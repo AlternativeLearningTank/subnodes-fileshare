@@ -53,14 +53,17 @@ app.use(function (req, res, next) {
 //     }
 // });
 
-var smb = cp.spawn('mount', ['--stdout', '//192.168.3.1/anonymous /mnt/public']);
-smb.stdout.on('data', function(data) {
-    //handle chunk of data
-    console.log("data: " + data);
+var smb = cp.exec('sudo mount //192.168.3.1/anonymous /mnt/public', function(err, stdout, stderr) {
+	if (error) {
+	     console.log(error.stack);
+	     console.log('Error code: '+error.code);
+	     console.log('Signal received: '+error.signal);
+	   }
+	   console.log('Child Process STDOUT: '+stdout);
+	   console.log('Child Process STDERR: '+stderr);
 });
-smb.on('exit', function() {
-	console.log("smb exit");
-    //file loaded completely, continue doing stuff
+smb.on('exit', function(code) {
+	console.log('Child process exited with exit code '+code);
 });
 
 
