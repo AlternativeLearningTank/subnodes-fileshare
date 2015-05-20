@@ -8,7 +8,8 @@ var path = require('path')
     ,bodyParser = require('body-parser')
     ,http = require('http').createServer(app)
     // ,smb2 = require('smb2');
-    ,cp = require('child_process');
+    ,cp = require('child_process')
+    ,fs = require('fs');
 
 
 // -----------------
@@ -64,6 +65,20 @@ var smb = cp.exec('sudo mount //192.168.3.1/anonymous /mnt/public', function(err
 });
 smb.on('exit', function(code) {
 	console.log('Child process exited with exit code '+code);
+
+	if (code === 0) {
+		console.log("share successfully mounted. listing directory contents now.");
+		fs.readdir('/mnt/public', function(err, files) {
+			if (err) {
+				console.log('err: ' + err);
+			}
+			else {
+				files.forEach(function(f) {
+					console.log("files: " + f);
+				});
+			}
+		});
+	}
 });
 
 
