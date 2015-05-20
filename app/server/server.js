@@ -38,7 +38,7 @@ var smb2Client = new smb2({
 , domain:'WORKGROUP'
 , username:''
 , password:''
-, debug: true,
+, debug: true
 , autoCloseTimeout: 0
 });
 
