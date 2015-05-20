@@ -34,15 +34,22 @@ app.use(function (req, res, next) {
 // Create an SMB2 instance
 // ----------------------------
 var smb2Client = new smb2({
-  share:'\\\\192.168.3.1\\Anonmymous'
+  share:'\\\\192.168.3.1\\anonymous'
 , domain:'WORKGROUP'
 , username:''
 , password:''
+, debug: true,
+, autoCloseTimeout: 0
 });
 
-smb2Client.readdir('192.168.3.1\\Anonymous', function(err, files){
-    if(err) throw err;
-    console.log(files);
+smb2Client.readdir('\\', function(err, files){
+	if(err) {
+        console.log("Error (readdir):\n", err);
+        console.log("files", files);
+    } else {
+        console.log("Connection made.");
+        console.log(files); 
+    }
 });
 
 
