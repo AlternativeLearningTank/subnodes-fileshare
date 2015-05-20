@@ -7,9 +7,7 @@ var path = require('path')
     ,cookieParser = require('cookie-parser')
     ,bodyParser = require('body-parser')
     ,http = require('http').createServer(app)
-    ,server = require('socket.io')(http)
-    ,SocketServer = require('./socket_server')
-    ,MoonbootsCfg = require('./moonboots_config');
+    ,smb2 = require('smb2');
 
 
 // -----------------
@@ -17,7 +15,6 @@ var path = require('path')
 // -----------------
 app.use(compress());
 app.use(serveStatic(path.resolve(path.normalize('public'))));
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -33,21 +30,24 @@ app.use(function (req, res, next) {
     next();
 });
 
+// ----------------------------
+// Create an SMB2 instance
+// ----------------------------
+var smb2Client = new SMB2({
+  share:'\\\\192.168.3.1\\Anonmymous'
+, domain:'WORKGROUP'
+, username:''
+, password:''
+});
 
-// ---------------------------------------------------
-// Configure Moonboots to serve our client application
-// ---------------------------------------------------
-new MoonbootsCfg({ app: app, config: config }).init();
+smb2Client.readdir('192.168.3.1\\anonymous', function(err, files){
+    if(err) throw err;
+    console.log(files);
+});
 
 
 // ----------------------
 // Set up our HTTP server
 // ----------------------
 http.listen(config.http.port);
-console.log('Hot Probs is running at: http://localhost:' + config.http.port + '.');
-
-
-// ---------------------------------------------------
-// Set up socket.io listeners for our application
-// ---------------------------------------------------
-new SocketServer({ io: server }).init();
+console.log('subnodes-fileshare is running at: http://localhost:' + config.http.port + '.');
