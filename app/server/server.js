@@ -54,10 +54,10 @@ app.use(function (req, res, next) {
 // });
 
 var smb = cp.exec('sudo mount //192.168.3.1/anonymous /mnt/public', function(err, stdout, stderr) {
-	if (error) {
-	     console.log(error.stack);
-	     console.log('Error code: '+error.code);
-	     console.log('Signal received: '+error.signal);
+	if (err) {
+	     console.log(err.stack);
+	     console.log('Error code: '+err.code);
+	     console.log('Signal received: '+err.signal);
 	   }
 	   console.log('Child Process STDOUT: '+stdout);
 	   console.log('Child Process STDERR: '+stderr);
