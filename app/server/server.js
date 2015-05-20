@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
 // ----------------------------
 // Create an SMB2 instance
 // ----------------------------
-var smb2Client = new SMB2({
+var smb2Client = new smb2({
   share:'//192.168.3.1//Anonmymous'
 , domain:'WORKGROUP'
 , username:''
