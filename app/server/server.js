@@ -76,6 +76,16 @@ smb.on('exit', function(code) {
 				files.forEach(function(f) {
 					console.log("files: " + f);
 				});
+
+				console.log("writing a test file to the share");
+				fs.write('/mnt/public/test.txt', 'lorem ipsum', function(err) {
+					if (err) { 
+						console.log("err: " + err);
+					}
+					else {
+						console.log("wrote text.txt to smb share");
+					}
+				});
 			}
 		});
 	}
