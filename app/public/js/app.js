@@ -34,6 +34,11 @@ module.exports = {
                 $createClient.fadeIn();
             });
 
+            $bConnect.on('click', function() {
+                $directory.fadeIn();
+            });
+
+
             // // init our main view
             // var mainView = self.view = new MainView({
             //     model: self.login,
