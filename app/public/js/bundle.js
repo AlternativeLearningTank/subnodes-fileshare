@@ -82,6 +82,8 @@ module.exports = {
     },
 
     readFiles: function() {
+
+        console.log("readFiles");
         var extensionsMap = {
                       ".zip" : "fa-file-archive-o",         
                       ".gz" : "fa-file-archive-o",         
@@ -153,6 +155,7 @@ module.exports = {
 
         var table = $("#dataTable").dataTable(options);
 
+        console.log("about to call /files endpoint");
         $.get('/files').then(function(data){
             console.log("data: " + data.length);
             table.fnClearTable();
