@@ -126,6 +126,8 @@ module.exports = {
 
         var table = $("#dataTable").dataTable(options);
 
+        console.log("getFiles called");
+
         $.get('/files').then(function(data){
             table.fnClearTable();
             table.fnAddData(data);
