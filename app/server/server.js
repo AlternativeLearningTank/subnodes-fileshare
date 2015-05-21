@@ -8,7 +8,7 @@ var path = require('path')
     ,bodyParser = require('body-parser')
     ,http = require('http').createServer(app)
     // ,smb2 = require('smb2');
-    ,cp = require('child_process')
+    ,su = require('sudo')
     ,fs = require('fs');
 
 
@@ -98,7 +98,7 @@ var guest = true;
 // 	}
 // });
 
-var cmd = cp.spawn('mount', ['//'+ip+'/'+share, mnt, '-o', 'guest'], { uid: 1000});
+var cmd = su(['mount', '//'+ip+'/'+share, mnt, '-o', 'guest']);
 cmd.stdout.on('data', function(data) {
 	console.log("stdout: " + data);
 });
