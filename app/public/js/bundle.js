@@ -37,7 +37,7 @@ module.exports = {
 
             $bConnect.on('click', function() {
                 $directory.fadeIn();
-                console.log("module.exports.getFiles: " + module.exports.getFiles);
+                module.exports.getFiles();
             });
 
 
