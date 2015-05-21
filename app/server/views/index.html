@@ -42,7 +42,7 @@
             <p>Tell me the directory that you would like to host files from.</p>
             <form class="">
               <div class="form-group">
-                <input type="text" placeholder="path/to/folder" class="form-control">
+                <input id="serverAddr" type="text" placeholder="path/to/folder" class="form-control">
               </div>
             </form>
             <div class="error"></div>
@@ -53,12 +53,12 @@
       <div id="create-client" class="container">
         <div class="row">
           <div class="col-md-4">
-            <h2>Connect to a public server</h2>
+            <h2>Connect to a server</h2>
             <p>Enter the address, share name and directory where you would like to mount a public server available on the mesh network.</p>
             <form class="">
               <div class="form-group">
-                <input type="text" placeholder="location/share" class="form-control">
-                <input type="text" placeholder="mount point" class="form-control">
+                <input id="shareAddr" type="text" placeholder="192.168.3.1/anonymous" class="form-control">
+                <input id="mountPt" type="text" placeholder="/path/to/directory" class="form-control">
               </div>
             </form>
             <div class="error"></div>
