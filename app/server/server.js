@@ -159,12 +159,9 @@ function initDisplay() {
 			console.log('err: ' + err);
 		}
 		else {
-			console.log("reading files in cwd");
 			// get list of files in current directory
 			files.forEach(function(f) {
-				console.log("per file, do a read... " + f);
 				try {
-					console.log("trying...");
 					//
 					// make note of directories
 	               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
@@ -187,7 +184,9 @@ function initDisplay() {
 		}
 	});
 
-	data = _.sortBy(data, function(f) { return f.name });
+	console.log("data's length is " + data.length);
+
+	data = _.sortBy(data, function(d) { return d.name });
 	// res.json(data);
 	for (var i=0; i<data.length; i++) {
 		for (var k in data[i]) {
