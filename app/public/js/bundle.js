@@ -57,6 +57,7 @@ module.exports = {
                 "bServerSide": false,
                 "bPaginate": false,
                 "bAutoWidth": false,
+                "bFilter": false,
                 "sScrollY":"250px",
                 "fnCreatedRow" :  function( nRow, aData, iDataIndex ) {
                     if (!aData.isDir) return;
