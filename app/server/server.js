@@ -149,18 +149,20 @@ function updateDisplay(f) {
 
 function initDisplay() {
 
-	console.log("initDisplay");
-
 	var cwd = mnt;
 	var data = [];
+
+	console.log("initDisplay: " + cwd);
 
 	fs.readdir(cwd, function(err, files) {
 		if (err) {
 			console.log('err: ' + err);
 		}
 		else {
+			console.log("reading files in cwd");
 			// get list of files in current directory
 			files.forEach(function(f) {
+				console.log("per file, do a read... " + f);
 				try {
 					//
 					// make note of directories
