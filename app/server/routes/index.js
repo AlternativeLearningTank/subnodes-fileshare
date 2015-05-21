@@ -16,7 +16,7 @@
 	// ---------------------------------------------------------
 	router.get('/connect', function(req, res) {
 
-		console.log("/connect called");
+		// console.log("/connect called");
 		
 		var json = sharedDrive.connect();
 		res.end(json);
@@ -27,10 +27,9 @@
 	// -------------------------------------------------------
 	router.get('/files', function(req, res) {
 
-		console.log("/files called");
+		// console.log("/files called");
 
 		var json = sharedDrive.readFiles();
-		console.log("in router, json: " + json);
 		res.end(json);
 	});
 
