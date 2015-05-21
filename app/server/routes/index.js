@@ -9,7 +9,8 @@
 	    ,su = require('sudo')
 	    ,fs = require('fs')
 	    ,chokidar = require('chokidar')
-	    ,dirContents = [];
+	    ,dirContents = []
+	    ,watcher;
 
 	// ---------------------------
 	// Create route for index page
@@ -18,68 +19,83 @@
 		res.render('index');
 	});
 
+	// ---------------------------------------------------------
+	// Set up our mount point when application requests /connect
+	// ---------------------------------------------------------
+	router.get('/connect', function(req, res) {
+		
+		// get params from 1)config file or 2)user input
+		var ip = config.smbClient.ip
+			,share = config.smbClient.share
+			,mnt = config.smbClient.mount
+			,opts = config.smbClient.options
+			,params = ['mount',
+						'//'+ip+'/'+share,
+						mnt,
+						opts.length>0?'-o':'',
+						opts[0]
+					   ];
+			// ,dirContents = [];
+
+		// mount the share drive + watch for changes
+		var cmd = su( params );
+		cmd.stdout.on('data', function(data) {
+			console.log("stdout: " + data);
+		});
+		cmd.stderr.on('data', function(data) {
+			console.log("stderr: " + data);
+		});
+		cmd.on('exit', function(code) {
+			console.log('Child process exited with exit code '+code);
+
+			// handle exit codes
+			switch (code) {
+				case 0:
+					console.log("share successfully mounted, listing directory contents...");
+				case 32:
+					console.log("share is already mounted, attempting to list contents...");
+					//start watching the share for changes; update display if any.
+					watcher = chokidar.watch(mnt, {
+						  ignored: /[\/\\]\./,
+						  persistent: true,
+						  ignoreInitial: true,
+						  usePolling: true,
+						  depth: 3
+						});
+						// watcher handlers
+						watcher
+							// .on('add', function(p) { getFiles(mnt, res); })
+							// .on('change', function(p) { getFiles(mnt, res); })
+					 	// 	.on('unlink', function(p) { getFiles(mnt, res); })
+							// .on('addDir', function(p) { getFiles(mnt, res); })
+							// .on('unlinkDir', function(p) { getFiles(mnt, res); })
+							.on('add', function(p) { app.call("/files"); })
+							.on('change', function(p) { app.call("/files"); })
+					 		.on('unlink', function(p) { app.call("/files"); })
+							.on('addDir', function(p) { app.call("/files"); })
+							.on('unlinkDir', function(p) { app.call("/files"); })
+							.on('error', function(err) { console.log('Error while watching file share: ', err); });
+
+					// get initial directory reading
+					// getFiles(mnt, res);
+					res.json( {"status": "success"} );
+				break;
+				case 1:
+					res.json( {"status": "error"} );
+					console.log("exit code 1, error while mounting file share.");
+				break;
+			}
+		});
+	});
+
 	// -------------------------------------------------------
-	// Set up our mount point when application requests /files
+	// Return files in shared drive
 	// -------------------------------------------------------
 	router.get('/files', function(req, res) {
-		
-		// // get params from 1)config file or 2)user input
-		// var ip = config.smbClient.ip
-		// 	,share = config.smbClient.share
-		// 	,mnt = config.smbClient.mount
-		// 	,opts = config.smbClient.options
-		// 	,params = ['mount',
-		// 				'//'+ip+'/'+share,
-		// 				mnt,
-		// 				opts.length>0?'-o':'',
-		// 				opts[0]
-		// 			   ];
-		// 	// ,dirContents = [];
 
-		// // mount the share drive + watch for changes
-		// var cmd = su( params );
-		// cmd.stdout.on('data', function(data) {
-		// 	console.log("stdout: " + data);
-		// });
-		// cmd.stderr.on('data', function(data) {
-		// 	console.log("stderr: " + data);
-		// });
-		// cmd.on('exit', function(code) {
-		// 	console.log('Child process exited with exit code '+code);
+		console.log("/files called");
 
-		// 	// handle exit codes
-		// 	switch (code) {
-		// 		case 0:
-		// 			console.log("share successfully mounted, listing directory contents...");
-		// 		case 32:
-		// 			console.log("share is already mounted, attempting to list contents...");
-		// 			//start watching the share for changes; update display if any.
-		// 			var watcher = chokidar.watch(mnt, {
-		// 				  ignored: /[\/\\]\./,
-		// 				  persistent: true,
-		// 				  ignoreInitial: true,
-		// 				  usePolling: true,
-		// 				  depth: 3
-		// 				});
-		// 				// watcher handlers
-		// 				watcher
-		// 					.on('add', function(path) { getFiles(mnt, res); })
-		// 					.on('change', function(path) { getFiles(mnt, res); })
-		// 			 		.on('unlink', function(path) { getFiles(mnt, res); })
-		// 					.on('addDir', function(path) { getFiles(mnt, res); })
-		// 					.on('unlinkDir', function(path) { getFiles(mnt, res); })
-		// 					.on('error', function(error) { console.log('Error happened', error); });
-
-		// 			// get initial directory reading
-		// 			getFiles(mnt, res);
-		// 		break;
-		// 		case 1:
-		// 			console.log("exit code 1, error.");
-		// 		break;
-		// 	}
-		// });
-	});
-	function getFiles(mnt, res) {
+		var mnt = config.smbClient.mount;
 
 		// reset dirContents array
 		dirContents = [];
@@ -117,9 +133,35 @@
 				res.json(dirContents);
 			}
 		});
-	}
+	});
 
-	//watcher.close(); needed when program exits
+
+	// -------------------------------------------------------
+	// Disconnect from the drive
+	// -------------------------------------------------------
+	router.get('/disconnect', function(req, res) {
+
+		// get params from 1)config file or 2)user input
+		var ip = config.smbClient.ip
+			,share = config.smbClient.share
+			,mnt = config.smbClient.mount
+			,params = ['umount', mnt ];
+
+		// call umount	
+		var cmd = su( params );
+		cmd.stdout.on('data', function(data) {
+			console.log("stdout: " + data);
+		});
+		cmd.stderr.on('data', function(data) {
+			console.log("stderr: " + data);
+		});
+		cmd.on('exit', function(code) {
+			console.log('Child process exited with exit code '+code);
+
+			// stop watching the drive // TO-DO should check if watcher is open before closing...
+			if ( watcher ) watcher.close();
+		});
+	});
 
 	module.exports = router;
 }());

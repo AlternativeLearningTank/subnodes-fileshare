@@ -39,7 +39,7 @@ module.exports = {
             $bConnect.on('click', function() {
                 $directory.fadeIn();
                 $bDisconnect.fadeIn();
-                module.exports.getFiles();
+                module.exports.connect();
             });
 
             $bRefresh.on('click', function() {
@@ -48,7 +48,8 @@ module.exports = {
 
             $bDisconnect.on('click', function() {
                 $bDisconnect.fadeOut();
-                // ???
+                $directory.fadeOut();
+                // unmount
             });
 
 
@@ -63,6 +64,12 @@ module.exports = {
 
             // we have what we need, we can now start our router and show the appropriate page
             //self.router.history.start({pushState: true, root: '/'});
+        });
+    },
+
+    connect: function() {
+        $.get('/connect').then(function(data){
+            module.exports.getFiles();
         });
     },
 
