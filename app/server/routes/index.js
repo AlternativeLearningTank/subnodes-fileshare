@@ -15,7 +15,7 @@
 	// Create route for index page
 	// ---------------------------
 	router.get('/', function(req, res) {
-		res.render('index');
+		res.redirect('views/index.html');
 	});
 
 	// -------------------------------------------------------
@@ -79,7 +79,6 @@
 			}
 		});
 	});
-
 	function getFiles(mnt, res) {
 
 		// reset dirContents array
@@ -87,20 +86,19 @@
 
 		fs.readdir(mnt, function(err, files) {
 			if (err) {
-				console.log('err: ' + err);
+				console.log('error reading the share directory: ' + err);
 			}
 			else {
 				// get list of files in current directory
 				files.forEach(function(f) {
 					try {
 						//
-						// make note of directories
+						// identify directories
 		               	var isDir = fs.statSync(path.join(mnt,f)).isDirectory();
 			            if (isDir) {
 			            	dirContents.push({ name : f, isDir: true, path : path.join(mnt, f)  });
 			            //
 			            } else {
-			            // make note of files
 					      	// do not display files beginning with a dot
 							if ( f.indexOf('.') > 0 ) {
 			                 	var ext = path.extname(f);    
@@ -108,17 +106,13 @@
 			                }
 			            }
 				    } catch(e) {
-				    	console.log("caught error! " + e);
+				    	console.log("error looping through directory files: " + e);
 			    	}
 				});
 
 				dirContents = _.sortBy(dirContents, function(file) { return file.name });
 				// print out files found for debugging
 				console.log("directory listing found! " + dirContents.length + " files found.");
-				// display based on dirContents
-				for (var i=0; i<dirContents.length; i++) {
-					console.log(dirContents[i].name);
-				}
 				// return json in the response
 				res.json(dirContents);
 			}
