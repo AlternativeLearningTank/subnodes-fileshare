@@ -39,18 +39,19 @@ module.exports = {
             $bConnect.on('click', function() {
                 $directory.fadeIn();
                 $bDisconnect.fadeIn();
+                // mount drive
                 module.exports.connect();
             });
 
             $bRefresh.on('click', function() {
-                module.exports.getFiles();
+                module.exports.readFiles();
             });
 
             $bDisconnect.on('click', function() {
                 $bDisconnect.fadeOut();
                 $directory.fadeOut();
-                module.exports.disconnect();
                 // unmount
+                module.exports.disconnect();
             });
 
 
@@ -76,11 +77,11 @@ module.exports = {
 
     connect: function() {
         $.get('/connect').then(function(data){
-            module.exports.getFiles();
+            module.exports.readFiles();
         });
     },
 
-    getFiles: function() {
+    readFiles: function() {
         var extensionsMap = {
                       ".zip" : "fa-file-archive-o",         
                       ".gz" : "fa-file-archive-o",         
@@ -168,8 +169,6 @@ module.exports = {
             });
         });
     },
-
-    // methods
 
 };
 
