@@ -18,8 +18,8 @@
 
 		// console.log("/connect called");
 		
-		var json = sharedDrive.connect(function(json) {
-			res.send(json);
+		var json = sharedDrive.connect(function(data) {
+			res.json(data);
 		});
 	});
 
@@ -30,9 +30,9 @@
 
 		// console.log("/files called");
 
-		sharedDrive.readFiles(function(json) {
-			console.log("json: " + json);
-			res.send(json);
+		sharedDrive.readFiles(function(data) {
+			console.log("json: " + data);
+			res.json(data);
 		});
 	});
 
@@ -43,8 +43,8 @@
 
 		console.log("/disconnect called");
 
-		var json = sharedDrive.disconnect(function(json) {
-			res.send(json);
+		var json = sharedDrive.disconnect(function(data) {
+			res.json(data);
 		});
 	});
 
