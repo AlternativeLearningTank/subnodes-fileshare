@@ -7,7 +7,7 @@ var _ = require('underscore')
     ,serveStatic = require('serve-static')
     ,cookieParser = require('cookie-parser')
     ,bodyParser = require('body-parser')
-    ,http = require('http').createServer(app)
+    // ,http = require('http').createServer(app)
     // ,smb2 = require('smb2');
     ,su = require('sudo')
     ,fs = require('fs')
@@ -60,7 +60,7 @@ app.use(function (req, res, next) {
 // ---------------------------
 app.get('/', function(req, res) {
 	console.log("getting index page");
-	res.redirect('template.html');
+	res.sendFile(path.join(__dirname+'public/index.html'));
 });
 
 // ----------------------------------------------------
@@ -247,5 +247,6 @@ function getFiles() {
 // ----------------------
 // Set up our HTTP server
 // ----------------------
-http.listen(config.http.port);
+// http.listen(config.http.port);
+app.listen(config.http.port);
 console.log('subnodes-fileshare is running at: http://localhost:' + config.http.port + '.');
