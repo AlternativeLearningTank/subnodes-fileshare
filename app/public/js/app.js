@@ -16,6 +16,8 @@ module.exports = {
 
             var $table = $(".linksholder").dataTable();
 
+            console.log("$table.size: " + $table.size());
+
             $.get( "/files", function( data ) {
                 console.log("data: " + data);
                 for (var i=0; i<data.length; i++) {
