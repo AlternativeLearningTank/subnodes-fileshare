@@ -34,50 +34,52 @@
         </p>
       </div>
     </div>
-    <div id="create-server" class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Create a public file share</h2>
-          <p>Tell me the directory that you would like to host files from.</p>
-          <!-- <form class="">
-            <div class="form-group"> -->
-              <input type="text" placeholder="path/to/folder" class="form-control">
-           <!--  </div>
-          </form> -->
-          <div class="error"></div>
-          <p><a id="bCreateServer" class="btn btn-default" href="#" role="button">Create Server »</a></p>
-        </div>
-      </div>
-    </div>
-    <div id="create-client" class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Connect to a public server</h2>
-          <p>Enter the address, share name and directory where you would like to mount a public server available on the mesh network.</p>
-          <!-- <form class="">
-            <div class="form-group"> -->
-              <input type="text" placeholder="location/share" class="form-control">
-              <input type="text" placeholder="mount point" class="form-control">
-          <!--   </div>
-          </form> -->
-          <div class="error"></div>
-          <p><a id="bConnect" class="btn btn-default" href="#" role="button">Connect »</a></p>
-        </div>
-        <div id="directory" class="col-md-8">
-          <h2>Directory Listing</h2>
-          <!-- <p></p> -->
-          <div>
-            <table id="dataTable"></table>
+    <div class="container">
+      <div id="create-server">
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Create a public file share</h2>
+            <p>Tell me the directory that you would like to host files from.</p>
+            <form class="">
+              <div class="form-group">
+                <input type="text" placeholder="path/to/folder" class="form-control">
+              </div>
+            </form>
+            <div class="error"></div>
+            <p><a id="bCreateServer" class="btn btn-default" href="#" role="button">Create Server »</a></p>
           </div>
-          <div class="error"></div>
-          <p><a id="bRefresh" class="btn btn-default" href="#" role="button">Refresh</a></p>
         </div>
       </div>
+      <div id="create-client" class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h2>Connect to a public server</h2>
+            <p>Enter the address, share name and directory where you would like to mount a public server available on the mesh network.</p>
+            <form class="">
+              <div class="form-group">
+                <input type="text" placeholder="location/share" class="form-control">
+                <input type="text" placeholder="mount point" class="form-control">
+              </div>
+            </form>
+            <div class="error"></div>
+            <p><a id="bConnect" class="btn btn-default" href="#" role="button">Connect »</a></p>
+          </div>
+          <div id="directory" class="col-md-8">
+            <h2>Directory Listing</h2>
+            <!-- <p></p> -->
+            <div>
+              <table id="dataTable"></table>
+            </div>
+            <div class="error"></div>
+            <p><a id="bRefresh" class="btn btn-default" href="#" role="button">Refresh</a></p>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <footer>
+        <p>subnodes 2015</p>      
+      </footer>
     </div>
-    <hr>
-    <footer>
-      <p>subnodes 2015</p>      
-    </footer>
     <script src="/js/vendor/jquery-2.1.4.min.js"></script>
     <script src="/js/vendor/bootstrap.min.js"></script>
     <script src="/js/vendor/jquery.dataTables.min.js"></script>
