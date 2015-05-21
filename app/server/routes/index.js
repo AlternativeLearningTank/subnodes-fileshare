@@ -2,6 +2,7 @@
 	'use strict';
 
 	var _ = require('underscore')
+		,path = require('path')
 		,express = require('express')
 		,router = express.Router()
 	    ,config = require('getconfig')
