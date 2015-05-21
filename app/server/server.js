@@ -182,17 +182,17 @@ function initDisplay() {
 		    	}
 			});
 		}
-	});
 
-	console.log("data's length is " + data.length);
+		console.log("data's length is " + data.length);
 
-	data = _.sortBy(data, function(d) { return d.name });
-	// res.json(data);
-	for (var i=0; i<data.length; i++) {
-		for (var k in data[i]) {
-			console.log(k + ": " + data[i][k]);
+		data = _.sortBy(data, function(d) { return d.name });
+		// res.json(data);
+		for (var i=0; i<data.length; i++) {
+			for (var k in data[i]) {
+				console.log(k + ": " + data[i][k]);
+			}
 		}
-	}
+	});
 }
 
 //watcher.close(); needed when program exits
