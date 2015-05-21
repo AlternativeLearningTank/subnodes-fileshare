@@ -12,7 +12,7 @@
         ,dirContents = []
         ,watcher;
 
-        var connect = function() {
+        var connect = function(cb) {
 
             // get params from 1)config file or 2)user input
             var ip = config.smbClient.ip
@@ -64,12 +64,12 @@
                         // getFiles(mnt, res);
                         //res.json( {"status": "success"} );
                         var status = {"status": "success"};
-                        return status;
+                        cb(status);
                     break;
                     case 1:
                         // res.json( {"status": "error"} );
                         var status = {"status": "error"};
-                        return status;
+                        cb(status);
                         console.log("exit code 1, error while mounting file share.");
                     break;
                 }
@@ -119,7 +119,7 @@
             });
         }
 
-        var disconnect = function() {
+        var disconnect = function(cb) {
 
             // get params from 1)config file or 2)user input
             var mnt = config.smbClient.mount
@@ -144,12 +144,12 @@
 
                         // return status
                         var status = {"status": "success"};
-                        return status;
+                        cb(status);
                     break;
 
                     case 1:
                         var status = {"status": "error"};
-                        return status;
+                        cb(status);
                         console.log("exit code 1, error while disconnecting file share.");
                     break;
                 }   
