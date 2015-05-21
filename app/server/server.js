@@ -116,8 +116,8 @@ function mountShare() {
 }
 
 function updateDisplay() {
-	var cwd = process.cwd();
-	var query = mnt;
+	var cwd = mnt;
+	var query = '';
 	var data = [];
 	fs.readdir(mnt, function(err, files) {
 		if (err) {
@@ -126,23 +126,28 @@ function updateDisplay() {
 		else {
 			// get list of files in current directory
 			files.forEach(function(f) {
-				try {
-                	//console.log("processingile);
-                	var isDirectory = fs.statSync(path.join(cwd,f)).isDirectory();
-	                if (isDirectory) {
-	                  data.push({ Name : f, IsDirectory: true, Path : path.join(query, f)  });
-	                } else {
-	                  var ext = path.extname(f);    
-	                  data.push({ Name : f, Ext : ext, IsDirectory: false, Path : path.join(query, f) });
-	                }
-		        } catch(e) {
-		          console.log(e); 
-		        }
 				// do not display files beginning with a dot
-				//if ( f.indexOf('.') > 0 ) console.log("files: " + f);
+				if ( f.indexOf('.') > 0 ) {
+					try {
+	                	//console.log("processingile);
+	                	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
+		                if (isDir) {
+		                  data.push({ name : f, isDir: true, path : path.join(query, f)  });
+		                } else {
+		                  var ext = path.extname(f);    
+		                  data.push({ name : f, ext : ext, isDir: false, path : path.join(query, f) });
+		                }
+	                	console.log("isDir: " + isDir);
+	                	console.log("name: " + f);
+	                	console.log("path: " + path);
+	                	console.log("ext: " + ext);
+			        } catch(e) {
+			          console.log(e); 
+			        }
+				}
 			});
 
-		    data = _.sortBy(data, function(f) { return f.Name });
+		    data = _.sortBy(data, function(f) { return f.name });
 		    // res.json(data);
 		    console.log("files: " + data);
 		}
