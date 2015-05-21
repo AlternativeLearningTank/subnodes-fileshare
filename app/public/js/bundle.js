@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-// // Application Controller
+// Application Controller
 
 var config = require('clientconfig')
     ,domReady = require('domready');
@@ -7,7 +7,7 @@ var config = require('clientconfig')
 // exports
 module.exports = {
 
-    // this is the the whole app init
+    // this is the whole app init
     init: function () {
 
         console.log("init: " + init);
@@ -17,23 +17,23 @@ module.exports = {
         // wait for document ready to render our main view
         domReady(function () {
 
-            console.log("domReady");
+            // console.log("domReady");
 
-            var $table = $(".linksholder").dataTable();
+            // var $table = $(".linksholder").dataTable();
 
-            console.log("$table.size: " + $table.size());
+            // console.log("$table.size: " + $table.size());
 
-            $.get( "/files", function( data ) {
-                console.log("data: " + data);
-                for (var i=0; i<data.length; i++) {
-                    console.log(data[i].name);
-                    console.log(data[i].path);
-                    console.log(data[i].ext);
-                    console.log(data[i].isDir);
-                }
-                $table.fnClearTable();
-                $table.fnAddData(data);
-            });
+            // $.get( "/files", function( data ) {
+            //     console.log("data: " + data);
+            //     for (var i=0; i<data.length; i++) {
+            //         console.log(data[i].name);
+            //         console.log(data[i].path);
+            //         console.log(data[i].ext);
+            //         console.log(data[i].isDir);
+            //     }
+            //     $table.fnClearTable();
+            //     $table.fnAddData(data);
+            // });
 
             // // init our main view
             // var mainView = self.view = new MainView({
