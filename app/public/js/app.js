@@ -25,7 +25,13 @@ module.exports = {
                 ,$directory = $('#directory');
 
             $bServer.on('click', function() {
+                $createClient.fadeOut();
                 $createServer.fadeIn();
+            });
+
+            $bClient.on('click', function() {
+                $createServer.fadeOut();
+                $createClient.fadeIn();
             });
 
             // // init our main view
