@@ -126,10 +126,10 @@ function updateDisplay() {
 		else {
 			// get list of files in current directory
 			files.forEach(function(f) {
-				console.log("//////////////////////////////////////////////////////////");
-				console.log("f: " + f);
 				// do not display files beginning with a dot
-				// if ( f.indexOf('.') > 0 ) {
+				if ( f.indexOf('.') > 0 ) {
+					console.log("//////////////////////////////////////////////////////////");
+					console.log("f: " + f);
 				// 	try {
 	   //              	//console.log("processingile);
 	   //              	console.log("cwd: " + cwd);
@@ -149,7 +149,7 @@ function updateDisplay() {
 			 //        } catch(e) {
 			 //          console.log(e); 
 			 //        }
-				// }
+				}
 			});
 
 		    data = _.sortBy(data, function(f) { return f.name });
