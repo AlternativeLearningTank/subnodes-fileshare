@@ -113,8 +113,8 @@
                     // print out files found for debugging
                     console.log("directory listing found! " + dirContents.length + " files found.");
                     // return json in the response
-                    var json = JSON.stringify( dirContents );
-                    cb(json);
+                    // var json = JSON.stringify( dirContents );
+                    cb( dirContents );
                 }
             });
         }
