@@ -17,7 +17,7 @@ module.exports = {
 
             console.log("domReady");
 
-            console.log("$table.size: " + $table.size());
+            console.log("$table.size: " + $(".linksholder").size());
 
             var $table = $(".linksholder").dataTable();
 
