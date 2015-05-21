@@ -29,8 +29,9 @@
 
 		// console.log("/files called");
 
-		var json = sharedDrive.readFiles();
-		res.end(json);
+		sharedDrive.readFiles(function(json) {
+			res.end(json);
+		});
 	});
 
 
