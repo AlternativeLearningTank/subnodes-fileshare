@@ -59,6 +59,7 @@ app.use(function (req, res, next) {
 // Create route for index page
 // ---------------------------
 app.get('/', function(req, res) {
+	console.log("getting index page");
 	res.redirect('template.html');
 });
 
