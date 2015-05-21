@@ -153,6 +153,7 @@ module.exports = {
         var table = $("#dataTable").dataTable(options);
 
         $.get('/files').then(function(data){
+            console.log("data: " + data.length);
             table.fnClearTable();
             table.fnAddData(data);
         });
