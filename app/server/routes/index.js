@@ -30,7 +30,7 @@
 		console.log("/files called");
 
 		var json = sharedDrive.readFiles();
-		console.log("json: " + json);
+		console.log("in router, json: " + json);
 		res.end(json);
 	});
 
