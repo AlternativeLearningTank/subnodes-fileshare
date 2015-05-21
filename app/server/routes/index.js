@@ -19,7 +19,7 @@
 		// console.log("/connect called");
 		
 		var json = sharedDrive.connect();
-		res.end(json);
+		res.send(json);
 	});
 
 	// -------------------------------------------------------
@@ -31,7 +31,7 @@
 
 		sharedDrive.readFiles(function(json) {
 			console.log("json: " + json);
-			res.end(json);
+			res.send(json);
 		});
 	});
 
@@ -44,7 +44,7 @@
 		console.log("/disconnect called");
 
 		var json = sharedDrive.disconnect();
-		res.end(json);
+		res.send(json);
 	});
 
 	module.exports = router;
