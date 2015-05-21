@@ -16,6 +16,12 @@
 
             $.get( "/files", function( data ) {
                 console.log("data: " + data);
+                for (var i=0; i<data.length; i++) {
+                    console.log(data[i].name);
+                    console.log(data[i].path);
+                    console.log(data[i].ext);
+                    console.log(data[i].isDir);
+                }
             });
 
             // // init our main view
