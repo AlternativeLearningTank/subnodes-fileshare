@@ -15,6 +15,7 @@ module.exports = {
         // wait for document ready to render our main view
         domReady(function () {
 
+            // hook up the UI
             var $bDisconnect = $('#bDisconnect')
                 ,$bServer = $('#bServer')
                 ,$bClient = $('#bClient')
@@ -37,7 +38,17 @@ module.exports = {
 
             $bConnect.on('click', function() {
                 $directory.fadeIn();
+                $bDisconnect.fadeIn();
                 module.exports.getFiles();
+            });
+
+            $bRefresh.on('click', function() {
+                module.exports.getFiles();
+            });
+
+            $bDisconnect.on('click', function() {
+                $bDisconnect.fadeOut();
+                // ???
             });
 
 
@@ -127,14 +138,9 @@ module.exports = {
 
         var table = $("#dataTable").dataTable(options);
 
-        // $.get('/files').then(function(data){
-
-        //     console.log("data: " + data.length);
-        //     table.fnClearTable();
-        //     table.fnAddData(data);
-        // });
-        $.get( "/files", function( data ) {
-          console.log("data: " + data);
+        $.get('/files').then(function(data){
+            table.fnClearTable();
+            table.fnAddData(data);
         });
 
         $(".up").on("click", function(e){
