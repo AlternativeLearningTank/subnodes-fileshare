@@ -180,14 +180,14 @@ function initDisplay() {
 		}
 	});
 
-// 	data = _.sortBy(data, function(f) { return f.name });
-// 	// res.json(data);
-// 	//for (var i=0; i<data.length; i++) {
-// 	//	for (var k in data[i]) {
-// 	//		console.log(k + ": " + data[i][k]);
-// 	//	}
-// 	//}
-// }
+	data = _.sortBy(data, function(f) { return f.name });
+	// res.json(data);
+	for (var i=0; i<data.length; i++) {
+		for (var k in data[i]) {
+			console.log(k + ": " + data[i][k]);
+		}
+	}
+}
 
 
 // ----------------------
