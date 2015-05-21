@@ -119,17 +119,19 @@ function mountShare() {
 
 function updateDisplay(f) {
 
+	var cwd = mnt;
+
 	// make note of directories
-	var isDir = fs.statSync(f).isDirectory();
+	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
 	if (isDir) {
-		data.push({ name : f, isDir: true, path : f });
+		data.push({ name : f, isDir: true, path : path.join(cwd, f) });
 	//
 	} else {
 	// make note of files
 		// do not display files beginning with a dot
 		if ( f.indexOf('.') > 0 ) {
 			var ext = path.extname(f);    
-			data.push({ name : f, ext : ext, isDir: false, path : f });
+			data.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
 		}
 	}
 
