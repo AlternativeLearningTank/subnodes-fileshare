@@ -96,7 +96,8 @@ function mountShare() {
 					  ignored: /[\/\\]\./,
 					  persistent: true,
 					  ignoreInitial: true,
-					  usePolling: true
+					  usePolling: true,
+					  cwd: ''
 					});
 
 				// ,
@@ -184,12 +185,12 @@ function initDisplay() {
 
 		data = _.sortBy(data, function(d) { return d.name });
 		// res.json(data);
-		console.log("initial directory listing found!")
-		for (var i=0; i<data.length; i++) {
-			for (var k in data[i]) {
-				console.log(k + ": " + data[i][k]);
-			}
-		}
+		console.log("initial directory listing found! " + data.length + " files found.")
+		// for (var i=0; i<data.length; i++) {
+		// 	for (var k in data[i]) {
+		// 		console.log(k + ": " + data[i][k]);
+		// 	}
+		// }
 	});
 }
 
