@@ -14,11 +14,8 @@
 //         // wait for document ready to render our main view
 //         domReady(function () {
 
-            var $table = $(".linksholder").dataTable();
-
             $.get('/files').then(function(data){
-                $table.fnClearTable();
-                $table.fnAddData(data);
+                console.log("data: " + data);
             });
 
             // // init our main view
