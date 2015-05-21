@@ -70,6 +70,8 @@ cmd.stderr.on('data', function(data) {
 cmd.on('exit', function(code) {
 	console.log('Child process exited with exit code '+code);
 
+	// exit code 32 == drive already mounted
+
 	if (code === 0) {
 		console.log("share successfully mounted. listing directory contents now.");
 		fs.readdir('/mnt/public', function(err, files) {
@@ -82,11 +84,9 @@ cmd.on('exit', function(code) {
 				});
 
 				console.log("writing a test file to the share");
-				var stream = fs.createWriteStream("/mnt/public/my_file.txt");
-				stream.once('open', function(fd) {
-				  stream.write("My first row\n");
-				  stream.write("My second row\n");
-				  stream.end();
+				fs.writeFile('message.txt', 'Hello Node', function (err) {
+				  if (err) throw err;
+				  console.log('It\'s saved!');
 				});
 				// fs.write('/mnt/public/test.txt', 'lorem ipsum', function(err) {
 				// 	if (err) { 
