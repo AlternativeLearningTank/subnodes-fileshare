@@ -97,7 +97,7 @@ function mountShare() {
 					  persistent: true,
 					  ignoreInitial: true,
 					  usePolling: true,
-					  cwd: ''
+					  cwd: './'
 					});
 
 				// ,
