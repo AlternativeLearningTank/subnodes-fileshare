@@ -138,10 +138,6 @@ function updateDisplay() {
 		                  	data.push({ name : f, ext : ext, isDir: false, path : path.join(query, f) });
 		                }
 		            }
-	               	console.log("isDir: " + isDir);
-	               	console.log("name: " + f);
-	               	console.log("path: " + path.join(query,f));
-	               	console.log("ext: " + ext);
 			    } catch(e) {
 			        console.log(e); 
 		    	}
