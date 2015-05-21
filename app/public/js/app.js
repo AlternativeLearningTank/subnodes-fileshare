@@ -9,8 +9,6 @@ module.exports = {
     // this is the whole app init
     init: function () {
 
-        console.log("init");
-
         var self = window.app = this;
 
         // wait for document ready to render our main view
@@ -18,9 +16,9 @@ module.exports = {
 
             console.log("domReady");
 
-            var $table = $(".linksholder").dataTable();
-
             console.log("$table.size: " + $table.size());
+
+            var $table = $(".linksholder").dataTable();
 
             $.get( "/files", function( data ) {
                 console.log("data: " + data);
