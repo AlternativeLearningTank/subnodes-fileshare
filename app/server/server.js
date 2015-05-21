@@ -135,17 +135,16 @@ function updateDisplay() {
 	                  var ext = path.extname(f);    
 	                  data.push({ Name : f, Ext : ext, IsDirectory: false, Path : path.join(query, f) });
 	                }
-
 		        } catch(e) {
 		          console.log(e); 
-		        } 
-		        data = _.sortBy(data, function(f) { return f.Name });
-		        // res.json(data);
-
-		        console.log("files: " + data);
+		        }
 				// do not display files beginning with a dot
 				//if ( f.indexOf('.') > 0 ) console.log("files: " + f);
 			});
+
+		    data = _.sortBy(data, function(f) { return f.Name });
+		    // res.json(data);
+		    console.log("files: " + data);
 		}
 	});
 }
