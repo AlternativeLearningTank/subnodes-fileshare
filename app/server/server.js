@@ -9,7 +9,8 @@ var path = require('path')
     ,http = require('http').createServer(app)
     // ,smb2 = require('smb2');
     ,su = require('sudo')
-    ,fs = require('fs');
+    ,fs = require('fs')
+    ,chokidar = require('chokidar');
 
 
 // -----------------
@@ -71,58 +72,47 @@ function mountShare() {
 	cmd.on('exit', function(code) {
 		console.log('Child process exited with exit code '+code);
 
-		if (code === 0) {
-			// success
-			console.log("share successfully mounted. listing directory contents now.");
-			fs.readdir(mnt, function(err, files) {
-				if (err) {
-					console.log('err: ' + err);
-				}
-				else {
-					files.forEach(function(f) {
-						if ( f.indexOf('.') > 0 ) console.log("files: " + f);
+		switch (code) {
+			case 0:
+				console.log("share successfully mounted, listing directory contents...");
+			case 32:
+				console.log("share is already mounted, attempting to list contents...");
+				// start watching the share for changes; update display if any.
+				var log = console.log.bind(console);
+				var watcher = chokidar.watch('file, dir, or glob', {
+					  ignored: /[\/\\]\./,
+					  persistent: true
 					});
 
-					console.log("writing a test file to the share");
-					fs.writeFile(mnt+'/message.txt', 'Hello Node', function (err) {
-					  if (err) throw err;
-					  console.log('It\'s saved!');
-					});
-
-					var mv = su(['mv', 'text.txt', mnt]);
-					mv.on('exit', function(code) {
-						console.log("mv exited with code " + code);
-					});
-				}
-			});
-		}
-		else if (code === 32) {
-			console.log("share was already mounted, trying again to write file")
-			fs.readdir(mnt, function(err, files) {
-				if (err) {
-					console.log('err: ' + err);
-				}
-				else {
-					files.forEach(function(f) {
-						if ( f.indexOf('.') > 0 ) console.log("files: " + f);
-					});
-
-					console.log("writing a test file to the share");
-					fs.writeFile(mnt+'/message.txt', 'Hello Node', function (err) {
-					  if (err) throw err;
-					  console.log('It\'s saved!');
-					});
-
-					var mv = su(['mv', 'test.txt', mnt]);
-					mv.on('exit', function(code) {
-						console.log("mv exited with code " + code);
-					});
-				}
-			});
+					// watcher handlers
+					watcher
+						.on('add', function(path) { log('File', path, 'has been added'); })
+						.on('change', function(path) { log('File', path, 'has been changed'); })
+				 		.on('unlink', function(path) { log('File', path, 'has been removed'); })
+						.on('addDir', function(path) { log('Directory', path, 'has been added'); })
+						.on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); })
+						.on('error', function(error) { log('Error happened', error); });
+				// update the directory listing
+				updateDisplay();
+			break;
 		}
 	});
 }
 mountShare();
+
+function updateDisplay() {
+	fs.readdir(mnt, function(err, files) {
+		if (err) {
+			console.log('err: ' + err);
+		}
+		else {
+			// get list of files in current directory
+			files.forEach(function(f) {
+				if ( f.indexOf('.') > 0 ) console.log("files: " + f);
+			});
+		}
+	});
+}
 
 
 // ----------------------
