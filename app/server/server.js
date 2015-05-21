@@ -149,10 +149,12 @@ function updateDisplay(f) {
 
 function initDisplay() {
 
+	console.log("initDisplay");
+
 	var cwd = mnt;
 	var data = [];
 
-	fs.readdir(mnt, function(err, files) {
+	fs.readdir(cwd, function(err, files) {
 		if (err) {
 			console.log('err: ' + err);
 		}
