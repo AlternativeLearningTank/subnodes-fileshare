@@ -117,7 +117,7 @@ function mountShare() {
 
 function updateDisplay() {
 	var cwd = process.cwd();
-	var query = '';
+	var query = mnt;
 	var data = [];
 	fs.readdir(mnt, function(err, files) {
 		if (err) {
