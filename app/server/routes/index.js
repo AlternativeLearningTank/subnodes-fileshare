@@ -97,17 +97,7 @@
 					// 		.on('error', function(error) { console.log('Error happened', error); });
 
 					// get initial directory reading
-					getFiles(mnt);
-
-					// print out files found for debugging
-					console.log("directory listing found! " + dirContents.length + " files found.");
-					// display based on dirContents
-					for (var i=0; i<dirContents.length; i++) {
-						console.log(dirContents[i].name);
-					}
-
-					// return json in the response
-					res.json(dirContents);
+					getFiles(mnt, res);
 				break;
 				case 1:
 					console.log("exit code 1, error.");
@@ -116,7 +106,7 @@
 		});
 	});
 
-	function getFiles(mnt) {
+	function getFiles(mnt, res) {
 
 		// reset dirContents array
 		dirContents = [];
@@ -147,10 +137,17 @@
 				    	console.log("caught error! " + e);
 			    	}
 				});
-			}
 
-			dirContents = _.sortBy(dirContents, function(file) { return file.name });
-			console.log("in getFiles, dirContents.length: " + dirContents.length);
+				dirContents = _.sortBy(dirContents, function(file) { return file.name });
+				// print out files found for debugging
+				console.log("directory listing found! " + dirContents.length + " files found.");
+				// display based on dirContents
+				for (var i=0; i<dirContents.length; i++) {
+					console.log(dirContents[i].name);
+				}
+				// return json in the response
+				res.json(dirContents);
+			}
 		});
 	}
 
