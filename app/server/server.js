@@ -105,33 +105,33 @@ cmd.stdout.on('data', function(data) {
 cmd.stderr.on('data', function(data) {
 	console.log("stderr: " + data);
 });
-// cmd.on('exit', function(code) {
-// 	console.log('Child process exited with exit code '+code);
+cmd.on('exit', function(code) {
+	console.log('Child process exited with exit code '+code);
 
-// 	if (code === 0) {
-// 		console.log("share successfully mounted. listing directory contents now.");
-// 		fs.readdir('/mnt/public', function(err, files) {
-// 			if (err) {
-// 				console.log('err: ' + err);
-// 			}
-// 			else {
-// 				files.forEach(function(f) {
-// 					console.log("files: " + f);
-// 				});
+	if (code === 0) {
+		console.log("share successfully mounted. listing directory contents now.");
+		fs.readdir('/mnt/public', function(err, files) {
+			if (err) {
+				console.log('err: ' + err);
+			}
+			else {
+				files.forEach(function(f) {
+					console.log("files: " + f);
+				});
 
-// 				console.log("writing a test file to the share");
-// 				fs.write('/mnt/public/test.txt', 'lorem ipsum', function(err) {
-// 					if (err) { 
-// 						console.log("err: " + err);
-// 					}
-// 					else {
-// 						console.log("wrote text.txt to smb share");
-// 					}
-// 				});
-// 			}
-// 		});
-// 	}
-// });
+				console.log("writing a test file to the share");
+				fs.write('/mnt/public/test.txt', 'lorem ipsum', function(err) {
+					if (err) { 
+						console.log("err: " + err);
+					}
+					else {
+						console.log("wrote text.txt to smb share");
+					}
+				});
+			}
+		});
+	}
+});
 
 
 // ----------------------
