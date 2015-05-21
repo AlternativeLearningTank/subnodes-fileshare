@@ -58,9 +58,9 @@ module.exports = {
                 "bAutoWidth": false,
                 "sScrollY":"250px",
                 "fnCreatedRow" :  function( nRow, aData, iDataIndex ) {
-                    if (!aData.IsDirectory) return;
-                    var path = aData.Path;
-                    $(nRow).bind("click", function(e){
+                    if (!aData.isDir) return;
+                    var path = aData.path;
+                    $(nRow).on("click", function(e){
                         $.get('/files?path='+ path).then(function(data){
                             table.fnClearTable();
                             table.fnAddData(data);
@@ -68,35 +68,35 @@ module.exports = {
                         });
                         e.preventDefault();
                     });
-                }, 
+                },
                 "aoColumns": [
                     { "sTitle": "", "mData": null, "bSortable": false, "sClass": "head0", "sWidth": "55px",
                         "render": function (data, type, row, meta) {
-                            if (data.IsDirectory) {
-                                return "<a href='#' target='_blank'><i class='fa fa-folder'></i>&nbsp;" + data.Name +"</a>";
+                            if (data.isDir) {
+                                return "<a href='#' target='_blank'><i class='fa fa-folder'></i>&nbsp;" + data.name +"</a>";
                             } else {
-                                return "<a href='/" + data.Path + "' target='_blank'><i class='fa " + getFileIcon(data.Ext) + "'></i>&nbsp;" + data.Name +"</a>";
+                                return "<a href='/" + data.path + "' target='_blank'><i class='fa " + getFileIcon(data.ext) + "'></i>&nbsp;" + data.name +"</a>";
                             }
                         }
                     }
                 ]
             };
 
-            var table = $(".linksholder").dataTable(options);
+            var table = $("#dataTable").dataTable(options);
 
             $.get('/files').then(function(data){
-                console.log("data: " + data);
-                for (var i=0; i<data.length; i++) {
-                    console.log(data[i].name);
-                    console.log(data[i].path);
-                    console.log(data[i].ext);
-                    console.log(data[i].isDir);
-                }
                 table.fnClearTable();
+                // for (var i=0; i<data.length; i++) {
+                //     console.log(data[i].name);
+                //     console.log(data[i].path);
+                //     console.log(data[i].ext);
+                //     console.log(data[i].isDir);
+                //     table.fnAddData([data[i].name])
+                // }
                 table.fnAddData(data);
             });
 
-            $(".up").bind("click", function(e){
+            $(".up").on("click", function(e){
                 if (!currentPath) return;
                 var idx = currentPath.lastIndexOf("/");
                 var path =currentPath.substr(0, idx);

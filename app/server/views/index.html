@@ -3,25 +3,38 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>File Browser</title>
+    <title>Subnodes File Sharer</title>
     <link rel="stylesheet" href="/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/vendor/tidy-table.min.css">
     <link rel="stylesheet" href="/css/app.css">
   </head>
   <body>
     <div class="panel panel-default mainpanel">
       <div class="panel-heading">
-        File Browser
+        Subnodes File Sharer
         <span class="up">
           <i class="fa fa-level-up"></i> Up
         </span> 
       </div>
       <div class="panel-body">
-        <table class="linksholder"></table>
+        <table id="dataTable" class="display table table-bordered" cellspacing="0" width="100%">
+          <thead>
+            <tr>
+              <th>Name</th>
+            </tr>
+          </thead>
+          
+          <tfoot>
+            <tr>
+              <th>Name</th>
+            </tr>
+          </tfoot>
+        </table>
       </div>
   </div> 
     <script src="/js/vendor/jquery-2.1.4.min.js"></script>
     <script src="/js/vendor/bootstrap.min.js"></script>
-    <script src="/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="/js/vendor/tidy-table.min.js"></script>
     <script src="/js/bundle.js"></script>
   </body>
 </html>
