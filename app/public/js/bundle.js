@@ -87,13 +87,6 @@ module.exports = {
 
             $.get('/files').then(function(data){
                 table.fnClearTable();
-                // for (var i=0; i<data.length; i++) {
-                //     console.log(data[i].name);
-                //     console.log(data[i].path);
-                //     console.log(data[i].ext);
-                //     console.log(data[i].isDir);
-                //     table.fnAddData([data[i].name])
-                // }
                 table.fnAddData(data);
             });
 
