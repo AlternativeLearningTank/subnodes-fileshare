@@ -107,6 +107,7 @@ function mountShare() {
 		}
 	});
 }
+mountShare();
 
 
 // ----------------------
