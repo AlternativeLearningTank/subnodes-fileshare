@@ -53,48 +53,22 @@
 					console.log("share successfully mounted, listing directory contents...");
 				case 32:
 					console.log("share is already mounted, attempting to list contents...");
-					// start watching the share for changes; update display if any.
-					// var watcher = chokidar.watch(mnt, {
-					// 	  ignored: /[\/\\]\./,
-					// 	  persistent: true,
-					// 	  ignoreInitial: true,
-					// 	  usePolling: true,
-					// 	  depth: 3
-					// 	});
-
-					// 	// watcher handlers
-					// 	watcher
-					// 		.on('add', function(path) { 
-					// 			// get directory listing
-					// 			getFiles(mnt);
-					// 			// return json in the response
-					// 			res.json(dirContents);
-					// 		})
-					// 		// .on('change', function(path) { 
-					// 		// 	// get directory listing
-					// 		// 	//getFiles(mnt);
-					// 		// 	// return json in the response
-					// 		// 	//res.json(dirContents);
-					// 		// })
-					//  		.on('unlink', function(path) { 
-					// 			// get directory listing
-					// 			getFiles(mnt);
-					// 			// return json in the response
-					// 			res.json(dirContents);
-					// 		})
-					// 		.on('addDir', function(path) { 
-					// 			// get directory listing
-					// 			getFiles(mnt);
-					// 			// return json in the response
-					// 			res.json(dirContents);
-					// 		})
-					// 		.on('unlinkDir', function(path) { 
-					// 			// get directory listing
-					// 			getFiles(mnt);
-					// 			// return json in the response
-					// 			res.json(dirContents);
-					// 		})
-					// 		.on('error', function(error) { console.log('Error happened', error); });
+					//start watching the share for changes; update display if any.
+					var watcher = chokidar.watch(mnt, {
+						  ignored: /[\/\\]\./,
+						  persistent: true,
+						  ignoreInitial: true,
+						  usePolling: true,
+						  depth: 3
+						});
+						// watcher handlers
+						watcher
+							.on('add', function(path) { getFiles(mnt, res); })
+							.on('change', function(path) { getFiles(mnt, res); })
+					 		.on('unlink', function(path) { getFiles(mnt, res); })
+							.on('addDir', function(path) { getFiles(mnt, res); })
+							.on('unlinkDir', function(path) { getFiles(mnt, res); })
+							.on('error', function(error) { console.log('Error happened', error); });
 
 					// get initial directory reading
 					getFiles(mnt, res);
