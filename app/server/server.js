@@ -96,7 +96,8 @@ function mountShare() {
 					  ignored: /[\/\\]\./,
 					  persistent: true,
 					  ignoreInitial: true,
-					  cwd: ''
+					  cwd: '.',
+					  usePolling: true
 					});
 
 					// watcher handlers
@@ -188,6 +189,8 @@ function initDisplay() {
 		}
 	}
 }
+
+//watcher.close(); needed when program exits
 
 
 // ----------------------
