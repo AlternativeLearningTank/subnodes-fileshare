@@ -32,7 +32,8 @@
 
 		sharedDrive.readFiles(function(data) {
 			console.log("json: " + data);
-			res.json(data);
+			res.write(data);
+			res.end();
 		});
 	});
 
