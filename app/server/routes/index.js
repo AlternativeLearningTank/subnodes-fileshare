@@ -15,7 +15,7 @@
 	// Create route for index page
 	// ---------------------------
 	router.get('/', function(req, res) {
-		res.redirect('views/index.html');
+		res.redirect('index');
 	});
 
 	// -------------------------------------------------------
