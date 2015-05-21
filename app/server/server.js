@@ -94,11 +94,13 @@ function mountShare() {
 				var log = console.log.bind(console);
 				var watcher = chokidar.watch(mnt, {
 					  ignored: /[\/\\]\./,
-					  persistent: true,
-					  ignoreInitial: true,
-					  cwd: '.',
-					  usePolling: true
+					  persistent: true
 					});
+
+				// ,
+				// 	  ignoreInitial: true,
+				// 	  cwd: '.',
+				// 	  usePolling: true
 
 					// watcher handlers
 					watcher
