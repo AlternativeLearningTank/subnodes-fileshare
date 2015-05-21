@@ -84,7 +84,7 @@ function mountShare() {
 					});
 
 					console.log("writing a test file to the share");
-					fs.writeFile(mnt+'message.txt', 'Hello Node', function (err) {
+					fs.writeFile(mnt+'/message.txt', 'Hello Node', function (err) {
 					  if (err) throw err;
 					  console.log('It\'s saved!');
 					});
