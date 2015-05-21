@@ -1,7 +1,5 @@
 // Application Controller
 
-console.log("app.js loaded");
-
 var config = require('clientconfig')
     ,domReady = require('domready');
 
