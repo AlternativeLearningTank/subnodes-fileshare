@@ -127,13 +127,14 @@ module.exports = {
 
         var table = $("#dataTable").dataTable(options);
 
-        console.log("getFiles called");
+        // $.get('/files').then(function(data){
 
-        $.get('/files').then(function(data){
-            table.fnClearTable();
-            table.fnAddData(data);
-
-            console.log("data: " + data.length);
+        //     console.log("data: " + data.length);
+        //     table.fnClearTable();
+        //     table.fnAddData(data);
+        // });
+        $.get( "/files", function( data ) {
+          console.log("data: " + data);
         });
 
         $(".up").on("click", function(e){
