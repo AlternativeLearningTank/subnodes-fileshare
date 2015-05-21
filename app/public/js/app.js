@@ -14,6 +14,8 @@
 //         // wait for document ready to render our main view
 //         domReady(function () {
 
+            var $table = $(".linksholder").dataTable();
+
             $.get( "/files", function( data ) {
                 console.log("data: " + data);
                 for (var i=0; i<data.length; i++) {
@@ -22,6 +24,8 @@
                     console.log(data[i].ext);
                     console.log(data[i].isDir);
                 }
+                $table.fnClearTable();
+                $table.fnAddData(data);
             });
 
             // // init our main view
