@@ -149,8 +149,10 @@ function updateDisplay() {
 
 		    data = _.sortBy(data, function(f) { return f.name });
 		    // res.json(data);
-		    for (var k in data) {
-				console.log(k + ": " + data[k]);
+		    for (var i=0; i<data.length; i++) {
+		    	for (var k in data[i]) {
+					console.log(k + ": " + data[i][k]);
+				}
 			}
 		}
 	});
