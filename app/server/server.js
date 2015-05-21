@@ -59,22 +59,22 @@ app.use(function (req, res, next) {
 // ----------------------
 // Set up our mount point
 // ----------------------
-// get params from 1)config file or 2)user input
-var ip = config.smbClient.ip;
-var share = config.smbClient.share;
-var mnt = config.smbClient.mount;
-var opts = config.smbClient.options;
-var params = ['mount',
-				'//'+ip+'/'+share,
-				mnt,
-				opts.length>0?'-o':'',
-				opts[0]
-			   ];
-var dirContents = [];
 
-// define functions
-function mountShare() {
-	// var cmd = su(['mount', '//'+ip+'/'+share, mnt, '-o', 'guest']);
+app.get('/files', function(req, res) {
+	// get params from 1)config file or 2)user input
+	var ip = config.smbClient.ip;
+	var share = config.smbClient.share;
+	var mnt = config.smbClient.mount;
+	var opts = config.smbClient.options;
+	var params = ['mount',
+					'//'+ip+'/'+share,
+					mnt,
+					opts.length>0?'-o':'',
+					opts[0]
+				   ];
+	var dirContents = [];
+
+	// mount the share drive + watch for changes
 	var cmd = su( params );
 	cmd.stdout.on('data', function(data) {
 		console.log("stdout: " + data);
@@ -103,30 +103,60 @@ function mountShare() {
 
 					// watcher handlers
 					watcher
-						.on('add', function(path) { log('File', path, 'has been added'); initFileList(); })
+						.on('add change unlink addDir unlinkDir', function(path) {
+							getFiles();
+
+							console.log("updating the file display list!")
+							// display based on dirContents
+							for (var i=0; i<dirContents.length; i++) {
+								console.log(dirContents[i].name);
+							}
+							
+							// return json in the response
+							res.json(dirContents);
+						})
+						.on('error', function(err) {
+							console.log("error happened: " + err);
+						});
+						// .on('add', function(path) { log('File', path, 'has been added'); getFiles(res); })
 						// .on('change', function(path) { log('File', path, 'has been changed'); updateFileList(path); })
-				 		.on('unlink', function(path) { log('File', path, 'has been removed'); initFileList(); })
-						.on('addDir', function(path) { log('Directory', path, 'has been added'); initFileList(); })
-						.on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); initFileList(); })
-						.on('error', function(error) { log('Error happened', error); });
+				 		// .on('unlink', function(path) { log('File', path, 'has been removed'); getFiles(res); })
+						// .on('addDir', function(path) { log('Directory', path, 'has been added'); getFiles(res); })
+						// .on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); getFiles(res); })
+						// .on('error', function(error) { log('Error happened', error); });
 				// get initial directory reading
-				initFileList();
+				getFiles();
+
+				console.log("updating the file display list!")
+				// display based on dirContents
+				for (var i=0; i<dirContents.length; i++) {
+					console.log(dirContents[i].name);
+				}
+
+				// return json in the response
+				res.json(dirContents);
+
+
 			break;
 			case 1:
 				console.log("error!");
 			break;
 		}
 	});
-}
 
-function updateDisplay() {
+});
 
-	console.log("updating the file display list!")
-	// display based on dirContents
-	for (var i=0; i<dirContents.length; i++) {
-		console.log(dirContents[i].name);
-	}
-}
+// function updateDisplay(res) {
+
+// 	console.log("updating the file display list!")
+// 	// display based on dirContents
+// 	for (var i=0; i<dirContents.length; i++) {
+// 		console.log(dirContents[i].name);
+// 	}
+
+// 	// return json in the response
+// 	res.json(dirContents);
+// }
 
 // would be faster to just deal w/individual files, but no time to implement correctly
 // TO-DO: need efficient way to remove items from the dirContents array
@@ -166,7 +196,7 @@ function updateDisplay() {
 // 	updateDisplay();
 // }
 
-function initFileList() {
+function getFiles() {
 
 	var cwd = mnt;
 	dirContents = [];
@@ -200,11 +230,10 @@ function initFileList() {
 		}
 
 		dirContents = _.sortBy(dirContents, function(file) { return file.name });
-		// res.json(dirContents);
 		console.log("initial directory listing found! " + dirContents.length + " files found.");
 
 		// update the display
-		updateDisplay();
+		//updateDisplay(res);
 	});
 }
 
