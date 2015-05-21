@@ -128,12 +128,12 @@ function updateDisplay() {
 			files.forEach(function(f) {
 				try {
                 	//console.log("processingile);
-                	var isDirectory = fs.statSync(path.join(cwd,file)).isDirectory();
+                	var isDirectory = fs.statSync(path.join(cwd,f)).isDirectory();
 	                if (isDirectory) {
-	                  data.push({ Name : file, IsDirectory: true, Path : path.join(query, file)  });
+	                  data.push({ Name : f, IsDirectory: true, Path : path.join(query, f)  });
 	                } else {
-	                  var ext = path.extname(file);    
-	                  data.push({ Name : file, Ext : ext, IsDirectory: false, Path : path.join(query, file) });
+	                  var ext = path.extname(f);    
+	                  data.push({ Name : f, Ext : ext, IsDirectory: false, Path : path.join(query, f) });
 	                }
 
 		        } catch(e) {
