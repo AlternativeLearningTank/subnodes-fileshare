@@ -158,8 +158,21 @@
 		cmd.on('exit', function(code) {
 			console.log('Child process exited with exit code '+code);
 
-			// stop watching the drive // TO-DO should check if watcher is open before closing...
-			if ( watcher ) watcher.close();
+			switch (code) {
+				case 0:
+					console.log("exit code 0, success disconnecting file share.");
+					// stop watching the drive // TO-DO should check if watcher is open before closing...
+					if ( watcher ) watcher.close();
+
+					// return status
+					res.json( {"status": "success"} );
+				break;
+
+				case 1:
+					res.json( {"status": "error"} );
+					console.log("exit code 1, error while disconnecting file share.");
+				break;
+			}	
 		});
 	});
 
