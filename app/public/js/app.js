@@ -68,7 +68,7 @@ module.exports = {
                         });
                         e.preventDefault();
                     });
-                , 
+                }, 
                 "aoColumns": [
                     { "sTitle": "", "mData": null, "bSortable": false, "sClass": "head0", "sWidth": "55px",
                         "render": function (data, type, row, meta) {
