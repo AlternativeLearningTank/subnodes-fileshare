@@ -121,6 +121,9 @@ function updateDisplay(f) {
 
 	var cwd = mnt;
 
+	console.log("cwd: " + cwd);
+	console.log("f: " + f);
+
 	// make note of directories
 	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
 	if (isDir) {
