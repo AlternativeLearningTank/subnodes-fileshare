@@ -124,7 +124,8 @@ function mountShare() {
 function updateDisplay(path) {
 
 	var start = path.lastIndexOf('/');
-	var f = path.substr(start, path.length);
+	var f = path.substring(start, path.length);
+	console.log("f: " + f);
 
 	// make note of directories
 	var isDir = fs.statSync(path).isDirectory();
