@@ -99,11 +99,11 @@ function mountShare() {
 
 					// watcher handlers
 					watcher
-						.on('add', function(path) { log('File', path, 'has been added'); updateDisplay(); })
-						.on('change', function(path) { log('File', path, 'has been changed'); updateDisplay(); })
-				 		.on('unlink', function(path) { log('File', path, 'has been removed'); updateDisplay(); })
-						.on('addDir', function(path) { log('Directory', path, 'has been added'); updateDisplay(); })
-						.on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); updateDisplay(); })
+						.on('add', function(path) { log('File', path, 'has been added'); updateDisplay(path); })
+						.on('change', function(path) { log('File', path, 'has been changed'); updateDisplay(path); })
+				 		.on('unlink', function(path) { log('File', path, 'has been removed'); updateDisplay(path); })
+						.on('addDir', function(path) { log('Directory', path, 'has been added'); updateDisplay(path); })
+						.on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); updateDisplay(path); })
 						.on('error', function(error) { log('Error happened', error); });
 				// update the directory listing
 				updateDisplay();
@@ -115,44 +115,72 @@ function mountShare() {
 	});
 }
 
-function updateDisplay() {
-	var cwd = mnt;
-	var query = '';
-	var data = [];
-	fs.readdir(mnt, function(err, files) {
-		if (err) {
-			console.log('err: ' + err);
-		}
-		else {
-			// get list of files in current directory
-			files.forEach(function(f) {
-				console.log("//////////////////////////////////////////////////////////");
-				try {
-	               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
-		            if (isDir) {
-		            	data.push({ name : f, isDir: true, path : path.join(query, f)  });
-		            } else {
-				      	// do not display files beginning with a dot
-						if ( f.indexOf('.') > 0 ) {
-		                 	var ext = path.extname(f);    
-		                  	data.push({ name : f, ext : ext, isDir: false, path : path.join(query, f) });
-		                }
-		            }
-			    } catch(e) {
-			        console.log(e); 
-		    	}
-			});
+function updateDisplay(f) {
 
-		    data = _.sortBy(data, function(f) { return f.name });
-		    // res.json(data);
-		    for (var i=0; i<data.length; i++) {
-		    	for (var k in data[i]) {
-					console.log(k + ": " + data[i][k]);
-				}
-			}
+	// make note of directories
+	var isDir = fs.statSync(f).isDirectory();
+	if (isDir) {
+		data.push({ name : f, isDir: true, path : f });
+	//
+	} else {
+	// make note of files
+		// do not display files beginning with a dot
+		if ( f.indexOf('.') > 0 ) {
+			var ext = path.extname(f);    
+			data.push({ name : f, ext : ext, isDir: false, path : f });
 		}
-	});
+	}
+
+	// res.json(data);
+	//for (var i=0; i<data.length; i++) {
+	//	for (var k in data[i]) {
+	//		console.log(k + ": " + data[i][k]);
+	//	}
+	//}
 }
+
+// function updateDisplay() {
+
+// 	var cwd = mnt;
+// 	var data = [];
+
+// 	fs.readdir(mnt, function(err, files) {
+// 		if (err) {
+// 			console.log('err: ' + err);
+// 		}
+// 		else {
+// 			// get list of files in current directory
+// 			files.forEach(function(f) {
+// 				try {
+// 					//
+// 					// make note of directories
+// 	               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
+// 		            if (isDir) {
+// 		            	data.push({ name : f, isDir: true, path : path.join(cwd, f)  });
+// 		            //
+// 		            } else {
+// 		            // make note of files
+// 				      	// do not display files beginning with a dot
+// 						if ( f.indexOf('.') > 0 ) {
+// 		                 	var ext = path.extname(f);    
+// 		                  	data.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
+// 		                }
+// 		            }
+// 			    } catch(e) {
+// 			        console.log(e); 
+// 		    	}
+// 			});
+// 		}
+// 	});
+
+// 	data = _.sortBy(data, function(f) { return f.name });
+// 	// res.json(data);
+// 	//for (var i=0; i<data.length; i++) {
+// 	//	for (var k in data[i]) {
+// 	//		console.log(k + ": " + data[i][k]);
+// 	//	}
+// 	//}
+// }
 
 
 // ----------------------
