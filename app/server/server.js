@@ -25,7 +25,6 @@ app.use(bodyParser.json());
 // use Jade for template engine
 app.set('view engine', 'jade');
 
-
 // ----------------------------
 // Set our client config cookie
 // ----------------------------
@@ -56,23 +55,22 @@ app.use(function (req, res, next) {
 //     }
 // });
 
-// ----------------------
-// Set up our mount point
-// ----------------------
-
+// ----------------------------------------------------
+// Set up our mount point when user navigates to /files
+// ----------------------------------------------------
 app.get('/files', function(req, res) {
 	// get params from 1)config file or 2)user input
-	var ip = config.smbClient.ip;
-	var share = config.smbClient.share;
-	var mnt = config.smbClient.mount;
-	var opts = config.smbClient.options;
-	var params = ['mount',
+	var ip = config.smbClient.ip
+		,share = config.smbClient.share
+		,mnt = config.smbClient.mount
+		,opts = config.smbClient.options
+		,params = ['mount',
 					'//'+ip+'/'+share,
 					mnt,
 					opts.length>0?'-o':'',
 					opts[0]
-				   ];
-	var dirContents = [];
+				   ]
+		,dirContents = [];
 
 	// mount the share drive + watch for changes
 	var cmd = su( params );
@@ -104,6 +102,7 @@ app.get('/files', function(req, res) {
 					// watcher handlers
 					watcher
 						.on('add change unlink addDir unlinkDir', function(path) {
+							// get directory listing
 							getFiles();
 
 							console.log("updating the file display list!")
@@ -135,15 +134,12 @@ app.get('/files', function(req, res) {
 
 				// return json in the response
 				res.json(dirContents);
-
-
 			break;
 			case 1:
-				console.log("error!");
+				console.log("exit code 1, error.");
 			break;
 		}
 	});
-
 });
 
 // function updateDisplay(res) {
