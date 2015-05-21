@@ -1,18 +1,18 @@
 // // Application Controller
 
-// var config = require('clientconfig')
-//     ,domReady = require('domready');
+var config = require('clientconfig')
+    ,domReady = require('domready');
 
-// // exports
-// module.exports = {
+// exports
+module.exports = {
 
-//     // this is the the whole app init
-//     init: function () {
+    // this is the the whole app init
+    init: function () {
 
-//         var self = window.app = this;
+        var self = window.app = this;
 
-//         // wait for document ready to render our main view
-//         domReady(function () {
+        // wait for document ready to render our main view
+        domReady(function () {
 
             var $table = $(".linksholder").dataTable();
 
@@ -39,13 +39,12 @@
 
             // we have what we need, we can now start our router and show the appropriate page
             //self.router.history.start({pushState: true, root: '/'});
-//         });
-//     },
+        });
+    },
 
+    // methods
 
-//     // methods
+};
 
-// };
-
-// // run it
-// module.exports.init();
+// run it
+module.exports.init();
