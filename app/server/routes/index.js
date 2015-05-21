@@ -65,7 +65,7 @@
 						watcher
 							.on('add change unlink addDir unlinkDir', function(path) {
 								// get directory listing
-								getFiles();
+								getFiles(mnt);
 
 								console.log("updating the file display list!")
 								// display based on dirContents
@@ -86,7 +86,7 @@
 							// .on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); getFiles(res); })
 							// .on('error', function(error) { log('Error happened', error); });
 					// get initial directory reading
-					getFiles();
+					getFiles(mnt);
 
 					console.log("updating the file display list!")
 					// display based on dirContents
@@ -104,7 +104,7 @@
 		});
 	});
 
-	function getFiles() {
+	function getFiles(mnt) {
 
 		var cwd = mnt;
 		dirContents = [];
