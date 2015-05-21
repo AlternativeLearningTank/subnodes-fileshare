@@ -13,7 +13,7 @@
   "private": false,
   "main": "./app/server/server.js",
   "scripts": {
-    "start": "node ./app/server/server"
+    "start": "sudo node ./app/server/server"
   },
   "dependencies": {
     "body-parser": "^1.12.4",
