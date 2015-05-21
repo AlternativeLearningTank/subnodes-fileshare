@@ -60,43 +60,53 @@ var share = "anonymous";
 var mnt = "/mnt/public";
 var guest = true;
 
-var cmd = su(['mount', '//'+ip+'/'+share, mnt, '-o', 'guest']);
-cmd.stdout.on('data', function(data) {
-	console.log("stdout: " + data);
-});
-cmd.stderr.on('data', function(data) {
-	console.log("stderr: " + data);
-});
-cmd.on('exit', function(code) {
-	console.log('Child process exited with exit code '+code);
+function mountShare() {
+	var cmd = su(['mount', '//'+ip+'/'+share, mnt, '-o', 'guest']);
+	cmd.stdout.on('data', function(data) {
+		console.log("stdout: " + data);
+	});
+	cmd.stderr.on('data', function(data) {
+		console.log("stderr: " + data);
+	});
+	cmd.on('exit', function(code) {
+		console.log('Child process exited with exit code '+code);
 
-	// exit code 32 == drive already mounted
+		if (code === 0) {
+			// success
+			console.log("share successfully mounted. listing directory contents now.");
+			fs.readdir(mnt, function(err, files) {
+				if (err) {
+					console.log('err: ' + err);
+				}
+				else {
+					files.forEach(function(f) {
+						if ( f.indexOf('.') > 0 ) console.log("files: " + f);
+					});
 
-	if (code === 0) {
-		console.log("share successfully mounted. listing directory contents now.");
-		fs.readdir('/mnt/public', function(err, files) {
-			if (err) {
-				console.log('err: ' + err);
-			}
-			else {
-				files.forEach(function(f) {
-					if ( f.indexOf('.') > 0 ) console.log("files: " + f);
-				});
+					console.log("writing a test file to the share");
+					fs.writeFile(mnt+'message.txt', 'Hello Node', function (err) {
+					  if (err) throw err;
+					  console.log('It\'s saved!');
+					});
 
-				console.log("writing a test file to the share");
-				fs.writeFile('/mnt/public/message.txt', 'Hello Node', function (err) {
-				  if (err) throw err;
-				  console.log('It\'s saved!');
-				});
-
-				var mv = su(['mv', 'text.txt', '/mnt/share']);
-				mv.on('exit', function(code) {
-					console.log("mv exited with code " + code);
-				});
-			}
-		});
-	}
-});
+					var mv = su(['mv', 'text.txt', mnt]);
+					mv.on('exit', function(code) {
+						console.log("mv exited with code " + code);
+					});
+				}
+			});
+		}
+		else if (code === 32) {
+			// resource was busy, drive probably needs to be unmounted
+			var umount = su(['unmount', mnt]);
+			umount.on('exit', function(code) {
+				if (code === 0) {
+					mountShare();
+				}
+			})
+		}
+	});
+}
 
 
 // ----------------------
