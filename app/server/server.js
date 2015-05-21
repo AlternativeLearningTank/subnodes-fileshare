@@ -98,13 +98,13 @@ var guest = true;
 // 	}
 // });
 
-var cmd = cp.spawn('sudo mount //'+ip+'/'+share+' '+mnt+' -o guest');
-// cmd.stdout.on('data', function(data) {
-// 	console.log("stdout: " + data);
-// });
-// cmd.stderr.on('data', function(data) {
-// 	console.log("stderr: " + data);
-// });
+var cmd = cp.spawn('sudo mount', ['//'+ip+'/'+share, mnt, '-o', 'guest']);
+cmd.stdout.on('data', function(data) {
+	console.log("stdout: " + data);
+});
+cmd.stderr.on('data', function(data) {
+	console.log("stderr: " + data);
+});
 // cmd.on('exit', function(code) {
 // 	console.log('Child process exited with exit code '+code);
 
