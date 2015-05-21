@@ -1,5 +1,13 @@
 body { color: black!important;}
 
+.form-control {
+	margin: 10px 0;
+}
+
+.btn {
+	margin-bottom: 10px;
+}
+
 #create-server,
 #create-client,
 #directory,
