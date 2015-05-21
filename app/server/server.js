@@ -1,5 +1,6 @@
 /* global console */
-var path = require('path')
+var _ = require('underscore')
+	,path = require('path')
     ,config = require('getconfig')
     ,app = require('express')()
     ,compress = require('compression')
@@ -115,6 +116,9 @@ function mountShare() {
 }
 
 function updateDisplay() {
+	var cwd = process.cwd();
+	var query = '';
+	var data = [];
 	fs.readdir(mnt, function(err, files) {
 		if (err) {
 			console.log('err: ' + err);
@@ -122,8 +126,25 @@ function updateDisplay() {
 		else {
 			// get list of files in current directory
 			files.forEach(function(f) {
-				// do no display files beginning with a dot
-				if ( f.indexOf('.') > 0 ) console.log("files: " + f);
+				try {
+                	//console.log("processingile);
+                	var isDirectory = fs.statSync(path.join(cwd,file)).isDirectory();
+	                if (isDirectory) {
+	                  data.push({ Name : file, IsDirectory: true, Path : path.join(query, file)  });
+	                } else {
+	                  var ext = path.extname(file);    
+	                  data.push({ Name : file, Ext : ext, IsDirectory: false, Path : path.join(query, file) });
+	                }
+
+		        } catch(e) {
+		          console.log(e); 
+		        } 
+		        data = _.sortBy(data, function(f) { return f.Name });
+		        // res.json(data);
+
+		        console.log("files: " + data);
+				// do not display files beginning with a dot
+				//if ( f.indexOf('.') > 0 ) console.log("files: " + f);
 			});
 		}
 	});
