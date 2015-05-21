@@ -69,11 +69,11 @@
 					 	// 	.on('unlink', function(p) { getFiles(mnt, res); })
 							// .on('addDir', function(p) { getFiles(mnt, res); })
 							// .on('unlinkDir', function(p) { getFiles(mnt, res); })
-							.on('add', function(p) { app.call("/files"); })
-							.on('change', function(p) { app.call("/files"); })
-					 		.on('unlink', function(p) { app.call("/files"); })
-							.on('addDir', function(p) { app.call("/files"); })
-							.on('unlinkDir', function(p) { app.call("/files"); })
+							.on('add', function(p) { router.call("/files"); })
+							.on('change', function(p) { router.call("/files"); })
+					 		.on('unlink', function(p) { router.call("/files"); })
+							.on('addDir', function(p) { router.call("/files"); })
+							.on('unlinkDir', function(p) { router.call("/files"); })
 							.on('error', function(err) { console.log('Error while watching file share: ', err); });
 
 					// get initial directory reading
@@ -142,9 +142,7 @@
 	router.get('/disconnect', function(req, res) {
 
 		// get params from 1)config file or 2)user input
-		var ip = config.smbClient.ip
-			,share = config.smbClient.share
-			,mnt = config.smbClient.mount
+		var mnt = config.smbClient.mount
 			,params = ['umount', mnt ];
 
 		// call umount	
