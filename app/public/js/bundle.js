@@ -15,6 +15,20 @@ module.exports = {
         // wait for document ready to render our main view
         domReady(function () {
 
+            var $bDisconnect = $('#bDisconnect')
+                ,$bServer = $('#bServer')
+                ,$bClient = $('#bClient')
+                ,$bCreateServer = $('#bCreateServer')
+                ,$bConnect = $('#bConnect')
+                ,$bRefresh = $('#bRefresh')
+                ,$createServer = $('#create-server')
+                ,$createClient = $('#create-client')
+                ,$directory = $('#directory');
+
+            $bServer.on('click', function() {
+                $createServer.fadeIn();
+            });
+
             // // init our main view
             // var mainView = self.view = new MainView({
             //     model: self.login,
