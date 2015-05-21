@@ -70,31 +70,31 @@
 								// get directory listing
 								getFiles(mnt);
 								// return json in the response
-								res.json(dirContents);
+								//res.json(dirContents);
 							})
 							.on('change', function(path) { 
 								// get directory listing
 								getFiles(mnt);
 								// return json in the response
-								res.json(dirContents);
+								//res.json(dirContents);
 							})
 					 		.on('unlink', function(path) { 
 								// get directory listing
 								getFiles(mnt);
 								// return json in the response
-								res.json(dirContents);
+								//res.json(dirContents);
 							})
 							.on('addDir', function(path) { 
 								// get directory listing
 								getFiles(mnt);
 								// return json in the response
-								res.json(dirContents);
+								//res.json(dirContents);
 							})
 							.on('unlinkDir', function(path) { 
 								// get directory listing
 								getFiles(mnt);
 								// return json in the response
-								res.json(dirContents);
+								//res.json(dirContents);
 							})
 							.on('error', function(error) { log('Error happened', error); });
 
