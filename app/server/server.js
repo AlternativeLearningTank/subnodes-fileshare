@@ -84,18 +84,15 @@ cmd.on('exit', function(code) {
 				});
 
 				console.log("writing a test file to the share");
-				fs.writeFile('message.txt', 'Hello Node', function (err) {
+				fs.writeFile('/mnt/public/message.txt', 'Hello Node', function (err) {
 				  if (err) throw err;
 				  console.log('It\'s saved!');
 				});
-				// fs.write('/mnt/public/test.txt', 'lorem ipsum', function(err) {
-				// 	if (err) { 
-				// 		console.log("err: " + err);
-				// 	}
-				// 	else {
-				// 		console.log("wrote text.txt to smb share");
-				// 	}
-				// });
+
+				var mv = su(['mv', 'text.txt', '/mnt/share']);
+				mv.on('exit', function(code) {
+					console.log("mv exited with code " + code);
+				});
 			}
 		});
 	}
