@@ -70,7 +70,7 @@ var params = ['mount',
 				opts.length>0?'-o':'',
 				opts[0]
 			   ];
-var files = [];
+var dirContents = [];
 
 // define functions
 function mountShare() {
@@ -101,19 +101,16 @@ function mountShare() {
 					  depth: 3
 					});
 
-				// ,
-				// 	  cwd: '.',
-
 					// watcher handlers
 					watcher
-						.on('add', function(path) { log('File', path, 'has been added'); updateDisplay(path); })
-						.on('change', function(path) { log('File', path, 'has been changed'); updateDisplay(path); })
-				 		.on('unlink', function(path) { log('File', path, 'has been removed'); updateDisplay(path); })
-						.on('addDir', function(path) { log('Directory', path, 'has been added'); updateDisplay(path); })
-						.on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); updateDisplay(path); })
+						.on('add', function(path) { log('File', path, 'has been added'); initFileList(); })
+						// .on('change', function(path) { log('File', path, 'has been changed'); updateFileList(path); })
+				 		.on('unlink', function(path) { log('File', path, 'has been removed'); initFileList(); })
+						.on('addDir', function(path) { log('Directory', path, 'has been added'); initFileList(); })
+						.on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); initFileList(); })
 						.on('error', function(error) { log('Error happened', error); });
-				// update the directory listing
-				initDisplay();
+				// get initial directory reading
+				initFileList();
 			break;
 			case 1:
 				console.log("error!");
@@ -122,38 +119,57 @@ function mountShare() {
 	});
 }
 
-function updateDisplay(file) {
+function updateDisplay() {
 
-	var start = file.lastIndexOf('/');
-	var f = file.substring(start, file.length);
-	console.log("f: " + f);
-
-	// make note of directories
-	var isDir = fs.statSync(file).isDirectory();
-	if (isDir) {
-		files.push({ name : f, isDir: true, path : file });
-	//
-	} else {
-	// make note of files
-		// do not display files beginning with a dot
-		if ( f.indexOf('.') > 0 ) {
-			var ext = path.extname(f);    
-			files.push({ name : f, ext : ext, isDir: false, path : file });
-		}
+	console.log("updating the file display list!")
+	// display based on dirContents
+	for (var i=0; i<dirContents.length; i++) {
+		console.log(dirContents[i].name);
 	}
-
-	// res.json(files);
-	//for (var i=0; i<files.length; i++) {
-	//	for (var k in files[i]) {
-	//		console.log(k + ": " + files[i][k]);
-	//	}
-	//}
 }
 
-function initDisplay() {
+// would be faster to just deal w/individual files, but no time to implement correctly
+// TO-DO: need efficient way to remove items from the dirContents array
+// function updateFileList(action, file) {
+
+// 	var start = file.lastIndexOf('/')+1;
+// 	var f = file.substring(start, file.length);
+// 	console.log("f: " + f);
+
+// 	switch(action) {
+// 		case 'add':
+// 			// make note of directories
+// 			var isDir = fs.statSync(file).isDirectory();
+// 			if (isDir) {
+// 				dirContents.push({ name : f, isDir: true, path : file });
+// 			//
+// 			} else {
+// 			// make note of files
+// 				// do not display files beginning with a dot
+// 				if ( f.indexOf('.') > 0 ) {
+// 					var ext = path.extname(f);    
+// 					dirContents.push({ name : f, ext : ext, isDir: false, path : file });
+// 				}
+// 			}
+// 		break;
+
+// 		case 'del':
+// 		break;
+// 	}
+	
+
+// 	dirContents = _.sortBy(dirContents, function(file) { return file.name });
+// 	// res.json(dirContents);
+// 	console.log("initial directory listing found! " + dirContents.length + " files found.");
+
+// 	// update the display
+// 	updateDisplay();
+// }
+
+function initFileList() {
 
 	var cwd = mnt;
-	files = [];
+	dirContents = [];
 
 	fs.readdir(cwd, function(err, files) {
 		if (err) {
@@ -167,14 +183,14 @@ function initDisplay() {
 					// make note of directories
 	               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
 		            if (isDir) {
-		            	files.push({ name : f, isDir: true, path : path.join(cwd, f)  });
+		            	dirContents.push({ name : f, isDir: true, path : path.join(cwd, f)  });
 		            //
 		            } else {
 		            // make note of files
 				      	// do not display files beginning with a dot
 						if ( f.indexOf('.') > 0 ) {
 		                 	var ext = path.extname(f);    
-		                  	files.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
+		                  	dirContents.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
 		                }
 		            }
 			    } catch(e) {
@@ -183,14 +199,12 @@ function initDisplay() {
 			});
 		}
 
-		files = _.sortBy(files, function(file) { return file.name });
-		// res.json(files);
-		console.log("initial directory listing found! " + files.length + " files found.")
-		// for (var i=0; i<files.length; i++) {
-		// 	for (var k in files[i]) {
-		// 		console.log(k + ": " + files[i][k]);
-		// 	}
-		// }
+		dirContents = _.sortBy(dirContents, function(file) { return file.name });
+		// res.json(dirContents);
+		console.log("initial directory listing found! " + dirContents.length + " files found.");
+
+		// update the display
+		updateDisplay();
 	});
 }
 
