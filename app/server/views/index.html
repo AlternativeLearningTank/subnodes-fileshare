@@ -9,47 +9,75 @@
     <link rel="stylesheet" href="/css/app.css">
   </head>
   <body>
-    <header>
-      <div>
-        Subnodes File Sharer
-        <!-- <span class="up">
-          <i class="fa fa-level-up"></i> Up
-        </span>  -->
-      </div>
-      <button type="submit" class="btn btn-success">Disconnect</button>
-    </header>
-    <div id="welcome">
-      <h2>Hello! This file sharer will let you create a shared server or connect to file servers available across the mesh network. Click one of the buttons below to get started.</h2>
-      <button id="bServer" type="button" class="btn btn-lg btn-default">Create Server</button>
-      <button id="bClient" type="button" class="btn btn-lg btn-default">Connect to Server</button>
-    </div>
-    <div id="create-server">
-      <form class="">
-        <div class="form-group">
-          <input type="text" placeholder="path/to/folder" class="form-control">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <p class="navbar-brand" href="#">Subnodes File Sharer</p>
+          <!-- <span class="up">
+            <i class="fa fa-level-up"></i> Up
+          </span>  -->
         </div>
-        <div class="error"></div>
-        <button type="submit" class="btn btn-success">Create Server</button>
-      </form>
-    </div>
-    <div id="create-client">
-      <form class="">
-        <div class="form-group">
-          <input type="text" placeholder="location/share" class="form-control">
-          <input type="text" placeholder="mount point" class="form-control">
-        </div>
-        <div class="error"></div>
-        <button type="submit" class="btn btn-success">Connect</button>
-      </form>
-    </div>
-    <div id="directory" class="panel">
-      <div>
-        <table id="dataTable">
-        </table>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <button type="submit" class="btn btn-success">Disconnect</button>
+          </form>
+        </div><!--/.navbar-collapse -->
       </div>
-        <div class="error"></div>
-      <button type="submit" class="btn btn-success">Refresh</button>
-  </div> 
+    </nav>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Subnodes File Sharing!</h1>
+        <p>This file sharer will let you create a shared server or connect to file servers available across the mesh network. Click one of the buttons below to get started.</p>
+        <p>
+          <a id="bServer" class="btn btn-primary btn-lg" href="#" role="button">Create Server »</a>
+          <a id="bClient" class="btn btn-primary btn-lg" href="#" role="button">Connect to Server »</a>
+        </p>
+      </div>
+    </div>
+    <div id="create-server" class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Create a public file share</h2>
+          <p>Tell me the directory that you would like to host files from.</p>
+          <form class="">
+            <div class="form-group">
+              <input type="text" placeholder="path/to/folder" class="form-control">
+            </div>
+          </form>
+          <div class="error"></div>
+          <p><a id="bCreateServer" class="btn btn-default" href="#" role="button">Create Server »</a></p>
+        </div>
+      </div>
+
+      <div id="create-client" class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h2>Connect to a public server</h2>
+            <p>Enter the address, share name and directory where you would like to mount a public server available on the mesh network.</p>
+            <form class="">
+              <div class="form-group">
+                <input type="text" placeholder="location/share" class="form-control">
+                <input type="text" placeholder="mount point" class="form-control">
+              </div>
+            </form>
+            <div class="error"></div>
+            <p><a id="bConnect" class="btn btn-default" href="#" role="button">Connect »</a></p>
+          </div>
+          <div id="directory" class="col-md-8">
+            <h2>Directory Listing</h2>
+            <!-- <p></p> -->
+            <div>
+              <table id="dataTable"></table>
+            </div>
+            <div class="error"></div>
+            <p><a id="bRefresh" class="btn btn-default" href="#" role="button">Refresh</a></p>
+         </div>
+        </div>
+      <hr>
+      <footer>
+        <p>subnodes 2015</p>
+      </footer>
+    </div>
     <script src="/js/vendor/jquery-2.1.4.min.js"></script>
     <script src="/js/vendor/bootstrap.min.js"></script>
     <script src="/js/vendor/jquery.dataTables.min.js"></script>
