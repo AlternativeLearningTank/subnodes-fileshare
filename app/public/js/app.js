@@ -129,6 +129,8 @@ module.exports = {
         $.get('/files').then(function(data){
             table.fnClearTable();
             table.fnAddData(data);
+
+            console.log("data: " + data.length);
         });
 
         $(".up").on("click", function(e){
