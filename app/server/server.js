@@ -111,7 +111,7 @@ app.get('/files', function(req, res) {
 							for (var i=0; i<dirContents.length; i++) {
 								console.log(dirContents[i].name);
 							}
-							
+
 							// return json in the response
 							res.json(dirContents);
 						})
@@ -245,9 +245,3 @@ function getFiles() {
 // ----------------------
 http.listen(config.http.port);
 console.log('subnodes-fileshare is running at: http://localhost:' + config.http.port + '.');
-
-
-// ----------------------
-// Init application
-// ----------------------
-mountShare();
