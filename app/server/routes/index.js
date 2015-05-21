@@ -66,28 +66,38 @@
 
 						// watcher handlers
 						watcher
-							.on('add change unlink addDir unlinkDir', function(path) {
+							.on('add', function(path) { 
 								// get directory listing
 								getFiles(mnt);
-
-								console.log("updating the file display list!")
-								// display based on dirContents
-								for (var i=0; i<dirContents.length; i++) {
-									console.log(dirContents[i].name);
-								}
-
 								// return json in the response
 								res.json(dirContents);
 							})
-							.on('error', function(err) {
-								console.log("error happened: " + err);
-							});
-							// .on('add', function(path) { log('File', path, 'has been added'); getFiles(res); })
-							// .on('change', function(path) { log('File', path, 'has been changed'); updateFileList(path); })
-					 		// .on('unlink', function(path) { log('File', path, 'has been removed'); getFiles(res); })
-							// .on('addDir', function(path) { log('Directory', path, 'has been added'); getFiles(res); })
-							// .on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); getFiles(res); })
-							// .on('error', function(error) { log('Error happened', error); });
+							.on('change', function(path) { 
+								// get directory listing
+								getFiles(mnt);
+								// return json in the response
+								res.json(dirContents);
+							})
+					 		.on('unlink', function(path) { 
+								// get directory listing
+								getFiles(mnt);
+								// return json in the response
+								res.json(dirContents);
+							})
+							.on('addDir', function(path) { 
+								// get directory listing
+								getFiles(mnt);
+								// return json in the response
+								res.json(dirContents);
+							})
+							.on('unlinkDir', function(path) { 
+								// get directory listing
+								getFiles(mnt);
+								// return json in the response
+								res.json(dirContents);
+							})
+							.on('error', function(error) { log('Error happened', error); });
+
 					// get initial directory reading
 					getFiles(mnt);
 
