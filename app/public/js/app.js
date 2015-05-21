@@ -14,7 +14,22 @@ module.exports = {
         // wait for document ready to render our main view
         domReady(function () {
 
-            var extensionsMap = {
+            // // init our main view
+            // var mainView = self.view = new MainView({
+            //     model: self.login,
+            //     el: document.body
+            // });
+
+            // // ...and render it
+            // mainView.render();
+
+            // we have what we need, we can now start our router and show the appropriate page
+            //self.router.history.start({pushState: true, root: '/'});
+        });
+    },
+
+    getFiles: function() {
+        var extensionsMap = {
                       ".zip" : "fa-file-archive-o",         
                       ".gz" : "fa-file-archive-o",         
                       ".bz2" : "fa-file-archive-o",         
@@ -46,12 +61,12 @@ module.exports = {
                       ".docx" : "fa-file-word-o",         
                     };
 
-            function getFileIcon(ext) {
-                return ( ext && extensionsMap[ext.toLowerCase()]) || 'fa-file-o';
-            }
+        function getFileIcon(ext) {
+            return ( ext && extensionsMap[ext.toLowerCase()]) || 'fa-file-o';
+        }
               
-            var currentPath = null;
-            var options = {
+        var currentPath = null;
+        var options = {
                 "bProcessing": true,
                 "bServerSide": false,
                 "bPaginate": false,
@@ -81,37 +96,24 @@ module.exports = {
                         }
                     }
                 ]
-            };
+        };
 
-            var table = $("#dataTable").dataTable(options);
+        var table = $("#dataTable").dataTable(options);
 
-            $.get('/files').then(function(data){
+        $.get('/files').then(function(data){
+            table.fnClearTable();
+            table.fnAddData(data);
+        });
+
+        $(".up").on("click", function(e){
+            if (!currentPath) return;
+            var idx = currentPath.lastIndexOf("/");
+            var path =currentPath.substr(0, idx);
+            $.get('/files?path='+ path).then(function(data){
                 table.fnClearTable();
                 table.fnAddData(data);
+                currentPath = path;
             });
-
-            $(".up").on("click", function(e){
-                if (!currentPath) return;
-                var idx = currentPath.lastIndexOf("/");
-                var path =currentPath.substr(0, idx);
-                $.get('/files?path='+ path).then(function(data){
-                    table.fnClearTable();
-                    table.fnAddData(data);
-                    currentPath = path;
-                });
-            });
-
-            // // init our main view
-            // var mainView = self.view = new MainView({
-            //     model: self.login,
-            //     el: document.body
-            // });
-
-            // // ...and render it
-            // mainView.render();
-
-            // we have what we need, we can now start our router and show the appropriate page
-            //self.router.history.start({pushState: true, root: '/'});
         });
     },
 

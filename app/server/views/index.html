@@ -9,17 +9,46 @@
     <link rel="stylesheet" href="/css/app.css">
   </head>
   <body>
-    <div class="panel panel-default mainpanel">
-      <div class="panel-heading">
+    <header>
+      <div>
         Subnodes File Sharer
-        <span class="up">
+        <!-- <span class="up">
           <i class="fa fa-level-up"></i> Up
-        </span> 
+        </span>  -->
       </div>
-      <div class="panel-body">
+      <button type="submit" class="btn btn-success">Disconnect</button>
+    </header>
+    <div id="welcome">
+      <h2>Hello! This file sharer will let you create a shared server or connect to file servers available across the mesh network. Click one of the buttons below to get started.</h2>
+      <button id="bServer" type="button" class="btn btn-lg btn-default">Create Server</button>
+      <button id="bClient" type="button" class="btn btn-lg btn-default">Connect to Server</button>
+    </div>
+    <div id="create-server">
+      <form class="">
+        <div class="form-group">
+          <input type="text" placeholder="path/to/folder" class="form-control">
+        </div>
+        <div class="error"></div>
+        <button type="submit" class="btn btn-success">Create Server</button>
+      </form>
+    </div>
+    <div id="create-client">
+      <form class="">
+        <div class="form-group">
+          <input type="text" placeholder="location/share" class="form-control">
+          <input type="text" placeholder="mount point" class="form-control">
+        </div>
+        <div class="error"></div>
+        <button type="submit" class="btn btn-success">Connect</button>
+      </form>
+    </div>
+    <div id="directory" class="panel">
+      <div>
         <table id="dataTable">
         </table>
       </div>
+        <div class="error"></div>
+      <button type="submit" class="btn btn-success">Refresh</button>
   </div> 
     <script src="/js/vendor/jquery-2.1.4.min.js"></script>
     <script src="/js/vendor/bootstrap.min.js"></script>

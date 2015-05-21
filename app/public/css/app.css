@@ -1,16 +1,22 @@
 body { color: black!important;}
 
-.mainpanel { min-height:400px;}
+#create-server,
+#create-client,
+#directory {
+	display: none;
+}
 
-.linksholder ul { list-style-type: none; }
+.panel { min-height:400px;}
 
-.linksholder li { font-size: 16px; line-height: 1.5em;}
+#dataTable ul { list-style-type: none; }
 
-.linksholder li .fa { margin-right: 5px; }
+#dataTable li { font-size: 16px; line-height: 1.5em;}
 
-.linksholder a { color : black;}
+#dataTable li .fa { margin-right: 5px; }
 
-.linksholder .fa { color: black;}
+#dataTable a { color : black;}
+
+#dataTable .fa { color: black;}
 
 .dataTables_info { margin-top: 10px; background: ghostwhite; }
 
