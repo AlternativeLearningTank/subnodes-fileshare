@@ -55,14 +55,25 @@ app.use(function (req, res, next) {
 //     }
 // });
 
-// get from user input
-var ip = "192.168.3.1";
-var share = "anonymous";
-var mnt = "/mnt/public";
-var guest = true;
+// ----------------------
+// Set up our mount point
+// ----------------------
+// get params from 1)config file or 2)user input
+var ip = config.smbClient.ip;
+var share = config.smbClient.share;
+var mnt = config.smbClient.mount;
+var opts = config.smbClient.options;
+var params = ['mount',
+				'//'+ip+'/'+share,
+				mnt,
+				opts.length>0?'-o':'',
+				opts[0]
+			   ];
 
+// define functions
 function mountShare() {
-	var cmd = su(['mount', '//'+ip+'/'+share, mnt, '-o', 'guest']);
+	// var cmd = su(['mount', '//'+ip+'/'+share, mnt, '-o', 'guest']);
+	var cmd = su( params );
 	cmd.stdout.on('data', function(data) {
 		console.log("stdout: " + data);
 	});
@@ -72,6 +83,7 @@ function mountShare() {
 	cmd.on('exit', function(code) {
 		console.log('Child process exited with exit code '+code);
 
+		// handle exit codes
 		switch (code) {
 			case 0:
 				console.log("share successfully mounted, listing directory contents...");
@@ -95,10 +107,12 @@ function mountShare() {
 				// update the directory listing
 				updateDisplay();
 			break;
+			case 1:
+				console.log("error!");
+			break;
 		}
 	});
 }
-mountShare();
 
 function updateDisplay() {
 	fs.readdir(mnt, function(err, files) {
@@ -108,6 +122,7 @@ function updateDisplay() {
 		else {
 			// get list of files in current directory
 			files.forEach(function(f) {
+				// do no display files beginning with a dot
 				if ( f.indexOf('.') > 0 ) console.log("files: " + f);
 			});
 		}
@@ -120,3 +135,9 @@ function updateDisplay() {
 // ----------------------
 http.listen(config.http.port);
 console.log('subnodes-fileshare is running at: http://localhost:' + config.http.port + '.');
+
+
+// ----------------------
+// Init application
+// ----------------------
+mountShare();
