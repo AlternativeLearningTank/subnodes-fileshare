@@ -95,13 +95,12 @@ function mountShare() {
 				var watcher = chokidar.watch(mnt, {
 					  ignored: /[\/\\]\./,
 					  persistent: true,
-					  cwd: '.'
+					  ignoreInitial: true,
+					  usePolling: true
 					});
 
 				// ,
-				// 	  ignoreInitial: true,
 				// 	  cwd: '.',
-				// 	  usePolling: true
 
 					// watcher handlers
 					watcher
