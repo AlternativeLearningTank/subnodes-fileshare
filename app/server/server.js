@@ -97,7 +97,7 @@ function mountShare() {
 					  persistent: true,
 					  ignoreInitial: true,
 					  usePolling: true,
-					  cwd: './'
+					  depth: 3
 					});
 
 				// ,
@@ -121,24 +121,22 @@ function mountShare() {
 	});
 }
 
-function updateDisplay(f) {
+function updateDisplay(path) {
 
-	var cwd = mnt;
-
-	console.log("cwd: " + cwd);
-	console.log("f: " + f);
+	var start = path.lastIndexOf('/');
+	var f = path.substr(start, path.length);
 
 	// make note of directories
-	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
+	var isDir = fs.statSync(path).isDirectory();
 	if (isDir) {
-		data.push({ name : f, isDir: true, path : path.join(cwd, f) });
+		data.push({ name : f, isDir: true, path : path });
 	//
 	} else {
 	// make note of files
 		// do not display files beginning with a dot
 		if ( f.indexOf('.') > 0 ) {
 			var ext = path.extname(f);    
-			data.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
+			data.push({ name : f, ext : ext, isDir: false, path : path });
 		}
 	}
 
