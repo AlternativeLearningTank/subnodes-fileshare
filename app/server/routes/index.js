@@ -30,6 +30,7 @@
 		console.log("/files called");
 
 		var json = sharedDrive.readFiles();
+		console.log("json: " + json);
 		res.end(json);
 	});
 
