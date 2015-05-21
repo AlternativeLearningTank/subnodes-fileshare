@@ -1,7 +1,8 @@
 (function() {
 	'use strict';
 
-	var express = require('express')
+	var _ = require('underscore')
+		,express = require('express')
 		,router = express.Router()
 	    ,config = require('getconfig')
 	    ,su = require('sudo')
