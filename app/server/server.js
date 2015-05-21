@@ -130,6 +130,9 @@ function updateDisplay() {
 				if ( f.indexOf('.') > 0 ) {
 					try {
 	                	//console.log("processingile);
+	                	console.log("cwd: " + cwd);
+	                	console.log("f: " + f);
+	                	console.log("path.join(cwd,f): " + path.join(cwd,f));
 	                	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
 		                if (isDir) {
 		                  data.push({ name : f, isDir: true, path : path.join(query, f)  });
@@ -139,7 +142,7 @@ function updateDisplay() {
 		                }
 	                	console.log("isDir: " + isDir);
 	                	console.log("name: " + f);
-	                	console.log("path: " + path);
+	                	console.log("path: " + path.join(query,f));
 	                	console.log("ext: " + ext);
 			        } catch(e) {
 			          console.log(e); 
