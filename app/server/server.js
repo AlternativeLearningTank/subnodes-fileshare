@@ -70,6 +70,7 @@ var params = ['mount',
 				opts.length>0?'-o':'',
 				opts[0]
 			   ];
+var files = [];
 
 // define functions
 function mountShare() {
@@ -130,21 +131,21 @@ function updateDisplay(file) {
 	// make note of directories
 	var isDir = fs.statSync(file).isDirectory();
 	if (isDir) {
-		data.push({ name : f, isDir: true, path : file });
+		files.push({ name : f, isDir: true, path : file });
 	//
 	} else {
 	// make note of files
 		// do not display files beginning with a dot
 		if ( f.indexOf('.') > 0 ) {
 			var ext = path.extname(f);    
-			data.push({ name : f, ext : ext, isDir: false, path : file });
+			files.push({ name : f, ext : ext, isDir: false, path : file });
 		}
 	}
 
-	// res.json(data);
-	//for (var i=0; i<data.length; i++) {
-	//	for (var k in data[i]) {
-	//		console.log(k + ": " + data[i][k]);
+	// res.json(files);
+	//for (var i=0; i<files.length; i++) {
+	//	for (var k in files[i]) {
+	//		console.log(k + ": " + files[i][k]);
 	//	}
 	//}
 }
@@ -152,7 +153,7 @@ function updateDisplay(file) {
 function initDisplay() {
 
 	var cwd = mnt;
-	var data = [];
+	files = [];
 
 	fs.readdir(cwd, function(err, files) {
 		if (err) {
@@ -166,14 +167,14 @@ function initDisplay() {
 					// make note of directories
 	               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
 		            if (isDir) {
-		            	data.push({ name : f, isDir: true, path : path.join(cwd, f)  });
+		            	files.push({ name : f, isDir: true, path : path.join(cwd, f)  });
 		            //
 		            } else {
 		            // make note of files
 				      	// do not display files beginning with a dot
 						if ( f.indexOf('.') > 0 ) {
 		                 	var ext = path.extname(f);    
-		                  	data.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
+		                  	files.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
 		                }
 		            }
 			    } catch(e) {
@@ -182,12 +183,12 @@ function initDisplay() {
 			});
 		}
 
-		data = _.sortBy(data, function(d) { return d.name });
-		// res.json(data);
-		console.log("initial directory listing found! " + data.length + " files found.")
-		// for (var i=0; i<data.length; i++) {
-		// 	for (var k in data[i]) {
-		// 		console.log(k + ": " + data[i][k]);
+		files = _.sortBy(files, function(file) { return file.name });
+		// res.json(files);
+		console.log("initial directory listing found! " + files.length + " files found.")
+		// for (var i=0; i<files.length; i++) {
+		// 	for (var k in files[i]) {
+		// 		console.log(k + ": " + files[i][k]);
 		// 	}
 		// }
 	});
