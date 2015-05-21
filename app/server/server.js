@@ -79,7 +79,7 @@ function mountShare() {
 				console.log("share is already mounted, attempting to list contents...");
 				// start watching the share for changes; update display if any.
 				var log = console.log.bind(console);
-				var watcher = chokidar.watch('file, dir, or glob', {
+				var watcher = chokidar.watch(mnt, {
 					  ignored: /[\/\\]\./,
 					  persistent: true
 					});
