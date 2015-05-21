@@ -15,13 +15,12 @@
 	// Create route for index page
 	// ---------------------------
 	router.get('/', function(req, res) {
-		console.log("getting index page");
 		res.render('index');
 	});
 
-	// ----------------------------------------------------
-	// Set up our mount point when user navigates to /files
-	// ----------------------------------------------------
+	// -------------------------------------------------------
+	// Set up our mount point when application requests /files
+	// -------------------------------------------------------
 	router.get('/files', function(req, res) {
 		
 		// get params from 1)config file or 2)user input
@@ -98,9 +97,10 @@
 					// 		.on('error', function(error) { console.log('Error happened', error); });
 
 					// get initial directory reading
-					dirContents = getFiles(mnt);
+					getFiles(mnt);
 
-					console.log("updating the file display list!")
+					// print out files found for debugging
+					console.log("directory listing found! " + dirContents.length + " files found.");
 					// display based on dirContents
 					for (var i=0; i<dirContents.length; i++) {
 						console.log(dirContents[i].name);
@@ -118,11 +118,10 @@
 
 	function getFiles(mnt) {
 
-		var cwd = mnt;
-		var dirFiles = [];
-		// dirContents = [];
+		// reset dirContents array
+		dirContents = [];
 
-		fs.readdir(cwd, function(err, files) {
+		fs.readdir(mnt, function(err, files) {
 			if (err) {
 				console.log('err: ' + err);
 			}
@@ -132,16 +131,16 @@
 					try {
 						//
 						// make note of directories
-		               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
+		               	var isDir = fs.statSync(path.join(mnt,f)).isDirectory();
 			            if (isDir) {
-			            	dirFiles.push({ name : f, isDir: true, path : path.join(cwd, f)  });
+			            	dirContents.push({ name : f, isDir: true, path : path.join(mnt, f)  });
 			            //
 			            } else {
 			            // make note of files
 					      	// do not display files beginning with a dot
 							if ( f.indexOf('.') > 0 ) {
 			                 	var ext = path.extname(f);    
-			                  	dirFiles.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
+			                  	dirContents.push({ name : f, ext : ext, isDir: false, path : path.join(mnt, f) });
 			                }
 			            }
 				    } catch(e) {
@@ -150,9 +149,7 @@
 				});
 			}
 
-			dirFiles = _.sortBy(dirFiles, function(file) { return file.name });
-			console.log("initial directory listing found! " + dirFiles.length + " files found.");
-			return dirFiles;
+			dirContents = _.sortBy(dirContents, function(file) { return file.name });
 		});
 	}
 

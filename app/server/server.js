@@ -12,31 +12,39 @@
 	// -----------------
 	// Configure express
 	// -----------------
+	//
+	// set where our front-end pages live
+	//
 	app.set('views', path.join(__dirname, 'views'));
 	app.engine('html', require('ejs').renderFile);
 	app.set('view engine', 'html');
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
-	app.use(cookieParser());
-	app.use(express.static(path.join(__dirname, '../public')));
-	app.use('/', routes);
-	app.set('port', config.http.port || 8080);
-
-	// ----------------------------
+	//
 	// Set our client config cookie
-	// ----------------------------
+	//
+	app.use(cookieParser());
 	app.use(function (req, res, next) {
 	    res.cookie('config', JSON.stringify(config.client));
 	    next();
 	});
-
-	// ----------------------
-	// Set up our HTTP server
-	// ----------------------
+	//
+	// set where our static files will live (js/css/img/fonts/etc)
+	//
+	app.use(express.static(path.join(__dirname, '../public')));
+	//
+	// where our routing rules will live
+	app.use('/', routes);
+	//
+	// Set up our port and HTTP server
+	//
+	app.set('port', config.http.port || 8080);
 	var server = app.listen(app.get('port'), function() {
 		console.log("Express server listening on port " + server.address().port);
 	});
-
+	//
+	// makes `app` publically available
+	//
 	module.exports = app;
-
+	//
 }());

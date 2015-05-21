@@ -14,7 +14,7 @@
 //         // wait for document ready to render our main view
 //         domReady(function () {
 
-            $.get('/files').then(function(data){
+            $.get( "/files", function( data ) {
                 console.log("data: " + data);
             });
 
