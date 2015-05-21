@@ -98,13 +98,6 @@ function mountShare() {
 		}
 		else if (code === 32) {
 			console.log("share was already mounted, trying again to write file")
-			// resource was busy, drive probably needs to be unmounted
-			// var umount = su(['unmount', mnt]);
-			// umount.on('exit', function(code) {
-			// 	if (code === 0) {
-			// 		mountShare();
-			// 	}
-			// })
 			fs.readdir(mnt, function(err, files) {
 				if (err) {
 					console.log('err: ' + err);
@@ -120,7 +113,7 @@ function mountShare() {
 					  console.log('It\'s saved!');
 					});
 
-					var mv = su(['mv', 'text.txt', mnt]);
+					var mv = su(['mv', 'test.txt', mnt]);
 					mv.on('exit', function(code) {
 						console.log("mv exited with code " + code);
 					});
