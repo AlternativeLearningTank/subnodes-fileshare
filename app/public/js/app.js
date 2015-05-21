@@ -157,7 +157,9 @@ module.exports = {
 
         console.log("about to call /files endpoint");
         $.get('/files').then(function(data){
-            console.log("data: " + data.length);
+            for ( var k in data ) {
+                console.log(k + ": " + data[k]);
+            }
             table.fnClearTable();
             table.fnAddData(data);
         });
