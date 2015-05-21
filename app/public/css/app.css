@@ -1,6 +1,6 @@
-body { left:10%;width:80%;position:absolute; top:10%; color: black!important;}
+body { color: black!important;}
 
-.mainpanel { height:90%;min-height:400px;}
+.mainpanel { min-height:400px;}
 
 .linksholder ul { list-style-type: none; }
 
@@ -11,8 +11,6 @@ body { left:10%;width:80%;position:absolute; top:10%; color: black!important;}
 .linksholder a { color : black;}
 
 .linksholder .fa { color: black;}
-
-.dataTables_filter label { float: right; font-weight:normal; position: absolute; top : 10px; right: 5px; }
 
 .dataTables_info { margin-top: 10px; background: ghostwhite; }
 
