@@ -121,23 +121,23 @@ function mountShare() {
 	});
 }
 
-function updateDisplay(path) {
+function updateDisplay(file) {
 
-	var start = path.lastIndexOf('/');
-	var f = path.substring(start, path.length);
+	var start = file.lastIndexOf('/');
+	var f = file.substring(start, file.length);
 	console.log("f: " + f);
 
 	// make note of directories
-	var isDir = fs.statSync(path).isDirectory();
+	var isDir = fs.statSync(file).isDirectory();
 	if (isDir) {
-		data.push({ name : f, isDir: true, path : path });
+		data.push({ name : f, isDir: true, path : file });
 	//
 	} else {
 	// make note of files
 		// do not display files beginning with a dot
 		if ( f.indexOf('.') > 0 ) {
 			var ext = path.extname(f);    
-			data.push({ name : f, ext : ext, isDir: false, path : path });
+			data.push({ name : f, ext : ext, isDir: false, path : file });
 		}
 	}
 
