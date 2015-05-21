@@ -152,8 +152,6 @@ function initDisplay() {
 	var cwd = mnt;
 	var data = [];
 
-	console.log("initDisplay: " + cwd);
-
 	fs.readdir(cwd, function(err, files) {
 		if (err) {
 			console.log('err: ' + err);
@@ -165,7 +163,6 @@ function initDisplay() {
 					//
 					// make note of directories
 	               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
-	               	console.log("are we a directory? " + isDir);
 		            if (isDir) {
 		            	data.push({ name : f, isDir: true, path : path.join(cwd, f)  });
 		            //
@@ -183,10 +180,9 @@ function initDisplay() {
 			});
 		}
 
-		console.log("data's length is " + data.length);
-
 		data = _.sortBy(data, function(d) { return d.name });
 		// res.json(data);
+		console.log("initial directory listing found!")
 		for (var i=0; i<data.length; i++) {
 			for (var k in data[i]) {
 				console.log(k + ": " + data[i][k]);
