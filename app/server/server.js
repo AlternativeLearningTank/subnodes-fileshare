@@ -99,11 +99,11 @@ function mountShare() {
 
 					// watcher handlers
 					watcher
-						.on('add', function(path) { log('File', path, 'has been added'); })
-						.on('change', function(path) { log('File', path, 'has been changed'); })
-				 		.on('unlink', function(path) { log('File', path, 'has been removed'); })
-						.on('addDir', function(path) { log('Directory', path, 'has been added'); })
-						.on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); })
+						.on('add', function(path) { log('File', path, 'has been added'); updateDisplay(); })
+						.on('change', function(path) { log('File', path, 'has been changed'); updateDisplay(); })
+				 		.on('unlink', function(path) { log('File', path, 'has been removed'); updateDisplay(); })
+						.on('addDir', function(path) { log('Directory', path, 'has been added'); updateDisplay(); })
+						.on('unlinkDir', function(path) { log('Directory', path, 'has been removed'); updateDisplay(); })
 						.on('error', function(error) { log('Error happened', error); });
 				// update the directory listing
 				updateDisplay();
