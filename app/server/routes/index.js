@@ -150,6 +150,7 @@
 			}
 
 			dirContents = _.sortBy(dirContents, function(file) { return file.name });
+			console.log("in getFiles, dirContents.length: " + dirContents.length);
 		});
 	}
 
