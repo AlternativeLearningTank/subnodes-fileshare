@@ -6,7 +6,8 @@
 	    ,config = require('getconfig')
 	    ,su = require('sudo')
 	    ,fs = require('fs')
-	    ,chokidar = require('chokidar');
+	    ,chokidar = require('chokidar')
+	    ,dirContents = [];
 
 	// ---------------------------
 	// Create route for index page
@@ -31,8 +32,8 @@
 						mnt,
 						opts.length>0?'-o':'',
 						opts[0]
-					   ]
-			,dirContents = [];
+					   ];
+			// ,dirContents = [];
 
 		// mount the share drive + watch for changes
 		var cmd = su( params );
