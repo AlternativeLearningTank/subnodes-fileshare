@@ -127,29 +127,28 @@ function updateDisplay() {
 			// get list of files in current directory
 			files.forEach(function(f) {
 				// do not display files beginning with a dot
-				if ( f.indexOf('.') > 0 ) {
+				// if ( f.indexOf('.') > 0 ) {
 					console.log("//////////////////////////////////////////////////////////");
-					console.log("f: " + f);
-				// 	try {
-	   //              	//console.log("processingile);
-	   //              	console.log("cwd: " + cwd);
-	   //              	console.log("f: " + f);
-	   //              	console.log("path.join(cwd,f): " + path.join(cwd,f));
-	   //              	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
-		  //               if (isDir) {
-		  //                 data.push({ name : f, isDir: true, path : path.join(query, f)  });
-		  //               } else {
-		  //                 var ext = path.extname(f);    
-		  //                 data.push({ name : f, ext : ext, isDir: false, path : path.join(query, f) });
-		  //               }
-	   //              	console.log("isDir: " + isDir);
-	   //              	console.log("name: " + f);
-	   //              	console.log("path: " + path.join(query,f));
-	   //              	console.log("ext: " + ext);
-			 //        } catch(e) {
-			 //          console.log(e); 
-			 //        }
-				}
+					try {
+	                	//console.log("processingile);
+	                	console.log("cwd: " + cwd);
+	                	console.log("f: " + f);
+	                	console.log("path.join(cwd,f): " + path.join(cwd,f));
+	                	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
+		                if (isDir) {
+		                  data.push({ name : f, isDir: true, path : path.join(query, f)  });
+		                } else {
+		                  var ext = path.extname(f);    
+		                  data.push({ name : f, ext : ext, isDir: false, path : path.join(query, f) });
+		                }
+	                	console.log("isDir: " + isDir);
+	                	console.log("name: " + f);
+	                	console.log("path: " + path.join(query,f));
+	                	console.log("ext: " + ext);
+			        } catch(e) {
+			          console.log(e); 
+			        }
+				// }
 			});
 
 		    data = _.sortBy(data, function(f) { return f.name });
