@@ -76,6 +76,7 @@ module.exports = {
 
     connect: function() {
         $.get('/connect').then(function(data){
+            console.log("connected status: " + data.status);
             module.exports.readFiles();
         });
     },
