@@ -164,9 +164,11 @@ function initDisplay() {
 			files.forEach(function(f) {
 				console.log("per file, do a read... " + f);
 				try {
+					console.log("trying...");
 					//
 					// make note of directories
 	               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
+	               	console.log("are we a directory? " + isDir);
 		            if (isDir) {
 		            	data.push({ name : f, isDir: true, path : path.join(cwd, f)  });
 		            //
@@ -179,7 +181,7 @@ function initDisplay() {
 		                }
 		            }
 			    } catch(e) {
-			        console.log(e); 
+			    	console.log("caught error! " + e);
 		    	}
 			});
 		}
