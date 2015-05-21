@@ -98,7 +98,7 @@ var guest = true;
 // 	}
 // });
 
-var cmd = cp.spawn('mount', ['//'+ip+'/'+share, mnt, '-o', 'guest']);
+var cmd = cp.spawn('mount', ['//'+ip+'/'+share, mnt, '-o', 'guest'], { uid: 27});
 cmd.stdout.on('data', function(data) {
 	console.log("stdout: " + data);
 });
