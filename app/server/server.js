@@ -54,16 +54,58 @@ app.use(function (req, res, next) {
 //     }
 // });
 
-var smb = cp.exec('sudo mount //192.168.3.1/anonymous /mnt/public', function(err, stdout, stderr) {
-	if (err) {
-	     console.log(err.stack);
-	     console.log('Error code: '+err.code);
-	     console.log('Signal received: '+err.signal);
-	   }
-	   console.log('Child Process STDOUT: '+stdout);
-	   console.log('Child Process STDERR: '+stderr);
+// get from user input
+var ip = "192.168.3.1";
+var share = "anonymous";
+var mnt = "/mnt/public";
+var guest = true;
+
+// build the exec string
+// var smb = cp.exec('sudo mount //'+ip+'/'+share+' '+mnt+' -o guest', function(err, stdout, stderr) {
+// 	if (err) {
+// 	     console.log(err.stack);
+// 	     console.log('Error code: '+err.code);
+// 	     console.log('Signal received: '+err.signal);
+// 	   }
+// 	   console.log('Child Process STDOUT: '+stdout);
+// 	   console.log('Child Process STDERR: '+stderr);
+// });
+// smb.on('exit', function(code) {
+// 	console.log('Child process exited with exit code '+code);
+
+// 	if (code === 0) {
+// 		console.log("share successfully mounted. listing directory contents now.");
+// 		fs.readdir('/mnt/public', function(err, files) {
+// 			if (err) {
+// 				console.log('err: ' + err);
+// 			}
+// 			else {
+// 				files.forEach(function(f) {
+// 					console.log("files: " + f);
+// 				});
+
+// 				console.log("writing a test file to the share");
+// 				fs.write('/mnt/public/test.txt', 'lorem ipsum', function(err) {
+// 					if (err) { 
+// 						console.log("err: " + err);
+// 					}
+// 					else {
+// 						console.log("wrote text.txt to smb share");
+// 					}
+// 				});
+// 			}
+// 		});
+// 	}
+// });
+
+var cmd = cp.spawn('sudo mount //'+ip+'/'+share+' '+mnt+' -o guest');
+cmd.stdout.on('data', function(data) {
+	console.log("stdout: " + data);
 });
-smb.on('exit', function(code) {
+cmd.stderr.on('data', function(data) {
+	console.log("stderr: " + data);
+});
+cmd.on('exit', function(code) {
 	console.log('Child process exited with exit code '+code);
 
 	if (code === 0) {
