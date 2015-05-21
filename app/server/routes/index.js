@@ -55,51 +55,50 @@
 				case 32:
 					console.log("share is already mounted, attempting to list contents...");
 					// start watching the share for changes; update display if any.
-					var log = console.log.bind(console);
-					var watcher = chokidar.watch(mnt, {
-						  ignored: /[\/\\]\./,
-						  persistent: true,
-						  ignoreInitial: true,
-						  usePolling: true,
-						  depth: 3
-						});
+					// var watcher = chokidar.watch(mnt, {
+					// 	  ignored: /[\/\\]\./,
+					// 	  persistent: true,
+					// 	  ignoreInitial: true,
+					// 	  usePolling: true,
+					// 	  depth: 3
+					// 	});
 
-						// watcher handlers
-						watcher
-							.on('add', function(path) { 
-								// get directory listing
-								getFiles(mnt);
-								// return json in the response
-								res.json(dirContents);
-							})
-							// .on('change', function(path) { 
-							// 	// get directory listing
-							// 	//getFiles(mnt);
-							// 	// return json in the response
-							// 	//res.json(dirContents);
-							// })
-					 		.on('unlink', function(path) { 
-								// get directory listing
-								getFiles(mnt);
-								// return json in the response
-								res.json(dirContents);
-							})
-							.on('addDir', function(path) { 
-								// get directory listing
-								getFiles(mnt);
-								// return json in the response
-								res.json(dirContents);
-							})
-							.on('unlinkDir', function(path) { 
-								// get directory listing
-								getFiles(mnt);
-								// return json in the response
-								res.json(dirContents);
-							})
-							.on('error', function(error) { log('Error happened', error); });
+					// 	// watcher handlers
+					// 	watcher
+					// 		.on('add', function(path) { 
+					// 			// get directory listing
+					// 			getFiles(mnt);
+					// 			// return json in the response
+					// 			res.json(dirContents);
+					// 		})
+					// 		// .on('change', function(path) { 
+					// 		// 	// get directory listing
+					// 		// 	//getFiles(mnt);
+					// 		// 	// return json in the response
+					// 		// 	//res.json(dirContents);
+					// 		// })
+					//  		.on('unlink', function(path) { 
+					// 			// get directory listing
+					// 			getFiles(mnt);
+					// 			// return json in the response
+					// 			res.json(dirContents);
+					// 		})
+					// 		.on('addDir', function(path) { 
+					// 			// get directory listing
+					// 			getFiles(mnt);
+					// 			// return json in the response
+					// 			res.json(dirContents);
+					// 		})
+					// 		.on('unlinkDir', function(path) { 
+					// 			// get directory listing
+					// 			getFiles(mnt);
+					// 			// return json in the response
+					// 			res.json(dirContents);
+					// 		})
+					// 		.on('error', function(error) { console.log('Error happened', error); });
 
 					// get initial directory reading
-					getFiles(mnt);
+					dirContents = getFiles(mnt);
 
 					console.log("updating the file display list!")
 					// display based on dirContents
@@ -120,7 +119,8 @@
 	function getFiles(mnt) {
 
 		var cwd = mnt;
-		dirContents = [];
+		var dirFiles = [];
+		// dirContents = [];
 
 		fs.readdir(cwd, function(err, files) {
 			if (err) {
@@ -134,14 +134,14 @@
 						// make note of directories
 		               	var isDir = fs.statSync(path.join(cwd,f)).isDirectory();
 			            if (isDir) {
-			            	dirContents.push({ name : f, isDir: true, path : path.join(cwd, f)  });
+			            	dirFiles.push({ name : f, isDir: true, path : path.join(cwd, f)  });
 			            //
 			            } else {
 			            // make note of files
 					      	// do not display files beginning with a dot
 							if ( f.indexOf('.') > 0 ) {
 			                 	var ext = path.extname(f);    
-			                  	dirContents.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
+			                  	dirFiles.push({ name : f, ext : ext, isDir: false, path : path.join(cwd, f) });
 			                }
 			            }
 				    } catch(e) {
@@ -150,11 +150,9 @@
 				});
 			}
 
-			dirContents = _.sortBy(dirContents, function(file) { return file.name });
-			console.log("initial directory listing found! " + dirContents.length + " files found.");
-
-			// update the display
-			//updateDisplay(res);
+			dirFiles = _.sortBy(dirFiles, function(file) { return file.name });
+			console.log("initial directory listing found! " + dirFiles.length + " files found.");
+			return dirFiles;
 		});
 	}
 
