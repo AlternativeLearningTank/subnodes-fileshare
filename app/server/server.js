@@ -55,6 +55,13 @@ app.use(function (req, res, next) {
 //     }
 // });
 
+// ---------------------------
+// Create route for index page
+// ---------------------------
+app.get('/', function(req, res) {
+	res.redirect('template.html');
+});
+
 // ----------------------------------------------------
 // Set up our mount point when user navigates to /files
 // ----------------------------------------------------
