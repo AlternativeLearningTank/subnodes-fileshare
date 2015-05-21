@@ -1,17 +1,8 @@
 (function() {
 	'use strict';
 
-	var _ = require('underscore')
-		,path = require('path')
-		,express = require('express')
-		,router = express.Router()
-	    ,config = require('getconfig')
-	    ,su = require('sudo')
-	    ,fs = require('fs')
-	    ,chokidar = require('chokidar')
-	    ,getFileList = require('../modules/GetFileList')
-	    ,dirContents = []
-	    ,watcher;
+	var router = require('express').Router()
+		,sharedDrive = require('../modules/SharedDrive');
 
 	// ---------------------------
 	// Create route for index page
@@ -21,13 +12,13 @@
 	});
 
 	// ---------------------------------------------------------
-	// Set up our mount point when application requests /connect
+	// Set up our mount point and connect to shared drive
 	// ---------------------------------------------------------
 	router.get('/connect', function(req, res) {
 
 		console.log("/connect called");
 		
-		var json = getFileList.connect();
+		var json = sharedDrive.connect();
 		res.end(json);
 	});
 
@@ -38,23 +29,22 @@
 
 		console.log("/files called");
 
-		var json = getFileList.files();
+		var json = sharedDrive.readFiles();
 		res.end(json);
-
-		
 	});
 
 
 	// -------------------------------------------------------
-	// Disconnect from the drive
+	// Disconnect from the share drive
 	// -------------------------------------------------------
 	router.get('/disconnect', function(req, res) {
 
 		console.log("/disconnect called");
 
-		var json = getFileList.disconnect();
+		var json = sharedDrive.disconnect();
 		res.end(json);
 	});
 
 	module.exports = router;
+
 }());

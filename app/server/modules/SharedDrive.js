@@ -1,17 +1,14 @@
 (function() {
     'use strict';
 
-    var GetFileList = function() {
+    var SharedDrive = function() {
 
         var _ = require('underscore')
         ,path = require('path')
-        ,express = require('express')
-        ,router = express.Router()
         ,config = require('getconfig')
         ,su = require('sudo')
         ,fs = require('fs')
         ,chokidar = require('chokidar')
-        ,getFileList = require('../modules/GetFileList')
         ,dirContents = []
         ,watcher;
 
@@ -28,7 +25,6 @@
                             opts.length>0?'-o':'',
                             opts[0]
                            ];
-                // ,dirContents = [];
 
             // mount the share drive + watch for changes
             var cmd = su( params );
@@ -57,16 +53,11 @@
                             });
                             // watcher handlers
                             watcher
-                                // .on('add', function(p) { getFiles(mnt, res); })
-                                // .on('change', function(p) { getFiles(mnt, res); })
-                            //  .on('unlink', function(p) { getFiles(mnt, res); })
-                                // .on('addDir', function(p) { getFiles(mnt, res); })
-                                // .on('unlinkDir', function(p) { getFiles(mnt, res); })
-                                .on('add', function(p) { module.exports.files(); })
-                                .on('change', function(p) { module.exports.files(); })
-                                .on('unlink', function(p) { module.exports.files(); })
-                                .on('addDir', function(p) { module.exports.files(); })
-                                .on('unlinkDir', function(p) { module.exports.files(); })
+                                .on('add', function(p) { module.exports.readFiles(); })
+                                .on('change', function(p) { module.exports.readFiles(); })
+                                .on('unlink', function(p) { module.exports.readFiles(); })
+                                .on('addDir', function(p) { module.exports.readFiles(); })
+                                .on('unlinkDir', function(p) { module.exports.readFiles(); })
                                 .on('error', function(err) { console.log('Error while watching file share: ', err); });
 
                         // get initial directory reading
@@ -85,7 +76,7 @@
             });
         }
 
-        var files = function() {
+        var readFiles = function() {
 
             var mnt = config.smbClient.mount;
 
@@ -122,7 +113,6 @@
                     // print out files found for debugging
                     console.log("directory listing found! " + dirContents.length + " files found.");
                     // return json in the response
-                    //res.json(dirContents);
                     return dirContents;
                 }
             });
@@ -152,13 +142,11 @@
                         if ( watcher ) watcher.close();
 
                         // return status
-                        // res.json( {"status": "success"} );
                         var status = {"status": "success"};
                         return status;
                     break;
 
                     case 1:
-                        // res.json( {"status": "error"} );
                         var status = {"status": "error"};
                         return status;
                         console.log("exit code 1, error while disconnecting file share.");
@@ -169,10 +157,10 @@
 
         return {
             connect: connect
-           ,files: files
+           ,readFiles: readFiles
            ,disconnect: disconnect
         }
     }();
 
-    module.exports = GetFileList;
+    module.exports = SharedDrive;
 }());
