@@ -139,7 +139,7 @@ module.exports = {
     updateDataTable: function(endPoint, path) {
         console.log("updating data table...");
         // $.get('/files').then(function(data){
-        $.get(path).then(function(data){
+        $.get(endPoint).then(function(data){
 
             console.log("data: " + data);
 
