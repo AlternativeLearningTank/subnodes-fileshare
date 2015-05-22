@@ -43,7 +43,7 @@
             //   # Control will enter here if $DIRECTORY doesn't exist.
             // fi
             var spawn = require('child_process').spawn,
-                cd = spawn('cd', ['/mnt/public/']);
+                cd = spawn('ls', ['/mnt/public/']);
             cd.stderr.on('data', function(data){
                 var d = String(data);
                 console.log("cd stderr: " + d);
