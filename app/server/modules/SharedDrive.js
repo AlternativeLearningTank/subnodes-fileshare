@@ -43,7 +43,7 @@
                 switch (code) {
                     case 0:
                         console.log("Mount point exists, proceed with loading share...");
-                        module.exports.mountShare(cData);
+                        module.exports.mountShare(cData, cb);
                     break;
 
                     case 1:
@@ -59,7 +59,7 @@
                             switch (code) {
                                 case 0:
                                     console.log("Mount point successfully created. mounting the share now...");
-                                    module.exports.mountShare(cData);
+                                    module.exports.mountShare(cData, cb);
                                 break;
                             }
                         });
@@ -68,7 +68,7 @@
             });
         }
 
-        var mountShare = function(cData) {
+        var mountShare = function(cData, cb) {
             var share = cData[0].share
                 ,mnt = cData[1].mount
                 ,opts = config.smbClient.options
