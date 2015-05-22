@@ -98,7 +98,8 @@ module.exports = {
             url: '/disconnect',                      
             success: function(res) {
                 console.log(JSON.stringify(res));   
-                console.log("disconnected status: " + res.status);                          
+                console.log("disconnected status: " + res.status);  
+                $dataTable.fnClearTable();                        
             },
             error: function(error) {
                 console.log("There was an error connecting to the file share... " + error);
