@@ -48,7 +48,7 @@ module.exports = {
 
             $bRefresh.on('click', function() {
                 // refresh the file contents
-                module.exports.updateDataTable();
+                module.exports.updateDataTable('/files', null);
             });
 
             $bDisconnect.on('click', function() {
@@ -122,7 +122,6 @@ module.exports = {
 
         // initialize dataTable
         $dataTable.dataTable(opts);
-        // $('#dataTable').dataTable(opts);
 
         // $(".up").on("click", function(e){
         //     if (!currentPath) return;
@@ -140,11 +139,6 @@ module.exports = {
         console.log("updating data table...");
         // $.get('/files').then(function(data){
         $.get(endPoint).then(function(data){
-
-            console.log("data: " + data);
-
-            // $('#dataTable').fnClearTable();
-            // $('#dataTable').fnAddData(data);
             $dataTable.fnClearTable();
             $dataTable.fnAddData(data);
             // currentPath = path;
