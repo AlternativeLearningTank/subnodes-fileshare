@@ -25,6 +25,8 @@
                 //             opts.length>0?'-o':'',
                 //             opts[0]
                 //            ];
+                console.log("SharedDrive, cData.share: " + cData.share);
+                console.log("SharedDrive, cData.mount: " + cData.mount);
             var share = cData.share
                 ,mnt = cData.mount
                 ,opts = config.smbClient.options
