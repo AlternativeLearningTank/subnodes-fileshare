@@ -16,6 +16,8 @@
 	// ---------------------------------------------------------
 	router.post('/connect', function(req, res) {
 
+		console.log("req.body: " + req.body);
+
 		var json = sharedDrive.connect(req.body, function(data) {
 			res.json(data);
 		});
