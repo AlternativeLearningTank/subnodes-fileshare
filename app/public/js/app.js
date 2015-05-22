@@ -36,6 +36,7 @@ module.exports = {
             var ip = config.smbClient.ip;
             var share = config.smbClient.share;
             var mnt = config.smbClient.mount;
+            var data = [];
 
             $serverAddr.val( sPath ? sPath : '' );
             $shareAddr.val( ip && share ? '//'+config.smbClient.ip+'/'+config.smbClient.share : '' );
@@ -56,15 +57,14 @@ module.exports = {
                 $directory.fadeIn();
                 $bDisconnect.fadeIn();
                 // mount drive
-                console.log("$shareAddr.val(): " + $shareAddr.val());
-                console.log("$mountPt.val(): " + $mountPt.val());
-                var data = [{"share": $shareAddr.val()}, {"mount": $mountPt.val()}];
+                data = [{"share": $shareAddr.val()}, {"mount": $mountPt.val()}];
                 module.exports.connect(data);
             });
 
             $bRefresh.on('click', function() {
                 // refresh the file contents
-                module.exports.updateDataTable('/files', null);
+                data = data.length > 0 ? data : [{"share": $shareAddr.val()}, {"mount": $mountPt.val()}];
+                module.exports.updateDataTable(data, '/files', null);
             });
 
             $bDisconnect.on('click', function() {
@@ -190,7 +190,7 @@ module.exports = {
             data: JSON.stringify(data),
             contentType: "application/json",
             dataType: 'json',
-            url: endpoint,                      
+            url: endPoint,                      
             success: function(res) {
                 console.log(JSON.stringify(res));     
 
