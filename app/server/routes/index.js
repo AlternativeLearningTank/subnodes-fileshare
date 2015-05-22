@@ -31,7 +31,7 @@
 		// console.log("/files called");
 
 		sharedDrive.readFiles(function(data) {
-			console.log("json: " + data);
+			console.log("server side, data: " + data);
 			res.json(data);
 		});
 	});
