@@ -112,9 +112,7 @@
                     dirContents = _.sortBy(dirContents, function(file) { return file.name });
                     // print out files found for debugging
                     console.log("directory listing found! " + dirContents.length + " files found.");
-                    // return json in the response
-                    // var json = JSON.stringify( dirContents );
-                    console.log("shared drive, dirContents: " + dirContents);
+                    // return the array
                     cb( dirContents );
                 }
             });

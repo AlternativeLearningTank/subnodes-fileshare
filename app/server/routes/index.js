@@ -28,10 +28,9 @@
 	// -------------------------------------------------------
 	router.get('/files', function(req, res) {
 
-		// console.log("/files called");
+		console.log("/files called");
 
 		sharedDrive.readFiles(function(data) {
-			console.log("server side, data: " + data);
 			res.json(data);
 		});
 	});

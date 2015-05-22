@@ -23,68 +23,10 @@ module.exports = {
                 ,$bRefresh = $('#bRefresh')
                 ,$createServer = $('#create-server')
                 ,$createClient = $('#create-client')
-                ,$directory = $('#directory');
-
-            $bServer.on('click', function() {
-                $createClient.fadeOut();
-                $createServer.fadeIn();
-            });
-
-            $bClient.on('click', function() {
-                $createServer.fadeOut();
-                $createClient.fadeIn();
-            });
-
-            $bConnect.on('click', function() {
-                $directory.fadeIn();
-                $bDisconnect.fadeIn();
-                // mount drive
-                module.exports.connect();
-            });
-
-            $bRefresh.on('click', function() {
-                module.exports.readFiles();
-            });
-
-            $bDisconnect.on('click', function() {
-                $bDisconnect.fadeOut();
-                $directory.fadeOut();
-                // unmount
-                module.exports.disconnect();
-            });
-
-
-            // // init our main view
-            // var mainView = self.view = new MainView({
-            //     model: self.login,
-            //     el: document.body
-            // });
-
-            // // ...and render it
-            // mainView.render();
-
-            // we have what we need, we can now start our router and show the appropriate page
-            //self.router.history.start({pushState: true, root: '/'});
-        });
-    },
-
-    disconnect: function() {
-        $.get('/disconnect').then(function(data){
-            console.log("status: " + data.status);
-        });
-    },
-
-    connect: function() {
-        $.get('/connect').then(function(data){
-            console.log("connected status: " + data.status);
-            module.exports.readFiles();
-        });
-    },
-
-    readFiles: function() {
-
-        console.log("readFiles");
-        var extensionsMap = {
+                ,$directory = $('#directory')
+                ,$dataTable = $('#dataTable')
+                ,currentPath = null
+                ,extensionsMap = {
                       ".zip" : "fa-file-archive-o",         
                       ".gz" : "fa-file-archive-o",         
                       ".bz2" : "fa-file-archive-o",         
@@ -116,12 +58,66 @@ module.exports = {
                       ".docx" : "fa-file-word-o",         
                     };
 
-        function getFileIcon(ext) {
-            return ( ext && extensionsMap[ext.toLowerCase()]) || 'fa-file-o';
-        }
-              
-        var currentPath = null;
-        var options = {
+            $bServer.on('click', function() {
+                $createClient.fadeOut();
+                $createServer.fadeIn();
+            });
+
+            $bClient.on('click', function() {
+                $createServer.fadeOut();
+                $createClient.fadeIn();
+            });
+
+            $bConnect.on('click', function() {
+                $directory.fadeIn();
+                $bDisconnect.fadeIn();
+                // mount drive
+                module.exports.connect();
+            });
+
+            $bRefresh.on('click', function() {
+                // refresh the file contents
+                module.exports.updateDataTable();
+            });
+
+            $bDisconnect.on('click', function() {
+                $bDisconnect.fadeOut();
+                $directory.fadeOut();
+                // unmount
+                module.exports.disconnect();
+            });
+
+
+            // // init our main view
+            // var mainView = self.view = new MainView({
+            //     model: self.login,
+            //     el: document.body
+            // });
+
+            // // ...and render it
+            // mainView.render();
+
+            // we have what we need, we can now start our router and show the appropriate page
+            //self.router.history.start({pushState: true, root: '/'});
+        });
+    },
+
+    disconnect: function() {
+        $.get('/disconnect').then(function(data){
+            console.log("disconnect status: " + data.status);
+        });
+    },
+
+    connect: function() {
+        $.get('/connect').then(function(data){
+            console.log("connected status: " + data.status);
+            module.exports.initDataTable();
+            module.exports.updateDataTable('/files', null);
+        });
+    },
+
+    initDataTable: function() {
+        var opts = {
                 "bProcessing": true,
                 "bServerSide": false,
                 "bPaginate": false,
@@ -132,11 +128,12 @@ module.exports = {
                     if (!aData.isDir) return;
                     var path = aData.path;
                     $(nRow).on("click", function(e){
-                        $.get('/files?path='+ path).then(function(data){
-                            table.fnClearTable();
-                            table.fnAddData(data);
-                            currentPath = path;
-                        });
+                        updateDataTable('/files?path='+path, path);
+                        // $.get('/files?path='+ path).then(function(data){
+                        //     $dataTable.fnClearTable();
+                        //     $dataTable.fnAddData(data);
+                        //     currentPath = path;
+                        // });
                         e.preventDefault();
                     });
                 },
@@ -153,24 +150,33 @@ module.exports = {
                 ]
         };
 
-        var table = $("#dataTable").dataTable(options);
+        // initialize dataTable
+        $dataTable.dataTable(opts);
 
-        $.get('/files').then(function(data){
-            console.log("data.length: " + data.length);
-            table.fnClearTable();
-            table.fnAddData(data);
-        });
+        // $(".up").on("click", function(e){
+        //     if (!currentPath) return;
+        //     var idx = currentPath.lastIndexOf("/");
+        //     var path =currentPath.substr(0, idx);
+        //     $.get('/files?path='+ path).then(function(data){
+        //         table.fnClearTable();
+        //         table.fnAddData(data);
+        //         currentPath = path;
+        //     });
+        // });
+    },
 
-        $(".up").on("click", function(e){
-            if (!currentPath) return;
-            var idx = currentPath.lastIndexOf("/");
-            var path =currentPath.substr(0, idx);
-            $.get('/files?path='+ path).then(function(data){
-                table.fnClearTable();
-                table.fnAddData(data);
-                currentPath = path;
-            });
+    updateDataTable: function(endPoint, path) {
+        console.log("updating data table...");
+        // $.get('/files').then(function(data){
+        $.get(path).then(function(data){
+            $dataTable.fnClearTable();
+            $dataTable.fnAddData(data);
+            currentPath = path;
         });
+    },
+
+    getFileIcon: function(ext) {
+        return ( ext && extensionsMap[ext.toLowerCase()]) || 'fa-file-o';
     },
 
 };
