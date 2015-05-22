@@ -37,9 +37,9 @@ module.exports = {
             var share = config.smbClient.share;
             var mnt = config.smbClient.mount;
 
-            $serverAddr.value( sPath ? sPath : '' );
-            $shareAddr.value( ip && share ? config.smbClient.ip + '/' + config.smbClient.share : '' );
-            $mountPt.value( mnt ? mnt : '' );
+            $serverAddr.val( sPath ? sPath : '' );
+            $shareAddr.val( ip && share ? config.smbClient.ip + '/' + config.smbClient.share : '' );
+            $mountPt.val( mnt ? mnt : '' );
 
             // set UI handlers
             $bServer.on('click', function() {
