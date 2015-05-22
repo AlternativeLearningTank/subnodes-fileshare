@@ -15,8 +15,8 @@
 	// Create a server from which we will share files
 	// ---------------------------------------------------------
 	router.post('/createServer', function(req, res) {
-
-		var json = sharedDrive.connect(req.body, function(data) {
+		console.log("createServer on serverside");
+		var json = sharedDrive.create(req.body, function(data) {
 			res.json(data);
 		});
 	});
