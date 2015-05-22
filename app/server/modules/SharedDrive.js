@@ -28,7 +28,7 @@
                 switch (code) {
                     case 0:
                         console.log("Directory exists, proceed with initing Samba...");
-                        module.exports.initSamba(cData, cb);
+                        module.exports.cfgSamba(cData, cb);
                     break;
 
                     case 1:
@@ -44,7 +44,7 @@
                             switch (code) {
                                 case 0:
                                     console.log("Directory successfully created. Initing Samba now...");
-                                    module.exports.initSamba(cData, cb);
+                                    module.exports.cfgSamba(cData, cb);
                                 break;
                             }
                         });
@@ -53,8 +53,8 @@
             });
         }
 
-        var initSamba = function(cData, cb) {
-            console.log("initSamba");
+        var cfgSamba = function(cData, cb) {
+            console.log("cfgSamba");
             //chmod -R nobody:nogroup
             var mkdir = su ( ['chmod', '-R', 'nobody:nogroup'] );
                 mkdir.on('exit', function(code) {
@@ -281,6 +281,7 @@
 
         return {
             create: create
+           ,cfgSamba: cfgSamba
            ,connect: connect
            ,mountShare: mountShare
            ,readFiles: readFiles
