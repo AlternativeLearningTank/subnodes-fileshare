@@ -42,12 +42,13 @@
             // if [ ! -d "$DIRECTORY" ]; then
             //   # Control will enter here if $DIRECTORY doesn't exist.
             // fi
-            var cd = su( ['cd', mnt]);
+            var spawn = require('child_process').spawn,
+                cd = spawn('cd', [mnt]);
             cd.stderr.on('data', function(data){
                 var d = String(data);
                 console.log("cd stderr: " + d);
             });
-            cd.on('exit', function(code) {
+            cd.on('close', function(code) {
                 console.log('CD process exited with exit code '+code);
 
                 switch (code) {
