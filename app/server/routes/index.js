@@ -16,13 +16,6 @@
 	// ---------------------------------------------------------
 	router.post('/connect', function(req, res) {
 
-		for (var k in req.body[0] ) {
-			console.log(k + ": " + req.body[0][k]);
-		}
-
-		console.log("req.body.share: " + req.body[0].share);
-		console.log("req.body.mount: " + req.body[1].mount);
-
 		var json = sharedDrive.connect(req.body, function(data) {
 			res.json(data);
 		});
