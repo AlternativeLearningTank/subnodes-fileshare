@@ -53,11 +53,11 @@
                             });
                             // watcher handlers
                             watcher
-                                .on('add', function(p) { module.exports.readFiles(); })
-                                .on('change', function(p) { module.exports.readFiles(); })
-                                .on('unlink', function(p) { module.exports.readFiles(); })
-                                .on('addDir', function(p) { module.exports.readFiles(); })
-                                .on('unlinkDir', function(p) { module.exports.readFiles(); })
+                                .on('add', function(p) { module.exports.readFiles(function(data){ /* need to send to front-end somehow */ }); })
+                                .on('change', function(p) { module.exports.readFiles(function(data){ /* need to send to front-end somehow */ }); })
+                                .on('unlink', function(p) { module.exports.readFiles(function(data){ /* need to send to front-end somehow */ }); })
+                                .on('addDir', function(p) { module.exports.readFiles(function(data){ /* need to send to front-end somehow */ }); })
+                                .on('unlinkDir', function(p) { module.exports.readFiles(function(data){ /* need to send to front-end somehow */ }); })
                                 .on('error', function(err) { console.log('Error while watching file share: ', err); });
 
                         // get initial directory reading
