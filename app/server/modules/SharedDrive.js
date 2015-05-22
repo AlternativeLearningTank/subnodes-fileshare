@@ -46,6 +46,8 @@
             cmd.stderr.on('data', function(data) {
                 console.log("stderr: " + data);
 
+                console.log("typeOf data: " + $.type(data));
+
                 // handle errors
                 if ( data.indexOf( "No such file or directory" ) > -1 ) {
                     console.log("MOUNT POINT DOES NOT EXIST. TRY TO CREATE?");
