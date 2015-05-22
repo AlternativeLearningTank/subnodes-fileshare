@@ -2,7 +2,8 @@
 // Application Controller
 
 var config = require('clientconfig')
-    ,domReady = require('domready');
+    ,domReady = require('domready')
+    ,$dataTable;
 
 // exports
 module.exports = {
@@ -25,41 +26,7 @@ module.exports = {
                 ,$createServer = $('#create-server')
                 ,$createClient = $('#create-client')
                 ,$directory = $('#directory')
-                ,$dataTable = $('#dataTable')
-                ,currentPath = null
-                ,extensionsMap = {
-                      ".zip" : "fa-file-archive-o",         
-                      ".gz" : "fa-file-archive-o",         
-                      ".bz2" : "fa-file-archive-o",         
-                      ".xz" : "fa-file-archive-o",         
-                      ".rar" : "fa-file-archive-o",         
-                      ".tar" : "fa-file-archive-o",         
-                      ".tgz" : "fa-file-archive-o",         
-                      ".tbz2" : "fa-file-archive-o",         
-                      ".z" : "fa-file-archive-o",         
-                      ".7z" : "fa-file-archive-o",         
-                      ".mp3" : "fa-file-audio-o",         
-                      ".cs" : "fa-file-code-o",         
-                      ".c++" : "fa-file-code-o",         
-                      ".cpp" : "fa-file-code-o",         
-                      ".js" : "fa-file-code-o",         
-                      ".xls" : "fa-file-excel-o",         
-                      ".xlsx" : "fa-file-excel-o",         
-                      ".png" : "fa-file-image-o",         
-                      ".jpg" : "fa-file-image-o",         
-                      ".jpeg" : "fa-file-image-o",         
-                      ".gif" : "fa-file-image-o",         
-                      ".mpeg" : "fa-file-movie-o",         
-                      ".pdf" : "fa-file-pdf-o",         
-                      ".ppt" : "fa-file-powerpoint-o",         
-                      ".pptx" : "fa-file-powerpoint-o",         
-                      ".txt" : "fa-file-text-o",         
-                      ".log" : "fa-file-text-o",         
-                      ".doc" : "fa-file-word-o",         
-                      ".docx" : "fa-file-word-o",         
-                    };
-
-            console.log("$dataTable.size(): " + $dataTable.size());
+                ,$dataTable = $('#dataTable');
 
             $bServer.on('click', function() {
                 $createClient.fadeOut();
@@ -115,12 +82,16 @@ module.exports = {
         $.get('/connect').then(function(data){
             console.log("connected status: " + data.status);
             console.log("in connect, $dataTable.size(): " + $dataTable.size());
-            // module.exports.initDataTable();
+            module.exports.initDataTable();
             module.exports.updateDataTable('/files', null);
         });
     },
 
     initDataTable: function() {
+
+        // currentPath needs to be define somewhere accessible for many methods
+        // currentPath = null;
+
         var opts = {
                 "bProcessing": true,
                 "bServerSide": false,
@@ -133,11 +104,6 @@ module.exports = {
                     var path = aData.path;
                     $(nRow).on("click", function(e){
                         updateDataTable('/files?path='+path, path);
-                        // $.get('/files?path='+ path).then(function(data){
-                        //     $dataTable.fnClearTable();
-                        //     $dataTable.fnAddData(data);
-                        //     currentPath = path;
-                        // });
                         e.preventDefault();
                     });
                 },
@@ -156,7 +122,7 @@ module.exports = {
 
         // initialize dataTable
         console.log("in initDataTable, $dataTable.size(): " + $dataTable.size());
-        // $dataTable.dataTable(opts);
+        $dataTable.dataTable(opts);
 
         // $(".up").on("click", function(e){
         //     if (!currentPath) return;
@@ -178,11 +144,42 @@ module.exports = {
             console.log("in updateDataTable, $dataTable.size(): " + $dataTable.size());
             $dataTable.fnClearTable();
             $dataTable.fnAddData(data);
-            currentPath = path;
+            // currentPath = path;
         });
     },
 
     getFileIcon: function(ext) {
+        extensionsMap = {
+            ".zip" : "fa-file-archive-o",         
+            ".gz" : "fa-file-archive-o",         
+            ".bz2" : "fa-file-archive-o",         
+            ".xz" : "fa-file-archive-o",         
+            ".rar" : "fa-file-archive-o",         
+            ".tar" : "fa-file-archive-o",         
+            ".tgz" : "fa-file-archive-o",         
+            ".tbz2" : "fa-file-archive-o",         
+            ".z" : "fa-file-archive-o",         
+            ".7z" : "fa-file-archive-o",         
+            ".mp3" : "fa-file-audio-o",         
+            ".cs" : "fa-file-code-o",         
+            ".c++" : "fa-file-code-o",         
+            ".cpp" : "fa-file-code-o",         
+            ".js" : "fa-file-code-o",         
+            ".xls" : "fa-file-excel-o",         
+            ".xlsx" : "fa-file-excel-o",         
+            ".png" : "fa-file-image-o",         
+            ".jpg" : "fa-file-image-o",         
+            ".jpeg" : "fa-file-image-o",         
+            ".gif" : "fa-file-image-o",         
+            ".mpeg" : "fa-file-movie-o",         
+            ".pdf" : "fa-file-pdf-o",         
+            ".ppt" : "fa-file-powerpoint-o",         
+            ".pptx" : "fa-file-powerpoint-o",         
+            ".txt" : "fa-file-text-o",         
+            ".log" : "fa-file-text-o",         
+            ".doc" : "fa-file-word-o",         
+            ".docx" : "fa-file-word-o",         
+        };
         return ( ext && extensionsMap[ext.toLowerCase()]) || 'fa-file-o';
     },
 
