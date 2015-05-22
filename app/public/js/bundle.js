@@ -103,7 +103,7 @@ module.exports = {
                     if (!aData.isDir) return;
                     var path = aData.path;
                     $(nRow).on("click", function(e){
-                        updateDataTable('/files?path='+path, path);
+                        module.exports.updateDataTable('/files?path='+path, path);
                         e.preventDefault();
                     });
                 },
@@ -113,7 +113,7 @@ module.exports = {
                             if (data.isDir) {
                                 return "<a href='#' target='_blank'><i class='fa fa-folder'></i>&nbsp;" + data.name +"</a>";
                             } else {
-                                return "<a href='/" + data.path + "' target='_blank'><i class='fa " + getFileIcon(data.ext) + "'></i>&nbsp;" + data.name +"</a>";
+                                return "<a href='/" + data.path + "' target='_blank'><i class='fa " + module.exports.getFileIcon(data.ext) + "'></i>&nbsp;" + data.name +"</a>";
                             }
                         }
                     }
