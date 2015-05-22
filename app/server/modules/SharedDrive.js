@@ -53,7 +53,14 @@
                 switch (code) {
                     case 32:
                         console.log("share is already mounted, disconnecting...");
-                        module.exports.disconnect(cData, function(data) { console.log("unmount status: " + data.status )});
+                        module.exports.disconnect(cData, function(data) { 
+                            console.log("unmount status: " + data.status );
+                            if ( data.status === "success" ) {
+                                // try to connect again
+                                console.log("attempting to connect again...");
+                                module.exports.connect(cData, cb);
+                            }
+                        });
                         break;
                     case 0:
                         console.log("share successfully mounted, listing directory contents...");
