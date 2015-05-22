@@ -14,7 +14,15 @@
     },
     "client": {
         "apiUrl": "http://localhost:8080",
-        "debugMode": true
+        "debugMode": true,
+        "smbServer": {
+            "path": "/samba/anonymous"
+        },
+        "smbClient": {
+            "ip": "192.168.3.1",
+            "share": "anonymous",
+            "mount": "/mnt/public"
+        }
     },
     "smbServer": {
         "path": "/samba/anonymous"

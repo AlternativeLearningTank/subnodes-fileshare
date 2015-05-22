@@ -58,6 +58,7 @@ module.exports = {
             });
 
             console.log("config.smbClient: " + config.smbClient);
+            console.log("config: " + config);
             // // init our main view
             // var mainView = self.view = new MainView({
             //     model: self.login,
