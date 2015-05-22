@@ -25,6 +25,7 @@
                 //             opts.length>0?'-o':'',
                 //             opts[0]
                 //            ];
+
             var share = cData[0].share
                 ,mnt = cData[1].mount
                 ,opts = config.smbClient.options
@@ -34,6 +35,8 @@
                             opts.length>0?'-o':'',
                             opts[0]
                            ];
+            
+            console.log("connecting to " + share + " mounted at " + mnt);
 
             // mount the share drive + watch for changes
             var cmd = su( params );
