@@ -89,10 +89,25 @@ module.exports = {
         });
     },
 
-    disconnect: function() {
-        $.get('/disconnect').then(function(data){
-            console.log("disconnect status: " + data.status);
+    disconnect: function(data) {
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json',
+            url: '/disconnect',                      
+            success: function(res) {
+                console.log(JSON.stringify(res));   
+                console.log("disconnected status: " + res.status);                          
+            },
+            error: function(error) {
+                console.log("There was an error connecting to the file share... " + error);
+             }
+
         });
+        // $.get('/disconnect').then(function(res){
+        //     console.log("disconnect status: " + res.status);
+        // });
     },
 
     connect: function(data) {
@@ -102,14 +117,14 @@ module.exports = {
             contentType: "application/json",
             dataType: 'json',
             url: '/connect',                      
-            success: function(data) {
-                console.log(JSON.stringify(data));   
-                console.log("connected status: " + data.status);
+            success: function(res) {
+                console.log(JSON.stringify(res));   
+                console.log("connected status: " + res.status);
                 module.exports.initDataTable();
-                module.exports.updateDataTable('/files', null);                            
+                module.exports.updateDataTable(data, '/files', null);                            
             },
             error: function(error) {
-                console.log("There was an error connecting to the file share...");
+                console.log("There was an error connecting to the file share... " + error);
              }
 
         });
@@ -120,7 +135,7 @@ module.exports = {
         // });
     },
 
-    initDataTable: function() {
+    initDataTable: function(data) {
 
         // currentPath needs to be define somewhere accessible for many methods
         // currentPath = null;
@@ -136,7 +151,7 @@ module.exports = {
                     if (!aData.isDir) return;
                     var path = aData.path;
                     $(nRow).on("click", function(e){
-                        module.exports.updateDataTable('/files?path='+path, path);
+                        module.exports.updateDataTable(data, '/files?path='+path, path);
                         e.preventDefault();
                     });
                 },
@@ -170,12 +185,30 @@ module.exports = {
         // });
     },
 
-    updateDataTable: function(endPoint, path) {
-        $.get(endPoint).then(function(data){
-            $dataTable.fnClearTable();
-            $dataTable.fnAddData(data);
-            // currentPath = path;
+    updateDataTable: function(data, endPoint, path) {
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json',
+            url: endpoint,                      
+            success: function(res) {
+                console.log(JSON.stringify(res));     
+
+                $dataTable.fnClearTable();
+                $dataTable.fnAddData(res);                        
+            },
+            error: function(error) {
+                console.log("There was an error updating the data table... " + error);
+             }
+
         });
+
+        // $.get(endPoint).then(function(data){
+        //     $dataTable.fnClearTable();
+        //     $dataTable.fnAddData(data);
+        //     // currentPath = path;
+        // });
     },
 
     getFileIcon: function(ext) {

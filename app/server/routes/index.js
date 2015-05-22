@@ -24,9 +24,9 @@
 	// -------------------------------------------------------
 	// Return files in shared drive
 	// -------------------------------------------------------
-	router.get('/files', function(req, res) {
+	router.post('/files', function(req, res) {
 
-		sharedDrive.readFiles(function(data) {
+		sharedDrive.readFiles(req.body, function(data) {
 			res.json(data);
 		});
 	});
@@ -34,9 +34,9 @@
 	// -------------------------------------------------------
 	// Disconnect from the share drive
 	// -------------------------------------------------------
-	router.get('/disconnect', function(req, res) {
+	router.post('/disconnect', function(req, res) {
 
-		var json = sharedDrive.disconnect(function(data) {
+		var json = sharedDrive.disconnect(req.body, function(data) {
 			res.json(data);
 		});
 	});

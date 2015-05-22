@@ -51,10 +51,12 @@
 
                 // handle exit codes
                 switch (code) {
+                    case 32:
+                        console.log("share is already mounted, disconnecting...");
+                        module.exports.disconnecting(function(data) { console.log("unmount status: " + data.status )});
+                        break;
                     case 0:
                         console.log("share successfully mounted, listing directory contents...");
-                    case 32:
-                        console.log("share is already mounted, attempting to list contents...");
                         //start watching the share for changes; update display if any.
                         watcher = chokidar.watch(mnt, {
                               ignored: /[\/\\]\./,
@@ -88,9 +90,10 @@
             });
         }
 
-        var readFiles = function(cb) {
+        var readFiles = function(cData, cb) {
 
-            var mnt = config.smbClient.mount;
+            // var mnt = config.smbClient.mount;
+            var mnt = cData[1].mount;
 
             // reset dirContents array
             dirContents = [];
@@ -130,10 +133,12 @@
             });
         }
 
-        var disconnect = function(cb) {
+        var disconnect = function(cData, cb) {
 
             // get params from 1)config file or 2)user input
-            var mnt = config.smbClient.mount
+            // var mnt = config.smbClient.mount
+            //     ,params = ['umount', mnt ];
+            var mnt = cData[1].mount
                 ,params = ['umount', mnt ];
 
             // call umount  
