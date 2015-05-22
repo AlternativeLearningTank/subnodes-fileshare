@@ -94,28 +94,28 @@ module.exports = {
     },
 
     connect: function(data) {
-        // $.ajax({
-        //     type: 'POST',
-        //     data: JSON.stringify(data),
-        //     contentType: "application/json",
-        //     dataType: 'json',
-        //     url: '/connect',                      
-        //     success: function(data) {
-        //         console.log(JSON.stringify(data));   
-        //         console.log("connected status: " + data.status);
-        //         module.exports.initDataTable();
-        //         module.exports.updateDataTable('/files', null);                            
-        //     },
-        //     error: function(error) {
-        //         console.log("There was an error connecting to the file share...");
-        //      }
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json',
+            url: '/connect',                      
+            success: function(data) {
+                console.log(JSON.stringify(data));   
+                console.log("connected status: " + data.status);
+                module.exports.initDataTable();
+                module.exports.updateDataTable('/files', null);                            
+            },
+            error: function(error) {
+                console.log("There was an error connecting to the file share...");
+             }
 
-        // });
-        $.get('/connect').then(function(data){
-            console.log("connected status: " + data.status);
-            module.exports.initDataTable();
-            module.exports.updateDataTable('/files', null);
         });
+        // $.get('/connect').then(function(data){
+        //     console.log("connected status: " + data.status);
+        //     module.exports.initDataTable();
+        //     module.exports.updateDataTable('/files', null);
+        // });
     },
 
     initDataTable: function() {
