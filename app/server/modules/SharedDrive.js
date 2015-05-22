@@ -46,16 +46,18 @@
             cmd.stderr.on('data', function(data) {
                 console.log("stderr: " + data);
 
-                console.log("typeOf data: " + (typeof data));
+                for (var k in data) {
+                    console.log(k + ": " + data[k]);
+                }
 
-                // handle errors
-                if ( data.indexOf( "No such file or directory" ) > -1 ) {
-                    console.log("MOUNT POINT DOES NOT EXIST. TRY TO CREATE?");
-                }
-                else if ( data.indexOf( "No such device or address" ) > -1 ) {
-                    console.log("THERE IS NO SUCH ADDRESS. LET FRONT-END KNOW");
-                    return;
-                }
+                // // handle errors
+                // if ( data.indexOf( "No such file or directory" ) > -1 ) {
+                //     console.log("MOUNT POINT DOES NOT EXIST. TRY TO CREATE?");
+                // }
+                // else if ( data.indexOf( "No such device or address" ) > -1 ) {
+                //     console.log("THERE IS NO SUCH ADDRESS. LET FRONT-END KNOW");
+                //     return;
+                // }
             });
             cmd.on('exit', function(code) {
                 console.log('Child process exited with exit code '+code);
