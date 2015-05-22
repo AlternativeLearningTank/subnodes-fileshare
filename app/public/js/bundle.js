@@ -57,6 +57,8 @@ module.exports = {
                 $directory.fadeIn();
                 $bDisconnect.fadeIn();
                 // mount drive
+                console.log("$shareAddr.val(): " + $shareAddr.val());
+                console.log("$mountPt.val(): " + $mountPt.val());
                 var data = [{"share": $shareAddr.val()}, {"mount": $mountPt.val()}];
                 module.exports.connect(data);
             });

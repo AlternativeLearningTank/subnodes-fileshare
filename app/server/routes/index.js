@@ -16,6 +16,10 @@
 	// ---------------------------------------------------------
 	router.post('/connect', function(req, res) {
 
+		for (var k in req.body ) {
+			console.log(k + ": " + req.body[k]);
+		}
+
 		console.log("req.body.share: " + req.body.share);
 		console.log("req.body.mount: " + req.body.mount);
 
