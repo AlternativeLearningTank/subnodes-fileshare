@@ -114,7 +114,7 @@ module.exports = {
         $.get('/connect').then(function(data){
             console.log("connected status: " + data.status);
             console.log("in connect, $dataTable.size(): " + $dataTable.size());
-            module.exports.initDataTable();
+            // module.exports.initDataTable();
             module.exports.updateDataTable('/files', null);
         });
     },
@@ -155,7 +155,7 @@ module.exports = {
 
         // initialize dataTable
         console.log("in initDataTable, $dataTable.size(): " + $dataTable.size());
-        $dataTable.dataTable(opts);
+        // $dataTable.dataTable(opts);
 
         // $(".up").on("click", function(e){
         //     if (!currentPath) return;
