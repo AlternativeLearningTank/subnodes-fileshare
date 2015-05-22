@@ -56,8 +56,12 @@
         var cfgSamba = function(cData, cb) {
             console.log("cfgSamba");
             //chmod -R nobody:nogroup
-            var mkdir = su ( ['chmod', '-R', 'nobody:nogroup'] );
-                mkdir.on('exit', function(code) {
+            var chmod = su ( ['chmod', '-R', 'nobody:nogroup'] );
+                chmod.stderr.on('data', function(data){
+                    var d = String(data);
+                    console.log("chmod stderr: " + d);
+                });
+                chmod.on('exit', function(code) {
                 console.log("CHMOD process exited with code " + code);
 
                 switch (code) {
