@@ -13,6 +13,7 @@
         ,watcher;
 
         var create = function(cData, cb) {
+            console.log("shareddrive, create");
             var dir = cData.dir;
             // first make sure the directory exists
             var spawn = require('child_process').spawn,
@@ -31,11 +32,11 @@
                     break;
 
                     case 1:
-                        console.log("Error, mount point may not exist.");
+                        console.log("Error, directory may not exist.");
                     break;
 
                     case 2:
-                        console.log("Error, mount point does not exist. Initing Samba...");
+                        console.log("Error, directory does not exist. Creating directory...");
                         var mkdir = su ( ['mkdir', '-p', dir] );
                         mkdir.on('exit', function(code) {
                             console.log("MKDIR process exited with code " + code);
@@ -53,6 +54,7 @@
         }
 
         var initSamba = function(cData, cb) {
+            console.log("initSamba");
             //chmod -R nobody:nogroup
             var mkdir = su ( ['chmod', '-R', 'nobody:nogroup'] );
                 mkdir.on('exit', function(code) {
@@ -69,6 +71,7 @@
         }
 
         var connect = function(cData, cb) {
+            console.log("connect");
 
             // get params from 1)config file or 2)user input
             // var ip = config.smbClient.ip
