@@ -56,7 +56,7 @@
         var cfgSamba = function(cData, cb) {
             console.log("cfgSamba");
             //chmod -R nobody:nogroup
-            var chmod = su ( ['chmod', '-R', 'nobody:nogroup', cData.dir] );
+            var chmod = su ( ['chmod', '-R', '0755', cData.dir] );
                 chmod.stderr.on('data', function(data){
                     var d = String(data);
                     console.log("chmod stderr: " + d);
@@ -66,7 +66,23 @@
 
                 switch (code) {
                     case 0:
-                        console.log("Changed group ownership successfully...");
+                        console.log("Set perms successfully...");
+                        var chown = su ( ['chown', '-R', 'nobody:nogroup', cData.dir] );
+                        chown.stderr.on('data', function(data){
+                            var d = String(data);
+                            console.log("chown stderr: " + d);
+                        });
+                        chown.on('exit', function(code) {
+                        console.log("CHOWN process exited with code " + code);
+
+                        switch (code) {
+                            case 0:
+                                console.log("Changed group ownership successfully...");
+                                // edit /etc/samba/smb.conf
+                                // sudo service samba restart
+                            break;
+                        }
+                    });
                         // edit /etc/samba/smb.conf
                         // sudo service samba restart
                     break;
