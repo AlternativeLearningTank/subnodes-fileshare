@@ -280,7 +280,8 @@
         }
 
         return {
-            connect: connect
+            create: create
+           ,connect: connect
            ,mountShare: mountShare
            ,readFiles: readFiles
            ,disconnect: disconnect
