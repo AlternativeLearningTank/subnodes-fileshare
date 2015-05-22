@@ -31,16 +31,17 @@ module.exports = {
 
             $dataTable = $('#dataTable');
 
-            // init input fields with info from config, if it exists
+            // init input fields with info from config, if they exist
             var sPath = config.smbServer.path;
             var ip = config.smbClient.ip;
             var share = config.smbClient.share;
             var mnt = config.smbClient.mount;
 
-            $serverAddr.value = sPath ? sPath : '';
-            $shareAddr.value = ip && share ? config.smbClient.ip + '/' + config.smbClient.share : '';
-            $mountPt.value = mnt ? mnt : '';
+            $serverAddr.value( sPath ? sPath : '' );
+            $shareAddr.value( ip && share ? config.smbClient.ip + '/' + config.smbClient.share : '' );
+            $mountPt.value( mnt ? mnt : '' );
 
+            // set UI handlers
             $bServer.on('click', function() {
                 $createClient.fadeOut();
                 $createServer.fadeIn();
@@ -147,8 +148,6 @@ module.exports = {
     },
 
     updateDataTable: function(endPoint, path) {
-        console.log("updating data table...");
-        // $.get('/files').then(function(data){
         $.get(endPoint).then(function(data){
             $dataTable.fnClearTable();
             $dataTable.fnAddData(data);
