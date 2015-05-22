@@ -12,15 +12,24 @@
         ,dirContents = []
         ,watcher;
 
-        var connect = function(cb) {
+        var connect = function(cData, cb) {
 
             // get params from 1)config file or 2)user input
-            var ip = config.smbClient.ip
-                ,share = config.smbClient.share
-                ,mnt = config.smbClient.mount
+            // var ip = config.smbClient.ip
+            //     ,share = config.smbClient.share
+            //     ,mnt = config.smbClient.mount
+                // ,opts = config.smbClient.options
+                // ,params = ['mount',
+                //             '//'+ip+'/'+share,
+                //             mnt,
+                //             opts.length>0?'-o':'',
+                //             opts[0]
+                //            ];
+            var share = cData.share
+                ,mnt = cData.mount
                 ,opts = config.smbClient.options
                 ,params = ['mount',
-                            '//'+ip+'/'+share,
+                            share,
                             mnt,
                             opts.length>0?'-o':'',
                             opts[0]
