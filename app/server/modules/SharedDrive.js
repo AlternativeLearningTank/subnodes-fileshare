@@ -38,75 +38,94 @@
             
             console.log("connecting to " + share + " mounted at " + mnt);
 
-            // mount the share drive + watch for changes
-            var cmd = su( params );
-            cmd.stdout.on('data', function(data) {
-                console.log("stdout: " + data);
-            });
-            cmd.stderr.on('data', function(data) {
-
+            // first make sure the mount point exists
+            // if [ ! -d "$DIRECTORY" ]; then
+            //   # Control will enter here if $DIRECTORY doesn't exist.
+            // fi
+            var cd = su( ['cd', mnt]);
+            cd.stderr.on('data', function(data){
                 var d = String(data);
-
-                console.log("stderr: " + d);
-
-                // handle errors
-                if ( d.indexOf( "No such file or directory" ) > -1 ) {
-                    console.log("MOUNT POINT DOES NOT EXIST. TRY TO CREATE?");
-                }
-                else if ( d.indexOf( "No such device or address" ) > -1 ) {
-                    console.log("THERE IS NO SUCH ADDRESS. LET FRONT-END KNOW");
-                    return;
-                }
+                console.log("cd stderr: " + d);
             });
-            cmd.on('exit', function(code) {
-                console.log('Child process exited with exit code '+code);
+            cd.on('exit', function(code) {
+                console.log('CD process exited with exit code '+code);
 
-                // handle exit codes
                 switch (code) {
-                    case 32:
-                        console.log("share is already mounted, disconnecting...");
-                        module.exports.disconnect(cData, function(data) { 
-                            console.log("unmount status: " + data.status );
-                            if ( data.status === "success" ) {
-                                // try to connect again
-                                console.log("attempting to connect again...");
-                                module.exports.connect(cData, cb);
-                            }
-                        });
-                        break;
                     case 0:
-                        console.log("share successfully mounted, listing directory contents...");
-                        //start watching the share for changes; update display if any.
-                        watcher = chokidar.watch(mnt, {
-                              ignored: /[\/\\]\./,
-                              persistent: true,
-                              ignoreInitial: true,
-                              usePolling: true,
-                              depth: 3
-                            });
-                            // watcher handlers
-                            watcher
-                                .on('add', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-                                .on('change', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-                                .on('unlink', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-                                .on('addDir', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-                                .on('unlinkDir', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-                                .on('error', function(err) { console.log('Error while watching file share: ', err); });
-
-                        // get initial directory reading
-                        // getFiles(mnt, res);
-                        //res.json( {"status": "success"} );
-                        var status = {"status": "success"};
-                        cb(status);
+                        console.log("mount point exists, proceed with loading share...");
                     break;
+
                     case 1:
-                        // res.json( {"status": "error"} );
-                        var status = {"status": "error"};
-                        cb(status);
-                        console.log("exit code 1, error while mounting file share.");
+                        console.log("error, mount point may not exist. Create the mount point.");
                     break;
                 }
             });
+
+            // // mount the share drive + watch for changes
+            // var mount = su( params );
+            // mount.stdout.on('data', function(data) {
+            //     console.log("stdout: " + data);
+            // });
+            // mount.stderr.on('data', function(data) {
+
+            //     var d = String(data);
+
+            //     console.log("mount stderr: " + d);
+
+            //     // handle errors
+            //     if ( d.indexOf( "No such file or directory" ) > -1 ) {
+            //         console.log("MOUNT POINT DOES NOT EXIST. TRY TO CREATE?");
+            //     }
+            //     else if ( d.indexOf( "No such device or address" ) > -1 ) {
+            //         console.log("THERE IS NO SUCH ADDRESS. LET FRONT-END KNOW");
+            //         return;
+            //     }
+            // });
+            // mount.on('exit', function(code) {
+            //     console.log('MOUNT process exited with exit code '+code);
+
+            //     // handle exit codes
+            //     switch (code) {
+            //         case 32:
+            //             console.log("share is already mounted, disconnecting...");
+            //             module.exports.disconnect(cData, function(data) { 
+            //                 console.log("unmount status: " + data.status );
+            //                 if ( data.status === "success" ) {
+            //                     // try to connect again
+            //                     console.log("attempting to connect again...");
+            //                     module.exports.connect(cData, cb);
+            //                 }
+            //             });
+            //             break;
+            //         case 0:
+            //             console.log("share successfully mounted, listing directory contents...");
+            //             //start watching the share for changes; update display if any.
+            //             watcher = chokidar.watch(mnt, {
+            //                   ignored: /[\/\\]\./,
+            //                   persistent: true,
+            //                   ignoreInitial: true,
+            //                   usePolling: true,
+            //                   depth: 3
+            //                 });
+            //                 // watcher handlers
+            //                 watcher
+            //                     .on('add', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+            //                     .on('change', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+            //                     .on('unlink', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+            //                     .on('addDir', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+            //                     .on('unlinkDir', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+            //                     .on('error', function(err) { console.log('Error while watching file share: ', err); });
+
+            //             var status = {"status": "success"};
+            //             cb(status);
+            //         break;
+            //         case 1:
+            //             var status = {"status": "error"};
+            //             cb(status);
+            //             console.log("exit code 1, error while mounting file share.");
+            //         break;
+            //     }
+            // });
         }
 
         var readFiles = function(cData, cb) {
@@ -161,15 +180,15 @@
                 ,params = ['umount', mnt ];
 
             // call umount  
-            var cmd = su( params );
-            cmd.stdout.on('data', function(data) {
+            var umount = su( params );
+            umount.stdout.on('data', function(data) {
                 console.log("stdout: " + data);
             });
-            cmd.stderr.on('data', function(data) {
+            umount.stderr.on('data', function(data) {
                 console.log("stderr: " + data);
             });
-            cmd.on('exit', function(code) {
-                console.log('Child process exited with exit code '+code);
+            umount.on('exit', function(code) {
+                console.log('UMOUNT process exited with exit code '+code);
 
                 switch (code) {
                     case 0:
