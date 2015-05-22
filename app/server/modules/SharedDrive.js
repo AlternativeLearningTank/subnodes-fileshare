@@ -43,7 +43,7 @@
             //   # Control will enter here if $DIRECTORY doesn't exist.
             // fi
             var spawn = require('child_process').spawn,
-                cd = spawn('ls', [mnt]);
+                cd = spawn('cd', [mnt]);
             cd.stderr.on('data', function(data){
                 var d = String(data);
                 console.log("cd stderr: " + d);
@@ -57,7 +57,11 @@
                     break;
 
                     case 1:
-                        console.log("error, mount point may not exist. Create the mount point.");
+                        console.log("error, mount point may not exist.");
+                    break;
+
+                    case 2:
+                        console.log("error, no such file or directory. Creating the mount point...");
                     break;
                 }
             });
