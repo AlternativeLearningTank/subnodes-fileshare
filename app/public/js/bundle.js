@@ -25,9 +25,22 @@ module.exports = {
                 ,$bRefresh = $('#bRefresh')
                 ,$createServer = $('#create-server')
                 ,$createClient = $('#create-client')
-                ,$directory = $('#directory');
+                ,$directory = $('#directory')
+                ,$serverAddr = $('#serverAddr')
+                ,$shareAddr = $('#shareAddr')
+                ,$mountPt = $('#mountPt');
 
             $dataTable = $('#dataTable');
+
+            // init input fields with info from config, if it exists
+            var sPath = config.smbServer.path;
+            var ip = config.smbClient.ip;
+            var share = config.smbClient.share;
+            var mnt = config.smbClient.mount;
+
+            $serverAddr.value = sPath ? sPath : '';
+            $shareAddr.value = ip && share ? config.smbClient.ip + '/' + config.smbClient.share : '';
+            $mountPt.value = mnt ? mnt : '';
 
             $bServer.on('click', function() {
                 $createClient.fadeOut();
@@ -58,7 +71,6 @@ module.exports = {
                 module.exports.disconnect();
             });
 
-            console.log("config.smbClient: " + config.smbClient);
             // // init our main view
             // var mainView = self.view = new MainView({
             //     model: self.login,

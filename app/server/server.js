@@ -13,7 +13,7 @@
 	// Configure express
 	// -----------------
 	//
-	// set where our front-end pages live
+	// set where our front-end pages live + how to render them (with HTML)
 	//
 	app.set('views', path.join(__dirname, 'views'));
 	app.engine('html', require('ejs').renderFile);

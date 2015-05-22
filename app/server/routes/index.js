@@ -15,8 +15,6 @@
 	// Set up our mount point and connect to shared drive
 	// ---------------------------------------------------------
 	router.get('/connect', function(req, res) {
-
-		// console.log("/connect called");
 		
 		var json = sharedDrive.connect(function(data) {
 			res.json(data);
@@ -28,8 +26,6 @@
 	// -------------------------------------------------------
 	router.get('/files', function(req, res) {
 
-		console.log("/files called");
-
 		sharedDrive.readFiles(function(data) {
 			res.json(data);
 		});
@@ -39,8 +35,6 @@
 	// Disconnect from the share drive
 	// -------------------------------------------------------
 	router.get('/disconnect', function(req, res) {
-
-		console.log("/disconnect called");
 
 		var json = sharedDrive.disconnect(function(data) {
 			res.json(data);
