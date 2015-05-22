@@ -54,6 +54,12 @@ module.exports = {
                 $createClient.fadeIn();
             });
 
+            $bCreateServer.on('click', function() {
+                // create the server 
+                data = {"dir": $serverAddr.val()};
+                module.exports.createServer(data);
+            });
+
             $bConnect.on('click', function() {
                 $directory.fadeIn();
                 $bDisconnect.fadeIn();
@@ -87,6 +93,24 @@ module.exports = {
 
             // we have what we need, we can now start our router and show the appropriate page
             //self.router.history.start({pushState: true, root: '/'});
+        });
+    },
+
+    createServer: function(data) {
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json',
+            url: '/createServer',                      
+            success: function(res) {
+                console.log(JSON.stringify(res));   
+                console.log("server creation status: " + res.status);                       
+            },
+            error: function(error) {
+                console.log("There was an error creating the server share... " + error);
+             }
+
         });
     },
 

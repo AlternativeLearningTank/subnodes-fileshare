@@ -12,6 +12,62 @@
         ,dirContents = []
         ,watcher;
 
+        var create = function(cData, cb) {
+            var dir = cData.dir;
+            // first make sure the directory exists
+            var spawn = require('child_process').spawn,
+                ls = spawn('ls', [dir]);
+            // ls.stderr.on('data', function(data){
+            //     var d = String(data);
+            //     console.log("ls stderr: " + d);
+            // });
+            ls.on('close', function(code) {
+                console.log('LS process exited with exit code ' + code);
+
+                switch (code) {
+                    case 0:
+                        console.log("Directory exists, proceed with initing Samba...");
+                        module.exports.initSamba(cData, cb);
+                    break;
+
+                    case 1:
+                        console.log("Error, mount point may not exist.");
+                    break;
+
+                    case 2:
+                        console.log("Error, mount point does not exist. Initing Samba...");
+                        var mkdir = su ( ['mkdir', '-p', dir] );
+                        mkdir.on('exit', function(code) {
+                            console.log("MKDIR process exited with code " + code);
+
+                            switch (code) {
+                                case 0:
+                                    console.log("Directory successfully created. Initing Samba now...");
+                                    module.exports.initSamba(cData, cb);
+                                break;
+                            }
+                        });
+                    break;
+                }
+            });
+        }
+
+        var initSamba = function(cData, cb) {
+            //chmod -R nobody:nogroup
+            var mkdir = su ( ['chmod', '-R', 'nobody:nogroup'] );
+                mkdir.on('exit', function(code) {
+                console.log("CHMOD process exited with code " + code);
+
+                switch (code) {
+                    case 0:
+                        console.log("Changed group ownership successfully...");
+                        // edit /etc/samba/smb.conf
+                        // sudo service samba restart
+                    break;
+                }
+            });
+        }
+
         var connect = function(cData, cb) {
 
             // get params from 1)config file or 2)user input
@@ -86,11 +142,8 @@
                 console.log("mount stderr: " + d);
                                         
                 // handle errors
-                if ( d.indexOf( "No such file or directory" ) > -1 ) {
-                    console.log("MOUNT POINT DOES NOT EXIST. TRY TO CREATE?");
-                }
                 else if ( d.indexOf( "No such device or address" ) > -1 ) {
-                    console.log("THERE IS NO SUCH ADDRESS. LET FRONT-END KNOW");
+                    console.log("NO SUCH ADDRESS. LET FRONT-END KNOW");
                     return;
                 }
             });
