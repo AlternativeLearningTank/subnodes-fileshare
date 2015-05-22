@@ -183,7 +183,7 @@ module.exports = {
                     { "sTitle": "", "mData": null, "bSortable": false, "sClass": "head0", "sWidth": "55px",
                         "render": function (data, type, row, meta) {
                             if (data.isDir) {
-                                return "<a href='#' target='_blank'><i class='fa fa-folder'></i>&nbsp;" + data.name +"</a>";
+                                return "<a href='share/" + data.name + "' target='_blank'><i class='fa fa-folder'></i>&nbsp;" + data.name +"</a>";
                             } else {
                                 return "<a href='share/" + data.name + "' target='_blank'><i class='fa " + module.exports.getFileIcon(data.ext) + "'></i>&nbsp;" + data.name +"</a>";
                             }
