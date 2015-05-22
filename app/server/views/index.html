@@ -11,17 +11,9 @@
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
-        <div class="navbar-header">
-          <p>Subnodes File Sharer</p>
-          <!-- <span class="up">
-            <i class="fa fa-level-up"></i> Up
-          </span>  -->
+        <div>
+          <p class="navbar-brand" >subnodes</p>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right">
-            <button id="bDisconnect" type="submit" class="btn btn-success">Disconnect</button>
-          </form>
-        </div><!--/.navbar-collapse -->
       </div>
     </nav>
     <div class="jumbotron">
@@ -67,11 +59,17 @@
           <div id="directory" class="col-md-8">
             <h2>Directory Listing</h2>
             <!-- <p></p> -->
+            <!-- <span class="up">
+              <i class="fa fa-level-up"></i> Up
+            </span>  -->
             <div class="data-table">
               <table id="dataTable"></table>
             </div>
             <div class="error"></div>
-            <p><a id="bRefresh" class="btn btn-default" href="#" role="button">Refresh</a></p>
+            <p>
+              <a id="bRefresh" class="btn btn-default" href="#" role="button">Refresh</a>
+              <a id="bDisconnect" class="btn btn-warning">Disconnect</a>
+            </p>
           </div>
         </div>
       </div>
