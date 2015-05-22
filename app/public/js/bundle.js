@@ -59,6 +59,8 @@ module.exports = {
                       ".docx" : "fa-file-word-o",         
                     };
 
+            console.log("$dataTable.size(): " + $dataTable.size());
+
             $bServer.on('click', function() {
                 $createClient.fadeOut();
                 $createServer.fadeIn();
@@ -112,6 +114,7 @@ module.exports = {
     connect: function() {
         $.get('/connect').then(function(data){
             console.log("connected status: " + data.status);
+            console.log("in connect, $dataTable.size(): " + $dataTable.size());
             module.exports.initDataTable();
             module.exports.updateDataTable('/files', null);
         });
@@ -153,6 +156,7 @@ module.exports = {
 
         // initialize dataTable
         $dataTable.dataTable(opts);
+        console.log("in initDataTable, $dataTable.size(): " + $dataTable.size());
 
         // $(".up").on("click", function(e){
         //     if (!currentPath) return;
@@ -170,6 +174,8 @@ module.exports = {
         console.log("updating data table...");
         // $.get('/files').then(function(data){
         $.get(path).then(function(data){
+
+            console.log("in updateDataTable, $dataTable.size(): " + $dataTable.size());
             $dataTable.fnClearTable();
             $dataTable.fnAddData(data);
             currentPath = path;
