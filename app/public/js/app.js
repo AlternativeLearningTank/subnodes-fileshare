@@ -97,8 +97,8 @@ module.exports = {
             type: 'POST',
             data: JSON.stringify(data),
             contentType: "application/json",
-            dataType:'json',
-            url: '/connect',                      
+            dataType: 'json',
+            url: 'http://192.168.2.5:8080/connect',                      
             success: function(data) {
                 console.log(JSON.stringify(data));   
                 console.log("connected status: " + data.status);
