@@ -58,7 +58,7 @@ module.exports = {
                 module.exports.disconnect();
             });
 
-
+            console.log("config.smbClient: " + config.smbClient);
             // // init our main view
             // var mainView = self.view = new MainView({
             //     model: self.login,
