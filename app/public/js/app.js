@@ -96,7 +96,6 @@ module.exports = {
     },
 
     createServer: function(data) {
-        console.log("createServer");
         $.ajax({
             type: 'POST',
             data: JSON.stringify(data),
@@ -185,7 +184,7 @@ module.exports = {
                             if (data.isDir) {
                                 return "<a href='#' target='_blank'><i class='fa fa-folder'></i>&nbsp;" + data.name +"</a>";
                             } else {
-                                return "<a href='/" + data.path + "' target='_blank'><i class='fa " + module.exports.getFileIcon(data.ext) + "'></i>&nbsp;" + data.name +"</a>";
+                                return "<a href='" + data.path + "' target='_blank'><i class='fa " + module.exports.getFileIcon(data.ext) + "'></i>&nbsp;" + data.name +"</a>";
                             }
                         }
                     }

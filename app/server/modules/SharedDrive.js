@@ -55,8 +55,10 @@
 
         var cfgSamba = function(cData, cb) {
             console.log("cfgSamba");
+            var dir = cData.dir;
+            var name = dir.substring((dir.lastIndexOf('/'))+1, dir.length);
             //chmod -R nobody:nogroup
-            var chmod = su ( ['chmod', '-R', '0755', cData.dir] );
+            var chmod = su ( ['chmod', '-R', '0755', dir] );
                 chmod.stderr.on('data', function(data){
                     var d = String(data);
                     console.log("chmod stderr: " + d);
@@ -67,24 +69,43 @@
                 switch (code) {
                     case 0:
                         console.log("Set perms successfully...");
-                        var chown = su ( ['chown', '-R', 'nobody:nogroup', cData.dir] );
+                        var chown = su ( ['chown', '-R', 'nobody:nogroup', dir] );
                         chown.stderr.on('data', function(data){
                             var d = String(data);
                             console.log("chown stderr: " + d);
                         });
                         chown.on('exit', function(code) {
-                        console.log("CHOWN process exited with code " + code);
+                            console.log("CHOWN process exited with code " + code);
 
-                        switch (code) {
-                            case 0:
-                                console.log("Changed group ownership successfully...");
-                                // edit /etc/samba/smb.conf
-                                // sudo service samba restart
-                            break;
-                        }
-                    });
-                        // edit /etc/samba/smb.conf
-                        // sudo service samba restart
+                            switch (code) {
+                                case 0:
+                                    console.log("Changed ownership successfully...");
+                                    // edit /etc/samba/smb.conf
+                                    //sed -i "s/SHARENAME/"+name+"/" /etc/samba/smb.conf
+                                    //sed -i "s/SHAREDIR/"+dir+"/" /etc/samba/smb.conf
+                                    //sed -i "s/ISSERVER\=0/ISSERVER\=1" /etc/samba/smb.conf
+                                    //
+                                    // restart the samba service
+                                    var service = su( ['service', 'samba', 'restart'] );
+                                    service.stderr.on('data', function(data) {
+                                        var d = String(data);
+                                        console.log("SERVICE samba stderr: " + d);
+                                    });
+                                    service.on('exit', function(code) {
+                                        console.log("SERVICE process exited with code " + code);
+
+                                        switch (code) {
+                                            case 0:
+                                                console.log("Started samba service successfully");
+                                            break;
+                                            case 1:
+                                                console.log("Error with starting samba service");
+                                            break;
+                                        }
+                                    });
+                                break;
+                            }
+                        });
                     break;
                 }
             });
@@ -92,18 +113,6 @@
 
         var connect = function(cData, cb) {
             console.log("connect");
-
-            // get params from 1)config file or 2)user input
-            // var ip = config.smbClient.ip
-            //     ,share = config.smbClient.share
-            //     ,mnt = config.smbClient.mount
-                // ,opts = config.smbClient.options
-                // ,params = ['mount',
-                //             '//'+ip+'/'+share,
-                //             mnt,
-                //             opts.length>0?'-o':'',
-                //             opts[0]
-                //            ];
 
             var mnt = cData[1].mount;
             
@@ -134,7 +143,6 @@
                         var mkdir = su ( ['mkdir', '-p', mnt] );
                         mkdir.on('exit', function(code) {
                             console.log("MKDIR process exited with code " + code);
-
                             switch (code) {
                                 case 0:
                                     console.log("Mount point successfully created. mounting the share now...");
@@ -207,6 +215,10 @@
 
                                     var status = {"status": "success"};
                                     cb(status);
+                        // add share info to startup script
+                        // sed -i "s/HASMOUNT\=0/HASMOUNT\=1" /etc/init.d/subnodes_fileshare
+                        // sed -i "s/SHARE/"+share+"/" /etc/init.d/subnodes_fileshare
+                        // sed -i "s/MOUNT/"+mount+"/" /etc/init.d/subnodes_fileshare
                         break;
                     case 1:
                         var status = {"status": "error"};
