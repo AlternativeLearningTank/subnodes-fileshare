@@ -142,7 +142,7 @@
                 console.log("mount stderr: " + d);
                                         
                 // handle errors
-                else if ( d.indexOf( "No such device or address" ) > -1 ) {
+                if ( d.indexOf( "No such device or address" ) > -1 ) {
                     console.log("NO SUCH ADDRESS. LET FRONT-END KNOW");
                     return;
                 }
