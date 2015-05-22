@@ -28,7 +28,7 @@
 
             var mnt = cData[1].mount;
             
-            console.log("Attempting to connect to " + share + " mounted at " + mnt);
+            console.log("Attempting to connect to " + cData[0].share + " mounted at " + mnt);
 
             // first make sure the mount point exists by trying to ls it
             var spawn = require('child_process').spawn,
