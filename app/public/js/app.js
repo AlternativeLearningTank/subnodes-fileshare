@@ -80,7 +80,6 @@ module.exports = {
     connect: function() {
         $.get('/connect').then(function(data){
             console.log("connected status: " + data.status);
-            console.log("in connect, $dataTable.size(): " + $dataTable.size());
             module.exports.initDataTable();
             module.exports.updateDataTable('/files', null);
         });
