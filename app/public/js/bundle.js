@@ -154,8 +154,10 @@ module.exports = {
         };
 
         // initialize dataTable
-        $dataTable.dataTable(opts);
-
+        if ( ! $.fn.DataTable.isDataTable( $dataTable ) ) {
+            $dataTable.dataTable(opts);
+        }
+        
         // $(".up").on("click", function(e){
         //     if (!currentPath) return;
         //     var idx = currentPath.lastIndexOf("/");
