@@ -56,7 +56,7 @@
         var cfgSamba = function(cData, cb) {
             console.log("cfgSamba");
             //chmod -R nobody:nogroup
-            var chmod = su ( ['chmod', '-R', 'nobody:nogroup'] );
+            var chmod = su ( ['chmod', '-R', 'nobody:nogroup', cData.dir] );
                 chmod.stderr.on('data', function(data){
                     var d = String(data);
                     console.log("chmod stderr: " + d);
