@@ -46,7 +46,7 @@
             cmd.stderr.on('data', function(data) {
                 console.log("stderr: " + data);
 
-                console.log("typeOf data: " + $.type(data));
+                console.log("typeOf data: " + (typeof data));
 
                 // handle errors
                 if ( data.indexOf( "No such file or directory" ) > -1 ) {
