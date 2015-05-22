@@ -140,6 +140,8 @@ module.exports = {
         // $.get('/files').then(function(data){
         $.get(path).then(function(data){
 
+            console.log("data: " + data);
+
             // $('#dataTable').fnClearTable();
             // $('#dataTable').fnAddData(data);
             $dataTable.fnClearTable();
