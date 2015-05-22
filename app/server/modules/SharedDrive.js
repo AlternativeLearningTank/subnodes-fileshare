@@ -26,17 +26,9 @@
                 //             opts[0]
                 //            ];
 
-            var share = cData[0].share
-                ,mnt = cData[1].mount
-                ,opts = config.smbClient.options
-                ,params = ['mount',
-                            share,
-                            mnt,
-                            opts.length>0?'-o':'',
-                            opts[0]
-                           ];
+            var mnt = cData[1].mount;
             
-            console.log("connecting to " + share + " mounted at " + mnt);
+            console.log("Attempting to connect to " + share + " mounted at " + mnt);
 
             // first make sure the mount point exists by trying to ls it
             var spawn = require('child_process').spawn,
@@ -50,88 +42,103 @@
 
                 switch (code) {
                     case 0:
-                        console.log("mount point exists, proceed with loading share...");
+                        console.log("Mount point exists, proceed with loading share...");
+                        module.exports.mountShare(cData);
                     break;
 
                     case 1:
-                        console.log("error, mount point may not exist.");
+                        console.log("Error, mount point may not exist.");
                     break;
 
                     case 2:
-                        console.log("error, no such file or directory. Creating the mount point...");
+                        console.log("Error, mount point does not exist. Creating the mount point...");
                         var mkdir = su ( ['mkdir', '-p', mnt] );
                         mkdir.on('exit', function(code) {
                             console.log("MKDIR process exited with code " + code);
-                        })
+
+                            switch (code) {
+                                case 0:
+                                    console.log("Mount point successfully created. mounting the share now...");
+                                    module.exports.mountShare(cData);
+                                break;
+                            }
+                        });
                     break;
                 }
             });
+        }
 
-            // // mount the share drive + watch for changes
-            // var mount = su( params );
-            // mount.stdout.on('data', function(data) {
-            //     console.log("stdout: " + data);
-            // });
-            // mount.stderr.on('data', function(data) {
+        var mountShare = function(cData) {
+            var share = cData[0].share
+                ,mnt = cData[1].mount
+                ,opts = config.smbClient.options
+                ,params = ['mount',
+                            share,
+                            mnt,
+                            opts.length>0?'-o':'',
+                            opts[0]
+                           ];
 
-            //     var d = String(data);
+            // mount the share drive + watch for changes
+            var mount = su( params );
+            mount.stderr.on('data', function(data) {
+                var d = String(data);
+                console.log("mount stderr: " + d);
+                                        
+                // handle errors
+                if ( d.indexOf( "No such file or directory" ) > -1 ) {
+                    console.log("MOUNT POINT DOES NOT EXIST. TRY TO CREATE?");
+                }
+                else if ( d.indexOf( "No such device or address" ) > -1 ) {
+                    console.log("THERE IS NO SUCH ADDRESS. LET FRONT-END KNOW");
+                    return;
+                }
+            });
+            mount.on('exit', function(code) {
+                console.log('MOUNT process exited with exit code '+code);
 
-            //     console.log("mount stderr: " + d);
+                // handle exit codes
+                switch (code) {
+                    case 32:
+                        console.log("Share is already mounted, disconnecting...");
+                        module.exports.disconnect(cData, function(data) { 
+                            console.log("unmount status: " + data.status );
+                            if ( data.status === "success" ) {
+                                // try to connect again
+                                console.log("Attempting to connect again...");
+                                module.exports.connect(cData, cb);
+                            }
+                        });
+                        break;
+                    case 0:
+                        console.log("Share successfully mounted, listing directory contents...");
+                        //start watching the share for changes; update display if any.
+                        watcher = chokidar.watch(mnt, {
+                                        ignored: /[\/\\]\./,
+                                        persistent: true,
+                                        ignoreInitial: true,
+                                        usePolling: true,
+                                        depth: 3
+                                    });
+                                    // watcher handlers
+                                    watcher
+                                    .on('add', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+                                    .on('change', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+                                    .on('unlink', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+                                    .on('addDir', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+                                    .on('unlinkDir', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
+                                    .on('error', function(err) { console.log('Error while watching file share: ', err); });
 
-            //     // handle errors
-            //     if ( d.indexOf( "No such file or directory" ) > -1 ) {
-            //         console.log("MOUNT POINT DOES NOT EXIST. TRY TO CREATE?");
-            //     }
-            //     else if ( d.indexOf( "No such device or address" ) > -1 ) {
-            //         console.log("THERE IS NO SUCH ADDRESS. LET FRONT-END KNOW");
-            //         return;
-            //     }
-            // });
-            // mount.on('exit', function(code) {
-            //     console.log('MOUNT process exited with exit code '+code);
-
-            //     // handle exit codes
-            //     switch (code) {
-            //         case 32:
-            //             console.log("share is already mounted, disconnecting...");
-            //             module.exports.disconnect(cData, function(data) { 
-            //                 console.log("unmount status: " + data.status );
-            //                 if ( data.status === "success" ) {
-            //                     // try to connect again
-            //                     console.log("attempting to connect again...");
-            //                     module.exports.connect(cData, cb);
-            //                 }
-            //             });
-            //             break;
-            //         case 0:
-            //             console.log("share successfully mounted, listing directory contents...");
-            //             //start watching the share for changes; update display if any.
-            //             watcher = chokidar.watch(mnt, {
-            //                   ignored: /[\/\\]\./,
-            //                   persistent: true,
-            //                   ignoreInitial: true,
-            //                   usePolling: true,
-            //                   depth: 3
-            //                 });
-            //                 // watcher handlers
-            //                 watcher
-            //                     .on('add', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-            //                     .on('change', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-            //                     .on('unlink', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-            //                     .on('addDir', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-            //                     .on('unlinkDir', function(p) { module.exports.readFiles(cData, function(data){ /* need to send to front-end somehow */ }); })
-            //                     .on('error', function(err) { console.log('Error while watching file share: ', err); });
-
-            //             var status = {"status": "success"};
-            //             cb(status);
-            //         break;
-            //         case 1:
-            //             var status = {"status": "error"};
-            //             cb(status);
-            //             console.log("exit code 1, error while mounting file share.");
-            //         break;
-            //     }
-            // });
+                                    var status = {"status": "success"};
+                                    cb(status);
+                        break;
+                    case 1:
+                        var status = {"status": "error"};
+                        cb(status);
+                        console.log("exit code 1, error while mounting file share.");
+                        break;
+                }
+            });
         }
 
         var readFiles = function(cData, cb) {
@@ -218,6 +225,7 @@
 
         return {
             connect: connect
+           ,mountShare: mountShare
            ,readFiles: readFiles
            ,disconnect: disconnect
         }
