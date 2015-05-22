@@ -97,21 +97,21 @@ module.exports = {
     },
 
     createServer: function(data) {
-        $.ajax({
-            type: 'POST',
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: 'json',
-            url: '/createServer',                      
-            success: function(res) {
-                console.log(JSON.stringify(res));   
-                console.log("server creation status: " + res.status);                       
-            },
-            error: function(error) {
-                console.log("There was an error creating the server share... " + error);
-             }
-
-        });
+        console.log("createServer: " + createServer);
+        // $.ajax({
+        //     type: 'POST',
+        //     data: JSON.stringify(data),
+        //     contentType: "application/json",
+        //     dataType: 'json',
+        //     url: '/createServer',                      
+        //     success: function(res) {
+        //         console.log(JSON.stringify(res));   
+        //         console.log("server creation status: " + res.status);                       
+        //     },
+        //     error: function(error) {
+        //         console.log("There was an error creating the server share... " + error);
+        //      }
+        // });
     },
 
     disconnect: function(data) {
@@ -129,7 +129,6 @@ module.exports = {
             error: function(error) {
                 console.log("There was an error connecting to the file share... " + error);
              }
-
         });
         // $.get('/disconnect').then(function(res){
         //     console.log("disconnect status: " + res.status);
