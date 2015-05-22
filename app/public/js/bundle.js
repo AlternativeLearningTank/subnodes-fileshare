@@ -39,7 +39,7 @@ module.exports = {
             var mnt = config.smbClient.mount;
 
             $serverAddr.val( sPath ? sPath : '' );
-            $shareAddr.val( ip && share ? config.smbClient.ip + '/' + config.smbClient.share : '' );
+            $shareAddr.val( ip && share ? '//'+config.smbClient.ip+'/'+config.smbClient.share : '' );
             $mountPt.val( mnt ? mnt : '' );
 
             // set UI handlers
@@ -57,7 +57,8 @@ module.exports = {
                 $directory.fadeIn();
                 $bDisconnect.fadeIn();
                 // mount drive
-                module.exports.connect();
+                var data = { "data": [ {"share": $shareAddr.val()}, {"mount": $mountPt.val()} ] };
+                module.exports.connect(data);
             });
 
             $bRefresh.on('click', function() {
@@ -92,12 +93,29 @@ module.exports = {
         });
     },
 
-    connect: function() {
-        $.get('/connect').then(function(data){
-            console.log("connected status: " + data.status);
-            module.exports.initDataTable();
-            module.exports.updateDataTable('/files', null);
+    connect: function(data) {
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType:'json',
+            url: '/connect',                      
+            success: function(data) {
+                console.log(JSON.stringify(data));   
+                console.log("connected status: " + data.status);
+                module.exports.initDataTable();
+                module.exports.updateDataTable('/files', null);                            
+            },
+            error: function(error) {
+                console.log("There was an error connecting to the file share...");
+             }
+
         });
+        // $.get('/connect').then(function(data){
+        //     console.log("connected status: " + data.status);
+        //     module.exports.initDataTable();
+        //     module.exports.updateDataTable('/files', null);
+        // });
     },
 
     initDataTable: function() {
