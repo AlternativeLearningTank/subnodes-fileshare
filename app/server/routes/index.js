@@ -16,6 +16,7 @@
 	// ---------------------------------------------------------
 	router.get('/connect', function(req, res) {
 		
+		req.body.data = { "data": [ {"share": "//192.168.3.1/anonymous"}, {"mount": "/mnt/public"} ] };
 		var json = sharedDrive.connect(req.body.data, function(data) {
 			res.json(data);
 		});
