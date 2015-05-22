@@ -38,18 +38,15 @@
             
             console.log("connecting to " + share + " mounted at " + mnt);
 
-            // first make sure the mount point exists
-            // if [ ! -d "$DIRECTORY" ]; then
-            //   # Control will enter here if $DIRECTORY doesn't exist.
-            // fi
+            // first make sure the mount point exists by trying to ls it
             var spawn = require('child_process').spawn,
-                cd = spawn('cd', [mnt]);
-            cd.stderr.on('data', function(data){
-                var d = String(data);
-                console.log("cd stderr: " + d);
-            });
-            cd.on('close', function(code) {
-                console.log('CD process exited with exit code '+code);
+                ls = spawn('ls', [mnt]);
+            // ls.stderr.on('data', function(data){
+            //     var d = String(data);
+            //     console.log("ls stderr: " + d);
+            // });
+            ls.on('close', function(code) {
+                console.log('LS process exited with exit code ' + code);
 
                 switch (code) {
                     case 0:
@@ -62,6 +59,10 @@
 
                     case 2:
                         console.log("error, no such file or directory. Creating the mount point...");
+                        var mkdir = su ( ['mkdir', '-p', mnt] );
+                        mkdir.on('exit', function(code) {
+                            console.log("MKDIR process exited with code " + code);
+                        })
                     break;
                 }
             });
