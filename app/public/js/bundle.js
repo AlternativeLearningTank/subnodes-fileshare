@@ -25,8 +25,9 @@ module.exports = {
                 ,$bRefresh = $('#bRefresh')
                 ,$createServer = $('#create-server')
                 ,$createClient = $('#create-client')
-                ,$directory = $('#directory')
-                ,$dataTable = $('#dataTable');
+                ,$directory = $('#directory');
+
+            $dataTable = $('#dataTable');
 
             $bServer.on('click', function() {
                 $createClient.fadeOut();
@@ -120,8 +121,8 @@ module.exports = {
         };
 
         // initialize dataTable
-        console.log("in initDataTable, $dataTable.size(): " + $dataTable.size());
         $dataTable.dataTable(opts);
+        // $('#dataTable').dataTable(opts);
 
         // $(".up").on("click", function(e){
         //     if (!currentPath) return;
@@ -140,7 +141,8 @@ module.exports = {
         // $.get('/files').then(function(data){
         $.get(path).then(function(data){
 
-            console.log("in updateDataTable, $dataTable.size(): " + $dataTable.size());
+            // $('#dataTable').fnClearTable();
+            // $('#dataTable').fnAddData(data);
             $dataTable.fnClearTable();
             $dataTable.fnAddData(data);
             // currentPath = path;
