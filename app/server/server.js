@@ -32,7 +32,7 @@
 	// set where our static files will live (js/css/img/fonts/etc)
 	//
 	app.use(express.static(path.join(__dirname, '../public')));
-	app.use('/shared', express.static('/mnt/public'));
+	app.use('/share', express.static(config.smbClient.mount)); // but mount location can change... need to fix this
 	//
 	// where our routing rules will live
 	app.use('/', routes);
