@@ -72,7 +72,8 @@ module.exports = {
                 $bDisconnect.fadeOut();
                 $directory.fadeOut();
                 // unmount
-                module.exports.disconnect();
+                data = data.length > 0 ? data : [{"share": $shareAddr.val()}, {"mount": $mountPt.val()}];
+                module.exports.disconnect(data);
             });
 
             // // init our main view
