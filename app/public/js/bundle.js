@@ -156,11 +156,8 @@ module.exports = {
 
         var table = $("#dataTable").dataTable(options);
 
-        console.log("about to call /files endpoint");
         $.get('/files').then(function(data){
-            for ( var k in data ) {
-                console.log(k + ": " + data[k]);
-            }
+            console.log("data.length: " + data.length);
             table.fnClearTable();
             table.fnAddData(data);
         });
