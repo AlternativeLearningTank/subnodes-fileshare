@@ -155,8 +155,8 @@ module.exports = {
         };
 
         // initialize dataTable
-        $dataTable.dataTable(opts);
         console.log("in initDataTable, $dataTable.size(): " + $dataTable.size());
+        $dataTable.dataTable(opts);
 
         // $(".up").on("click", function(e){
         //     if (!currentPath) return;
