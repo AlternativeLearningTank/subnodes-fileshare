@@ -10,10 +10,10 @@
     },
     "http": {
         "listen": "localhost",
-        "port": 8080
+        "port": 8081
     },
     "client": {
-        "apiUrl": "http://localhost:8080",
+        "apiUrl": "http://localhost:8081",
         "debugMode": true,
         "smbServer": {
             "path": "/samba/anonymous"
