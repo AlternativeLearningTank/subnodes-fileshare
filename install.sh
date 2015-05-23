@@ -24,7 +24,11 @@ case $yn in
 		#
 		# update the packages
 		echo "Updating apt-get and installing samba, samba-common, libcups2, cifs-utils"
-		apt-get update && apt-get install -y samba, samba-common, libcups2, cifs-utils
+		apt-get update && apt-get install -y samba samba-common libcups2 cifs-utils
+		echo ""
+		echo "Installing Node.js..."
+		wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+		sudo dpkg -i node_latest_armhf.deb
 		echo ""
 		# INSTALLING node.js chat room
 		echo "Installing file sharing interface..."

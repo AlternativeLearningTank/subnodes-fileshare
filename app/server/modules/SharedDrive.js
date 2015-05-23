@@ -80,11 +80,60 @@
                             switch (code) {
                                 case 0:
                                     console.log("Changed ownership successfully...");
-                                    // edit /etc/samba/smb.conf
-                                    //sed -i "s/SHARENAME/"+name+"/" /etc/samba/smb.conf
-                                    //sed -i "s/SHAREDIR/"+dir+"/" /etc/samba/smb.conf
-                                    //sed -i "s/ISSERVER\=0/ISSERVER\=1" /etc/samba/smb.conf
-                                    //
+                                    // update /etc/samba/smb.conf with currently chosen share name
+                                    var sed_sharename = su( ['sed', '-i', "s/SHARENAME/"+name+"/", "/etc/samba/smb.conf"] );
+                                    sed_sharename.stderr.on('data', function(data) {
+                                        var d = String(data);
+                                        console.log("sed_sharename samba stderr: " + d);
+                                    });
+                                    sed_sharename.on('exit', function(code) {
+                                        console.log("sed_sharename process exited with code " + code);
+
+                                        switch (code) {
+                                            case 0:
+                                                console.log("sed_sharename was successful");
+                                            break;
+                                            case 1:
+                                                console.log("Error with sed_sharename");
+                                            break;
+                                        }
+                                    });
+                                    // update /etc/samba/smb.conf with currently chosen share directory
+                                    var sed_sharedir = su( ['sed', '-i', "s/SHAREDIR/"+dir+"/", "/etc/samba/smb.conf"] );
+                                    sed_sharedir.stderr.on('data', function(data) {
+                                        var d = String(data);
+                                        console.log("sed_sharedir samba stderr: " + d);
+                                    });
+                                    sed_sharedir.on('exit', function(code) {
+                                        console.log("sed_sharedir process exited with code " + code);
+
+                                        switch (code) {
+                                            case 0:
+                                                console.log("sed_sharedir was successful");
+                                            break;
+                                            case 1:
+                                                console.log("Error with sed_sharedir");
+                                            break;
+                                        }
+                                    });
+                                    // set flag in startup script that this pi is a server
+                                    var sed_isserver = su( ['sed', '-i', "s/ISSERVER\=0/ISSERVER\=1", "/etc/init.d/subnodes_fileshare"] );
+                                    sed_isserver.stderr.on('data', function(data) {
+                                        var d = String(data);
+                                        console.log("sed_isserver samba stderr: " + d);
+                                    });
+                                    sed_isserver.on('exit', function(code) {
+                                        console.log("sed_isserver process exited with code " + code);
+
+                                        switch (code) {
+                                            case 0:
+                                                console.log("sed_isserver was successful");
+                                            break;
+                                            case 1:
+                                                console.log("Error with sed_isserver");
+                                            break;
+                                        }
+                                    });
                                     // restart the samba service
                                     var service = su( ['service', 'samba', 'restart'] );
                                     service.stderr.on('data', function(data) {
@@ -219,7 +268,62 @@
                         // sed -i "s/HASMOUNT\=0/HASMOUNT\=1" /etc/init.d/subnodes_fileshare
                         // sed -i "s/SHARE/"+share+"/" /etc/init.d/subnodes_fileshare
                         // sed -i "s/MOUNT/"+mount+"/" /etc/init.d/subnodes_fileshare
-                        break;
+
+                        // update startup script with currently chosen share name
+                        var sed_share = su( ['sed', '-i', "s/SHARE/"+share+"/", "/etc/init.d/subnodes_fileshare"] );
+                        sed_share.stderr.on('data', function(data) {
+                            var d = String(data);
+                            console.log("sed_share samba stderr: " + d);
+                        });
+                        sed_share.on('exit', function(code) {
+                            console.log("sed_share process exited with code " + code);
+
+                            switch (code) {
+                                case 0:
+                                    console.log("sed_share was successful");
+                                break;
+                                case 1:
+                                    console.log("Error with sed_share");
+                                break;
+                            }
+                        });
+                        // update startup script with currently chosen share directory
+                        var sed_mount = su( ['sed', '-i', "s/MOUNT/"+mount+"/", "/etc/init.d/subnodes_fileshare"] );
+                        sed_mount.stderr.on('data', function(data) {
+                            var d = String(data);
+                            console.log("sed_mount samba stderr: " + d);
+                        });
+                        sed_mount.on('exit', function(code) {
+                            console.log("sed_mount process exited with code " + code);
+
+                            switch (code) {
+                                case 0:
+                                    console.log("sed_mount was successful");
+                                break;
+                                case 1:
+                                    console.log("Error with sed_mount");
+                                break;
+                            }
+                        });
+                        // set flag in startup script that this pi is a server
+                        var sed_isserver = su( ['sed', '-i', "s/HASMOUNT\=0/HASMOUNT\=1", "/etc/init.d/subnodes_fileshare"] );
+                        sed_isserver.stderr.on('data', function(data) {
+                            var d = String(data);
+                            console.log("sed_isserver samba stderr: " + d);
+                        });
+                        sed_isserver.on('exit', function(code) {
+                            console.log("sed_isserver process exited with code " + code);
+
+                            switch (code) {
+                                case 0:
+                                    console.log("sed_isserver was successful");
+                                break;
+                                case 1:
+                                    console.log("Error with sed_isserver");
+                                break;
+                            }
+                        });
+                    break;
                     case 1:
                         var status = {"status": "error"};
                         cb(status);
