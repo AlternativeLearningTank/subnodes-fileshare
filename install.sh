@@ -33,7 +33,7 @@ fi
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # BEGIN INSTALLATION PROCESS
 #
-read -p "Do you wish to continue and set up your Raspberry Pi as a File Share? [N] " yn
+read -p "Please make sure you have already installed Subnodes at https://github.com/chootka/subnodes.git in order to have node.js installed and networking configured. If you have not, please exit and go back to do so. Do you wish to continue and set up your Raspberry Pi as a File Share? [N] " yn
 case $yn in
 	[Yy]* )
 		clear
@@ -43,12 +43,12 @@ case $yn in
 		# update the packages
 		# BTW batctl is installed here regardless so the bat0 interface is avaiable for the bridge, 
 		# should the user decide to set up an AP. TO-DO: Remove this dependency
-		echo "Updating apt-get and installing samba, samba-common, libcups2, cifs-utils, iw, batctl"
-		apt-get update && apt-get install -y samba samba-common libcups2 cifs-utils iw batctl
-		echo ""
-		echo "Installing Node.js..."
-		wget http://node-arm.herokuapp.com/node_latest_armhf.deb
-		sudo dpkg -i node_latest_armhf.deb
+		echo "Updating apt-get and installing samba, samba-common, libcups2, cifs-utils" #", iw, batctl"
+		apt-get update && apt-get install -y samba samba-common libcups2 cifs-utils #iw batctl
+		# echo ""
+		# echo "Installing Node.js..."
+		# wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+		# sudo dpkg -i node_latest_armhf.deb
 		echo ""
 		# INSTALLING node.js file sharing interface
 		echo "Installing file sharing interface..."
@@ -131,11 +131,11 @@ case $yn in
 		# COPY OVER THE SAMBA START UP SCRIPT + enable services
 		#
 		clear
+		echo "Adding the startup script for the file sharing interface..."
 		update-rc.d samba defaults
 		cp scripts/subnodes_fileshare.sh /etc/init.d/subnodes_fileshare
 		chmod 755 /etc/init.d/subnodes_fileshare
 		update-rc.d subnodes_fileshare defaults
-
 		echo "Done!"
 	;;
 	[Nn]* ) ;;
