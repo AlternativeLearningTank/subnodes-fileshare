@@ -39,6 +39,7 @@ module.exports = {
             var mnt = config.smbClient.mount;
             var data = [];
 
+            // fill input fields with default values pulled from config file, or blank if there are no config values
             $serverAddr.val( sPath ? sPath : '' );
             $shareAddr.val( ip && share ? '//'+config.smbClient.ip+'/'+config.smbClient.share : '' );
             $mountPt.val( mnt ? mnt : '' );
@@ -108,7 +109,7 @@ module.exports = {
                 console.log("server creation status: " + res.status);                       
             },
             error: function(error) {
-                console.log("There was an error creating the server share... " + error);
+                console.log("There was an error creating the server share... " + String(error));
              }
         });
     },
@@ -126,7 +127,7 @@ module.exports = {
                 $dataTable.fnClearTable();                        
             },
             error: function(error) {
-                console.log("There was an error connecting to the file share... " + error);
+                console.log("There was an error connecting to the file share... " + String(error));
              }
         });
         // $.get('/disconnect').then(function(res){
@@ -148,15 +149,10 @@ module.exports = {
                 module.exports.updateDataTable(data, '/files', null);                            
             },
             error: function(error) {
-                console.log("There was an error connecting to the file share... " + error);
+                console.log("There was an error connecting to the file share... " + String(error));
              }
 
         });
-        // $.get('/connect').then(function(data){
-        //     console.log("connected status: " + data.status);
-        //     module.exports.initDataTable();
-        //     module.exports.updateDataTable('/files', null);
-        // });
     },
 
     initDataTable: function(data) {
@@ -217,22 +213,16 @@ module.exports = {
             dataType: 'json',
             url: endPoint,                      
             success: function(res) {
-                console.log(JSON.stringify(res));     
+                console.log("Success updating the directory contents: " + JSON.stringify(res));     
 
                 $dataTable.fnClearTable();
                 $dataTable.fnAddData(res);                        
             },
             error: function(error) {
-                console.log("There was an error updating the data table... " + error);
+                console.log("There was an error updating the data table... " + String(error));
              }
 
         });
-
-        // $.get(endPoint).then(function(data){
-        //     $dataTable.fnClearTable();
-        //     $dataTable.fnAddData(data);
-        //     // currentPath = path;
-        // });
     },
 
     getFileIcon: function(ext) {
