@@ -146,7 +146,7 @@
                                         }
                                     });
                                     // set flag in startup script that this pi is a server
-                                    var sed_isserver = su( ['sed', '-i', "s/ISSERVER\=0/ISSERVER\=1", "/etc/init.d/subnodes_fileshare"] );
+                                    var sed_isserver = su( ['sed', '-i', "s/ISSERVER\=false/ISSERVER\=true", "/etc/init.d/subnodes_fileshare"] );
                                     sed_isserver.stderr.on('data', function(data) {
                                         var d = String(data);
                                         console.log("sed_isserver samba stderr: " + d);
@@ -294,7 +294,7 @@
                                     var status = {"status": "success"};
                                     cb(status);
                         // add share info to startup script
-                        // sed -i "s/HASMOUNT\=0/HASMOUNT\=1" /etc/init.d/subnodes_fileshare
+                        // sed -i "s/HASMOUNT\=false/HASMOUNT\=true" /etc/init.d/subnodes_fileshare
                         // sed -i "s/SHARE/"+share+"/" /etc/init.d/subnodes_fileshare
                         // sed -i "s/MOUNT/"+mount+"/" /etc/init.d/subnodes_fileshare
 
@@ -335,7 +335,7 @@
                             }
                         });
                         // set flag in startup script that this pi is a server
-                        var sed_isserver = su( ['sed', '-i', "s/HASMOUNT\=0/HASMOUNT\=1", "/etc/init.d/subnodes_fileshare"] );
+                        var sed_isserver = su( ['sed', '-i', "s/HASMOUNT\=false/HASMOUNT\=true", "/etc/init.d/subnodes_fileshare"] );
                         sed_isserver.stderr.on('data', function(data) {
                             var d = String(data);
                             console.log("sed_isserver samba stderr: " + d);
