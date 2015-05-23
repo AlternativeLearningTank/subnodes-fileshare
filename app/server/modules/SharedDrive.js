@@ -80,8 +80,9 @@
                             switch (code) {
                                 case 0:
                                     console.log("Changed ownership successfully...");
-                                    // update /etc/samba/smb.conf with currently chosen share name
-                                    var sed_sharename = su( ['sed', '-i', "s/SHARENAME/"+name+"/", "/etc/samba/smb.conf"] );
+                                    console.log("changing SHARENAME in scripts/smb.conf");
+                                    // update /home/pi/subnodes-fileshare/scripts/smb.conf with currently chosen share name
+                                    var sed_sharename = su( ['sed', '-i', "s/SHARENAME/"+name+"/", "/home/pi/subnodes-fileshare/scripts/smb.conf"] );
                                     sed_sharename.stderr.on('data', function(data) {
                                         var d = String(data);
                                         console.log("sed_sharename samba stderr: " + d);
@@ -92,56 +93,56 @@
                                         switch (code) {
                                             case 0:
                                                 console.log("sed_sharename was successful");
+                                                console.log("setting SHAREDIR in scripts/smb.conf")
+                                                // update /home/pi/subnodes-fileshare/scripts/smb.conf with currently chosen share directory
+                                                var sed_sharedir = su( ['sed', '-i', "s/SHAREDIR/"+dir+"/", "/home/pi/subnodes-fileshare/scripts/smb.conf"] );
+                                                sed_sharedir.stderr.on('data', function(data) {
+                                                    var d = String(data);
+                                                    console.log("sed_sharedir samba stderr: " + d);
+                                                });
+                                                sed_sharedir.on('exit', function(code) {
+                                                    console.log("sed_sharedir process exited with code " + code);
+
+                                                    switch (code) {
+                                                        case 0:
+                                                            console.log("sed_sharedir was successful");
+                                                            // make a backup first
+                                                            var bak_cp = su( ['cp', '-f', '/etc/samba/smb.conf', '/etc/samba/smb.conf.bak'] );
+                                                            bak_cp.stderr.on('data', function(data) {
+                                                                var d = String(data);
+                                                                console.log("bak_cp samba stderr: " + d);
+                                                            });
+                                                            bak_cp.on('exit', function(code) {
+                                                                console.log("bak_cp process exited with code " + code);
+                                                                switch (code) {
+                                                                    case 0: 
+                                                                        console.log("bak_cp was successful"); 
+                                                                        // copy updated samba conf to /etc/samba/smb.conf
+                                                                        console.log("copying updated samba conf to /etc/samba/smb.conf");
+                                                                        var smb_cp = su( ['cp', '-f', '/home/pi/subnodes-fileshare/scripts/smb.conf', '/etc/samba/smb.conf'] );
+                                                                        smb_cp.stderr.on('data', function(data) {
+                                                                            var d = String(data);
+                                                                            console.log("smb_cp samba stderr: " + d);
+                                                                        });
+                                                                        smb_cp.on('exit', function(code) {
+                                                                            console.log("smb_cp process exited with code " + code);
+                                                                            switch (code) {
+                                                                                case 0: console.log("smb_cp was successful"); break;
+                                                                                case 1: console.log("Error with smb_cp"); break;
+                                                                            }
+                                                                        });
+                                                                    break;
+                                                                    case 1: console.log("Error with bak_cp"); break;
+                                                                }
+                                                            });
+                                                        break;
+                                                        case 1: console.log("Error with sed_sharedir"); break;
+                                                    }
+                                                });
                                             break;
                                             case 1:
                                                 console.log("Error with sed_sharename");
                                             break;
-                                        }
-                                    });
-                                    // update /etc/samba/smb.conf with currently chosen share directory
-                                    var sed_sharedir = su( ['sed', '-i', "s/SHAREDIR/"+dir+"/", "/etc/samba/smb.conf"] );
-                                    sed_sharedir.stderr.on('data', function(data) {
-                                        var d = String(data);
-                                        console.log("sed_sharedir samba stderr: " + d);
-                                    });
-                                    sed_sharedir.on('exit', function(code) {
-                                        console.log("sed_sharedir process exited with code " + code);
-
-                                        switch (code) {
-                                            case 0:
-                                                console.log("sed_sharedir was successful");
-                                                // copy updated samba conf to /etc/samba/smb.conf
-                                                var bak_cp = su( ['cp', '-f', '/etc/samba/smb.conf', '/etc/samba/smb.conf.bak'] );
-                                                bak_cp.stderr.on('data', function(data) {
-                                                    var d = String(data);
-                                                    console.log("bak_cp samba stderr: " + d);
-                                                });
-                                                bak_cp.on('exit', function(code) {
-                                                    console.log("bak_cp process exited with code " + code);
-                                                    switch (code) {
-                                                        case 0: 
-                                                            console.log("bak_cp was successful"); 
-                                                            console.log("copying updated samba conf to /etc/samba/smb.conf");
-                                                            var smb_cp = su( ['cp', '-f', 'scripts/smb.conf', '/etc/samba/smb.conf'] );
-                                                            smb_cp.stderr.on('data', function(data) {
-                                                                var d = String(data);
-                                                                console.log("smb_cp samba stderr: " + d);
-                                                            });
-                                                            smb_cp.on('exit', function(code) {
-                                                                console.log("smb_cp process exited with code " + code);
-                                                                switch (code) {
-                                                                    case 0: console.log("smb_cp was successful"); break;
-                                                                    case 1: console.log("Error with smb_cp"); break;
-                                                                }
-                                                            });
-                                                        break;
-                                                        case 1: console.log("Error with bak_cp"); break;
-                                                    }
-                                                });
-
-                                                cp scripts/smb.conf /etc/samba/smb.conf
-                                            break;
-                                            case 1: console.log("Error with sed_sharedir"); break;
                                         }
                                     });
                                     // set flag in startup script that this pi is a server
