@@ -39,24 +39,6 @@ case $yn in
 		npm install
 		npm install -g nodemon
 
-		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-		# COPY OVER SAMBA CONF FILE
-		#
-		# default share name: [Anonymous]
-		# default share directory: /samba/anonymous
-		# can be changed via web interfaces
-		#
-		cp scripts/smb.conf /etc/samba/smb.conf
-
-		# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-		# COPY OVER THE SAMBA START UP SCRIPT + enable services
-		#
-		clear
-		update-rc.d samba defaults
-		cp scripts/subnodes_fileshare.sh /etc/init.d/subnodes_fileshare
-		chmod 755 /etc/init.d/subnodes_fileshare
-		update-rc.d subnodes_fileshare defaults
-
 		echo "Done!"
 	;;
 	[Nn]* ) ;;
