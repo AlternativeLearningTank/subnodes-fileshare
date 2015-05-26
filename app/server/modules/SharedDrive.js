@@ -82,7 +82,8 @@
                                     console.log("Changed ownership successfully...");
                                     console.log("changing SHARENAME in scripts/smb.conf");
                                     // update /home/pi/subnodes-fileshare/scripts/smb.conf with currently chosen share name
-                                    var sed_sharename = su( ['sed', '-i', "s/SHARENAME/"+name+"/", "/home/pi/subnodes-fileshare/scripts/smb.conf"] );
+                                    // sed 's#\(.*="\).*\("\)#\1cat\2#'
+                                    var sed_sharename = su( ['sed', '-i', 's#\(SHARENAME="\).*\("\)#\1'+name+'\2#', "/home/pi/subnodes-fileshare/scripts/smb_config.sh"] );
                                     sed_sharename.stderr.on('data', function(data) {
                                         var d = String(data);
                                         console.log("sed_sharename samba stderr: " + d);
@@ -95,7 +96,7 @@
                                                 console.log("sed_sharename was successful");
                                                 console.log("setting SHAREDIR in scripts/smb.conf")
                                                 // update /home/pi/subnodes-fileshare/scripts/smb.conf with currently chosen share directory
-                                                var sed_sharedir = su( ['sed', '-i', "s/SHAREDIR/"+dir+"/", "/home/pi/subnodes-fileshare/scripts/smb.conf"] );
+                                                var sed_sharedir = su( ['sed', '-i', 's#\(SHAREDIR="\).*\("\)#\1'+dir+'\2#', "/home/pi/subnodes-fileshare/scripts/smb_config.sh"] );
                                                 sed_sharedir.stderr.on('data', function(data) {
                                                     var d = String(data);
                                                     console.log("sed_sharedir samba stderr: " + d);
@@ -146,7 +147,9 @@
                                         }
                                     });
                                     // set flag in startup script that this pi is a server
-                                    var sed_isserver = su( ['sed', '-i', "s/ISSERVER\=false/ISSERVER\=true", "/etc/init.d/subnodes_fileshare"] );
+                                    //var sed_isserver = su( ['sed', '-i', "s/ISSERVER\=false/ISSERVER\=true", "/etc/init.d/subnodes_fileshare"] );
+                                    //'s#\(ISSERVER="\).*\("\)#\1'+dir+'\2#'
+                                    var sed_isserver = su( ['sed', '-i', 's#\(ISSERVER=\).*#\1true#', '/home/pi/subnodes-fileshare/script/subnodes_fileshare_config'] );
                                     sed_isserver.stderr.on('data', function(data) {
                                         var d = String(data);
                                         console.log("sed_isserver samba stderr: " + d);
@@ -298,8 +301,8 @@
                         // sed -i "s/SHARE/"+share+"/" /etc/init.d/subnodes_fileshare
                         // sed -i "s/MOUNT/"+mount+"/" /etc/init.d/subnodes_fileshare
 
-                        // update startup script with currently chosen share name
-                        var sed_share = su( ['sed', '-i', "s/SHARE/"+share+"/", "/etc/init.d/subnodes_fileshare"] );
+                        // update startup script with user defined share location
+                        var sed_share = su( ['sed', '-i', 's#\(SHARE="\).*\("\)#\1'+share+'\2#', "/home/pi/subnodes-fileshare/script/subnodes_fileshare_config"] );
                         sed_share.stderr.on('data', function(data) {
                             var d = String(data);
                             console.log("sed_share samba stderr: " + d);
@@ -316,8 +319,8 @@
                                 break;
                             }
                         });
-                        // update startup script with currently chosen share directory
-                        var sed_mount = su( ['sed', '-i', "s/MOUNT/"+mount+"/", "/etc/init.d/subnodes_fileshare"] );
+                        // update startup script with user defined mount point
+                        var sed_mount = su( ['sed', '-i', 's#\(MOUNT="\).*\("\)#\1'+mnt+'\2#', "/home/pi/subnodes-fileshare/script/subnodes_fileshare_config"] );
                         sed_mount.stderr.on('data', function(data) {
                             var d = String(data);
                             console.log("sed_mount samba stderr: " + d);
@@ -335,20 +338,20 @@
                             }
                         });
                         // set flag in startup script that this pi is a server
-                        var sed_isserver = su( ['sed', '-i', "s/HASMOUNT\=false/HASMOUNT\=true", "/etc/init.d/subnodes_fileshare"] );
-                        sed_isserver.stderr.on('data', function(data) {
+                        var sed_hasmount = su( ['sed', '-i', 's#\(HASMOUNT=\).*#\1true#', '/home/pi/subnodes-fileshare/script/subnodes_fileshare_config'] );
+                        sed_hasmount.stderr.on('data', function(data) {
                             var d = String(data);
-                            console.log("sed_isserver samba stderr: " + d);
+                            console.log("sed_hasmount samba stderr: " + d);
                         });
-                        sed_isserver.on('exit', function(code) {
-                            console.log("sed_isserver process exited with code " + code);
+                        sed_hasmount.on('exit', function(code) {
+                            console.log("sed_hasmount process exited with code " + code);
 
                             switch (code) {
                                 case 0:
-                                    console.log("sed_isserver was successful");
+                                    console.log("sed_hasmount was successful");
                                 break;
                                 case 1:
-                                    console.log("Error with sed_isserver");
+                                    console.log("Error with sed_hasmount");
                                 break;
                             }
                         });

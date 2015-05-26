@@ -1,17 +1,17 @@
 #!/bin/sh
 # /etc/init.d/subnodes_fileshare
 # starts samba service and brings up web interface for file sharer.
-
+#
+# pull in variables from config file
+. /home/pi/subnodes-fileshare/scripts/subnodes_fileshare_config.sh
+# define variables
 NAME=subnodes_fileshare
 DESC="Brings up samba server and web interface for file sharer."
 DAEMON_PATH="/home/pi/subnodes-fileshare"
 DAEMONOPTS="sudo nodemon ./app/server/server"
-
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
-ISSERVER=false
-HASMOUNT=false
-
+#
 	case "$1" in
 		start)
 			echo "Starting samba..."
@@ -21,7 +21,7 @@ HASMOUNT=false
 			fi
 			# mount the file share if we have a mount point
 			if [ $HASMOUNT = true ] ; then
-				mount SHARE MOUNT -o guest
+				mount $SHARE $MOUNT -o guest
 			fi
 			# start the node.js chat application
 			cd $DAEMON_PATH
@@ -65,7 +65,6 @@ HASMOUNT=false
 			$0 stop
 			$0 start
 		;;
-
 *)
 		echo "Usage: $0 {status|start|stop|restart}"
 		exit 1
