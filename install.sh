@@ -11,6 +11,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # SOME DEFAULT VALUES
 #
+NAME=subnodes_fileshare
+
 # WIRELESS RADIO DRIVER
 RADIO_DRIVER=nl80211
 
@@ -21,6 +23,8 @@ RADIO_DRIVER=nl80211
 # CHECK USER PRIVILEGES
 (( `id -u` )) && echo "This script *must* be ran with root privileges, try prefixing with sudo. i.e sudo $0" && exit 1
 #
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # CHECK USB WIFI HARDWARE IS FOUND
 # also, i will need to check for one device per network config for a total of two devices
 if [[ -n $(lsusb | grep RT5370) ]]; then
@@ -133,9 +137,10 @@ case $yn in
 		clear
 		echo "Adding the startup script for the file sharing interface..."
 		update-rc.d samba defaults
-		cp scripts/subnodes_fileshare.sh /etc/init.d/subnodes_fileshare
-		chmod 755 /etc/init.d/subnodes_fileshare
-		update-rc.d subnodes_fileshare defaults
+		cp scripts/$NAME.conf /etc/default/$NAME
+		cp scripts/$NAME.sh /etc/init.d/$NAME
+		chmod 755 /etc/init.d/$NAME
+		update-rc.d $NAME defaults
 		echo "Done!"
 	;;
 	[Nn]* ) ;;

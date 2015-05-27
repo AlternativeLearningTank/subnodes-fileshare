@@ -2,16 +2,18 @@
 # /etc/init.d/subnodes_fileshare
 # starts samba service and brings up web interface for file sharer.
 #
-# pull in variables from config file
-. /home/pi/subnodes-fileshare/scripts/subnodes_fileshare_config.sh
+#
 # define variables
 NAME=subnodes_fileshare
 DESC="Brings up samba server and web interface for file sharer."
-DAEMON_PATH="/home/pi/subnodes-fileshare"
+DAEMON_PATH=/home/pi/$NAME
 DAEMONOPTS="sudo nodemon ./app/server/server"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
-#
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
 	case "$1" in
 		start)
 			echo "Starting samba..."

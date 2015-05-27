@@ -80,10 +80,9 @@
                             switch (code) {
                                 case 0:
                                     console.log("Changed ownership successfully...");
-                                    console.log("changing SHARENAME in scripts/smb.conf");
+                                    console.log("changing SHARENAME in /etc/default/subnodes_fileshare");
                                     // update /home/pi/subnodes-fileshare/scripts/smb.conf with currently chosen share name
-                                    // sed 's#\(.*="\).*\("\)#\1cat\2#'
-                                    var sed_sharename = su( ['sed', '-i', 's#\(SHARENAME="\).*\("\)#\1'+name+'\2#', "/home/pi/subnodes-fileshare/scripts/smb_config.sh"] );
+                                    var sed_sharename = su( ['sed', '-i', 's#\(SHARENAME="\).*\("\)#\1'+name+'\2#', "/etc/default/subnodes_fileshare"] );
                                     sed_sharename.stderr.on('data', function(data) {
                                         var d = String(data);
                                         console.log("sed_sharename samba stderr: " + d);
@@ -94,9 +93,9 @@
                                         switch (code) {
                                             case 0:
                                                 console.log("sed_sharename was successful");
-                                                console.log("setting SHAREDIR in scripts/smb.conf")
+                                                console.log("setting SHAREDIR in /lib/init/smb.conf")
                                                 // update /home/pi/subnodes-fileshare/scripts/smb.conf with currently chosen share directory
-                                                var sed_sharedir = su( ['sed', '-i', 's#\(SHAREDIR="\).*\("\)#\1'+dir+'\2#', "/home/pi/subnodes-fileshare/scripts/smb_config.sh"] );
+                                                var sed_sharedir = su( ['sed', '-i', 's#\(SHAREDIR="\).*\("\)#\1'+dir+'\2#', "/etc/default/subnodes_fileshare"] );
                                                 sed_sharedir.stderr.on('data', function(data) {
                                                     var d = String(data);
                                                     console.log("sed_sharedir samba stderr: " + d);
@@ -147,9 +146,7 @@
                                         }
                                     });
                                     // set flag in startup script that this pi is a server
-                                    //var sed_isserver = su( ['sed', '-i', "s/ISSERVER\=false/ISSERVER\=true", "/etc/init.d/subnodes_fileshare"] );
-                                    //'s#\(ISSERVER="\).*\("\)#\1'+dir+'\2#'
-                                    var sed_isserver = su( ['sed', '-i', 's#\(ISSERVER=\).*#\1true#', '/home/pi/subnodes-fileshare/script/subnodes_fileshare_config'] );
+                                    var sed_isserver = su( ['sed', '-i', 's#\(ISSERVER=\).*#\1true#', '/etc/default/subnodes_fileshare'] );
                                     sed_isserver.stderr.on('data', function(data) {
                                         var d = String(data);
                                         console.log("sed_isserver samba stderr: " + d);
@@ -296,13 +293,8 @@
 
                                     var status = {"status": "success"};
                                     cb(status);
-                        // add share info to startup script
-                        // sed -i "s/HASMOUNT\=false/HASMOUNT\=true" /etc/init.d/subnodes_fileshare
-                        // sed -i "s/SHARE/"+share+"/" /etc/init.d/subnodes_fileshare
-                        // sed -i "s/MOUNT/"+mount+"/" /etc/init.d/subnodes_fileshare
-
                         // update startup script with user defined share location
-                        var sed_share = su( ['sed', '-i', 's#\(SHARE="\).*\("\)#\1'+share+'\2#', "/home/pi/subnodes-fileshare/script/subnodes_fileshare_config"] );
+                        var sed_share = su( ['sed', '-i', 's#\(SHARE="\).*\("\)#\1'+share+'\2#', "/etc/default/subnodes_fileshare"] );
                         sed_share.stderr.on('data', function(data) {
                             var d = String(data);
                             console.log("sed_share samba stderr: " + d);
@@ -320,7 +312,7 @@
                             }
                         });
                         // update startup script with user defined mount point
-                        var sed_mount = su( ['sed', '-i', 's#\(MOUNT="\).*\("\)#\1'+mnt+'\2#', "/home/pi/subnodes-fileshare/script/subnodes_fileshare_config"] );
+                        var sed_mount = su( ['sed', '-i', 's#\(MOUNT="\).*\("\)#\1'+mnt+'\2#', "/etc/default/subnodes_fileshare"] );
                         sed_mount.stderr.on('data', function(data) {
                             var d = String(data);
                             console.log("sed_mount samba stderr: " + d);
@@ -338,7 +330,7 @@
                             }
                         });
                         // set flag in startup script that this pi is a server
-                        var sed_hasmount = su( ['sed', '-i', 's#\(HASMOUNT=\).*#\1true#', '/home/pi/subnodes-fileshare/script/subnodes_fileshare_config'] );
+                        var sed_hasmount = su( ['sed', '-i', 's#\(HASMOUNT=\).*#\1true#', '/etc/default/subnodes_fileshare'] );
                         sed_hasmount.stderr.on('data', function(data) {
                             var d = String(data);
                             console.log("sed_hasmount samba stderr: " + d);
