@@ -6,7 +6,7 @@
 # define variables
 NAME=subnodes_fileshare
 DESC="Brings up samba server and web interface for file sharer."
-DAEMON_PATH=/home/pi/$NAME
+DAEMON_PATH=/home/pi/subnodes-fileshare
 DAEMONOPTS="sudo nodemon ./app/server/server"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME

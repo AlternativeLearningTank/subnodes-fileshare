@@ -95,7 +95,7 @@
                                                 console.log("sed_sharename was successful");
                                                 console.log("setting SHAREDIR in /lib/init/smb.conf")
                                                 // update /home/pi/subnodes-fileshare/scripts/smb.conf with currently chosen share directory
-                                                var sed_sharedir = su( ['sed', '-i', 's#\(SHAREDIR="\).*\("\)#\1'+dir+'\2#', "/etc/default/subnodes_fileshare"] );
+                                                var sed_sharedir = su( ['sed', '-i', 's#\(SHAREDIR="\).*\("\)#\1'+dir+'\2#', '/etc/default/subnodes_fileshare'] );
                                                 sed_sharedir.stderr.on('data', function(data) {
                                                     var d = String(data);
                                                     console.log("sed_sharedir samba stderr: " + d);
